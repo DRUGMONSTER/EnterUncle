@@ -32,9 +32,6 @@ public class UncleConvert_DRV{
 			return;
 		}
 
-
-		System.out.println("Empty Qnair, file no exist?");
-
 		ArrayList<DemoQuestion> demoQuestions = Qnair2.getDemoQuestions();
 		ArrayList<QuestionBase> questionBases = new ArrayList<QuestionBase>();
 		questionBases.addAll(demoQuestions);
