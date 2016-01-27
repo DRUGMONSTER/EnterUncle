@@ -24,7 +24,7 @@ public class UncleConvert_DRV{
 	}
 
 	private static void test(){
-		String fname = "C:\\Users\\Plaxx\\Desktop\\FOCX.ASC";
+		String fname = "C:\\Users\\Plaxx\\Desktop\\Work\\Tabs\\ASC\\FOCQ.ASC";
 		Parser.parseASCFile(fname);
 
 		if(Qnair2.isEmpty()){

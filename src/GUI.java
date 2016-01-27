@@ -32,7 +32,7 @@ public class GUI extends JFrame{
 	private JRadioButton[] radioButtons = {new JRadioButton("Municipal"), new JRadioButton("Provincial"), new JRadioButton("Federal")};
 	
 	public GUI(){
-		setTitle("Uncle Convert beta v0.27b");
+		setTitle("Uncle Convert beta v0.28b");
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -97,7 +97,7 @@ public class GUI extends JFrame{
 		rightPanel.add(fileArea, BorderLayout.CENTER);
 
 		JPanel buttonWrap = new JPanel();
-		buttonWrap.setLayout(new GridLayout(4, 1, 0, 10));
+		buttonWrap.setLayout(new GridLayout(3, 1, 0, 10));
 
 		JPanel governmentLevelWrap = new JPanel();
 		governmentLevel = new ButtonGroup();
