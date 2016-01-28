@@ -14,8 +14,12 @@ public class Logg{
 		logger.setLevel(Level.ALL);
 		try{
 			logger.addHandler(new FileHandler("E:\\EnterUncle.log"));
-		}catch(IOException e){
-			System.out.println("Problem with creating the log file");
+		}catch(IOException e1){
+			try{
+				logger.addHandler(new FileHandler("C:\\Users\\RZamberg\\Desktop\\EnterUncle.log"));
+			}catch(IOException e2){
+				System.out.println("Problem with creating the log file");
+			}
 		}
 
 		//Suppress logging output to the console

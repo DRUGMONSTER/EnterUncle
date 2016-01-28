@@ -274,45 +274,49 @@ public class Writer{
 		String bufferWithTags = Tagger.tag(bufferOfLines, tabNum, tags);
 
 		w.println(
-				"TABLE 1001\n" +
-						"O sgtest sgcomp ttcomp .99 high 1 cc(red) .95 high 2 cc(green) '" + tags + "autotag (below paren center)\n" +
-						"R TOTAL (u//w); all; novp nor now space 1 freq\n" +
-						"R TOTAL (w//t); all; novp nor freq noprint\n" +
-						"C TOTAL; all\n" +
-						bufferWithTags + "\n"
+			"TABLE 1001\n" +
+			"O sgtest sgcomp ttcomp .99 high 1 cc(red) .95 high 2 cc(green) '" + tags + "autotag (below paren center)\n" +
+			"R TOTAL (u//w); all; novp nor now space 1 freq\n" +
+			"R TOTAL (w//t); all; novp nor freq noprint\n" +
+			"C TOTAL; all\n" +
+			bufferWithTags + "\n"
 		);
 
 
-		// === T1002 and so on (copy paste) ===
-		int tableNum = 2;
+		// === T1002 and so on - (copy paste) ===
 
-		//Replace first three questions (check if these exist?)
+		//Replace first three questions
 		bufferOfLines.remove(0);
 		bufferOfLines.remove(0);
 		bufferOfLines.remove(0);
 
 		ArrayList<String> ageAndGen = new ArrayList<String>();
-		ageAndGen.add("C 18-34;");
-		ageAndGen.add("C 35-44;");
-		ageAndGen.add("C 45-54;");
-		ageAndGen.add("C 55-64;");
-		ageAndGen.add("C 65+;");
-		ageAndGen.add("C Male;");
-		ageAndGen.add("C Female;");
+		ageAndGen.add("C 18-34;\t");
+		ageAndGen.add("C 35-44;\t");
+		ageAndGen.add("C 45-54;\t");
+		ageAndGen.add("C 55-64;\t");
+		ageAndGen.add("C 65+;\t\t");
+		ageAndGen.add("C Male;\t\t\t");
+		ageAndGen.add("C Female;\t\t");
 
 		ArrayList<String> income = new ArrayList<String>();
-		income.add("C <20K;");
-		income.add("C 20-40K;");
-		income.add("C 40-60K;");
-		income.add("C 60-80K;");
-		income.add("C 80-100K;");
-		income.add("C 100-250K;");
+		income.add("C <20K;\t\t");
+		income.add("C 20-40K;\t");
+		income.add("C 40-60K;\t");
+		income.add("C 60-80K;\t");
+		income.add("C 80-100K;\t");
+		income.add("C 100-250K;\t");
 
 		bufferOfLines.add(0, income);
 		bufferOfLines.add(0, ageAndGen);
 
-
+		int tableNum = 2;
 		for(ArrayList<String> set : bufferOfLines){
+			w.println("TABLE 1" + String.format("%03d", tableNum));
+			w.println("R Sample; all; novp nor now space 1 freq");
+			w.println("C Total; all");
+			tableNum++;
+
 			for(String line : set){
 				w.println(line);
 

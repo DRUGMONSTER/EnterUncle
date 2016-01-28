@@ -1,17 +1,28 @@
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 //Key       -> DiEntry
-//IDENT_NUM -> (IDENT_STRING, REGEXs)
+//REGEXs -> (IDENT_STRING, DEMO_Q)
 
 
+public class DemoMap{
+	private  static Map<String, DiEntry> map = new LinkedHashMap<String, DiEntry>();
 
-
-@SuppressWarnings("unused")
-public class DemoMap extends LinkedHashMap<Integer, DemoMap.DiEntry>{
-	public void put(int i, String name, ArrayList<String> regexs){
-		super.put(i, new DiEntry(name, regexs));
+	public static void init(){
+		map.put("(?i).*\\bgender\\b.*",							new DiEntry("GENDER"		, null));
+		map.put("(?i).*\\bchildren\\b.*",						new DiEntry("CHILDREN"		, null));
+		map.put("(?i).*\\bage\\?$",								new DiEntry("AGE"			, null));
+		map.put("(?i).*\\bold\\b.*",							new DiEntry("AGE"			, null));
+		map.put("(?i).*\\bproperty\\b.*",						new DiEntry("PROPERTY"		, null));
+		map.put("(?i).*\\beducation\\b.*",						new DiEntry("EDU"			, null));
+		map.put("(?i).*\\bwork or school\\b.*",					new DiEntry("TRANSIT"		, null));
+		map.put("(?i).*\\bethnic\\b.*", 						new DiEntry("ETHNIC"		, null));
+		map.put("(?i).*\\breligion\\b.*",						new DiEntry("RELIGION"		, null));
+		map.put("(?i).*\\bincome\\b.*", 						new DiEntry("INCOME"		, null));
+		map.put("(?i).*\\bpart\\b.*\\bof\\b.*\\bcity\\b.*", 	new DiEntry("COMMUNITY"		, null));
+		map.put("(?i).*\\baddition\\b.*\\bcell phone\\b.*", 	new DiEntry("AlSO_LANDLINE"	, null));
+		map.put("(?i).*\\blandline\\b.*",						new DiEntry("REACHED"		, null));
+		map.put("(?i).*\\bborn in canada\\b.*",					new DiEntry("CANADA_BORN"	, null));
 	}
 
 	//use this in parser
@@ -20,30 +31,13 @@ public class DemoMap extends LinkedHashMap<Integer, DemoMap.DiEntry>{
 		return null;
 	}
 
-	class DiEntry{
-		public ArrayList<String> regexs;
+	static class DiEntry{
 		public String name;
+		public DemoQuestion dq;
 
-		public DiEntry(String aName, ArrayList<String> aRregexList){
-			regexs = aRregexList;
+		public DiEntry(String aName, DemoQuestion aDQ){
 			name = aName;
+			dq = aDQ;
 		}
-	}
-
-	private static void populateDemoMap(Map<String, String> demographicKeywords){
-		demographicKeywords.put("(?i).*\\bgender\\b.*",							"GENDER");
-		demographicKeywords.put("(?i).*\\bchildren\\b.*",						"CHILDREN");
-		demographicKeywords.put("(?i).*\\bage\\?$",								"AGE");
-		demographicKeywords.put("(?i).*\\bold\\b.*",							"AGE");
-		demographicKeywords.put("(?i).*\\bproperty\\b.*",						"PROPERTY");
-		demographicKeywords.put("(?i).*\\beducation\\b.*",						"EDU");
-		demographicKeywords.put("(?i).*\\bwork or school\\b.*",					"TRANSIT");
-		demographicKeywords.put("(?i).*\\bethnic\\b.*", 						"ETHNIC");
-		demographicKeywords.put("(?i).*\\breligion\\b.*",						"RELIGION");
-		demographicKeywords.put("(?i).*\\bincome\\b.*", 						"INCOME");
-		demographicKeywords.put("(?i).*\\bpart\\b.*\\bof\\b.*\\bcity\\b.*", 	"COMMUNITY");
-		demographicKeywords.put("(?i).*\\baddition\\b.*\\bcell phone\\b.*", 	"AlSO_LANDLINE");
-		demographicKeywords.put("(?i).*\\blandline\\b.*",						"REACHED");
-		demographicKeywords.put("(?i).*\\bborn in canada\\b.*",					"CANADA_BORN");
 	}
 }

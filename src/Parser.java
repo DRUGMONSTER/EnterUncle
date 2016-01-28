@@ -30,6 +30,8 @@ public class Parser{
 	}
 
 	private static void populateDemoMap(Map<String, String> demographicKeywords){
+		DemoMap.init();
+
 		demographicKeywords.put("(?i).*\\bgender\\b.*",							"GENDER");
 		demographicKeywords.put("(?i).*\\bchildren\\b.*",						"CHILDREN");
 		demographicKeywords.put("(?i).*\\bage\\?$",								"AGE");
@@ -142,12 +144,11 @@ public class Parser{
 			//Find and capitalize first letter
 			boolean firstLetter = false;
 			for(int i = 0; i < label.length(); i++){
-				if(!firstLetter && Character.isLetter(label.charAt(i)))
+				if(!firstLetter && Character.isLetter(label.charAt(i))){
 					firstLetter = true;
-				if(Character.isLetter(label.charAt(i))){
-					System.out.println(label + " =-=-= " + i);
+					continue;
+				}if(Character.isLetter(label.charAt(i))){
 					label = label.substring(0, i) + label.substring(i, i + 1).toUpperCase() + label.substring(i + 1);
-					System.out.println(label);
 					break;
 				}
 			}

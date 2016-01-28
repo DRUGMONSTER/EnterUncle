@@ -5,6 +5,11 @@ public class Qnair{
 	private static final ArrayList<DemoQuestion> demoQuestions = new ArrayList<DemoQuestion>();
 	private static final Set<String> rejectableVariables = new HashSet<String>(Arrays.asList(new String[]{"TZONE", "LOC", "LDF", "LDE", "AREA", "FSA", "FSA1", "INTRO", "LANG", "IT2", "S1", "INT01", "INT99", "C3"}));
 
+	public static DemoQuestion GENDER_Q = null;
+	public static DemoQuestion CHILDREN_Q = null;
+	public static DemoQuestion AGE_Q = null;
+	public static DemoQuestion INCOME_Q = null;
+
 	public static void clearQuestions(){
 		questions.clear();
 		demoQuestions.clear();

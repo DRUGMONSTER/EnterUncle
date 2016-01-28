@@ -32,7 +32,7 @@ public class GUI extends JFrame{
 	private JRadioButton[] radioButtons = {new JRadioButton("Municipal"), new JRadioButton("Provincial"), new JRadioButton("Federal")};
 	
 	public GUI(){
-		setTitle("Uncle Convert beta v0.28b");
+		setTitle("Uncle Convert beta v0.28.7b");
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setLocationRelativeTo(null);
 		setResizable(false);

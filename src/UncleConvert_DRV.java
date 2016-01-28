@@ -24,7 +24,9 @@ public class UncleConvert_DRV{
 	}
 
 	private static void test(){
-		String fname = "C:\\Users\\Plaxx\\Desktop\\Work\\Tabs\\ASC\\FODF.ASC";
+		String fname = "G:\\FORUM\\FODF\\Tabs\\FODF.ASC";
+		//String fname = "C:\\Users\\Plaxx\\Desktop\\Work\\Tabs\\ASC\\FODF.ASC";
+
 		Parser.parseASCFile(fname);
 
 		if(Qnair.isEmpty()){
