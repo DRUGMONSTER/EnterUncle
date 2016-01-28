@@ -145,7 +145,7 @@ public class Parser{
 				if(!firstLetter && Character.isLetter(label.charAt(i)))
 					firstLetter = true;
 				if(Character.isLetter(label.charAt(i))){
-					System.out.println(label + " =-=?????-= " + i);
+					System.out.println(label + " =-=-= " + i);
 					label = label.substring(0, i) + label.substring(i, i + 1).toUpperCase() + label.substring(i + 1);
 					System.out.println(label);
 					break;
