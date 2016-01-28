@@ -24,19 +24,22 @@ public class UncleConvert_DRV{
 	}
 
 	private static void test(){
-		String fname = "C:\\Users\\Plaxx\\Desktop\\Work\\Tabs\\ASC\\FOCQ.ASC";
+		String fname = "C:\\Users\\Plaxx\\Desktop\\Work\\Tabs\\ASC\\FODF.ASC";
 		Parser.parseASCFile(fname);
 
-		if(Qnair2.isEmpty()){
+		if(Qnair.isEmpty()){
 			System.out.println("Empty Qnair, file no exist?");
 			return;
 		}
 
-		ArrayList<DemoQuestion> demoQuestions = Qnair2.getDemoQuestions();
+		ArrayList<DemoQuestion> demoQuestions = Qnair.getDemoQuestions();
 		ArrayList<QuestionBase> questionBases = new ArrayList<QuestionBase>();
 		questionBases.addAll(demoQuestions);
-		questionBases.add(Qnair2.getQuestions().get(Qnair2.getQuestions().size() - 1)); // get last non-demo question
+		questionBases.add(Qnair.getQuestions().get(0));									// get first non-demo question
+		questionBases.add(Qnair.getQuestions().get(Qnair.getQuestions().size() - 1));		// get last non-demo question
 
 		Writer.writeFile(new File(fname), questionBases);
+
+		System.out.println("DONE");
 	}
 }

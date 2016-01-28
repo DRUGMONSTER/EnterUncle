@@ -129,7 +129,7 @@ public class GUI extends JFrame{
 				//getSelected from governmentLevel ButtonGroup
 				governmentLevel.getSelection();
 
-				if(Qnair2.isEmpty()){
+				if(Qnair.isEmpty()){
 					statusTF.setText("Can't Write - Empty Qnair");
 					return;
 				}
@@ -150,33 +150,9 @@ public class GUI extends JFrame{
 		}
 	}
 
-	/*
 	private void readFile(File ascFile){
-		fileToConvPathTF.setText(ascFile.getAbsolutePath());
-		Qnair.setAscFile(ascFile);
-		statusTF.setText("");
-
-		//Clear the left pane
-		bannerDemoQuestions.clear();
-		bannerQuestions.clear();
-		bannerWrap.removeAll();
-		getRootPane().revalidate();
-
-		//Reset
-		Qnair.clearBuffers();
-		Qnair.clearQuestions();
-
-		Qnair.readAndLoadFile(fileToConvPathTF.getText());
-		if(Qnair.isBuffEmpty()){
-			Logg.severe("Read File but Qnair Buffers are empty");
-			statusTF.setText("Bad file, no questions loaded");
-		}else
-			statusTF.setText("Read Successfully");
-	}
-	//*/
-	private void readFile(File ascFile){
-		if(!Qnair2.isEmpty())
-			Qnair2.clearQuestions();
+		if(!Qnair.isEmpty())
+			Qnair.clearQuestions();
 
 		bannerDemoQuestions.clear();
 		bannerQuestions.clear();
@@ -193,13 +169,13 @@ public class GUI extends JFrame{
 			statusTF.setText("Read Successfully");
 
 
-		for(DemoQuestion dq : Qnair2.getDemoQuestions()){
+		for(DemoQuestion dq : Qnair.getDemoQuestions()){
 			JCheckBox jcb = new JCheckBox(dq.getVariable());
 			jcb.setSelected(true);
 			bannerWrap.add(jcb);
 			bannerDemoQuestions.put(jcb, dq);
 		}
-		for(Question q : Qnair2.getQuestions()){
+		for(Question q : Qnair.getQuestions()){
 			JCheckBox jcb = new JCheckBox(q.getVariable());
 			bannerWrap.add(jcb);
 			bannerQuestions.put(jcb, q);

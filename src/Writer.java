@@ -12,6 +12,11 @@ public class Writer{
 	private static final int AGE_IDENTIFIER = 2;
 	private static final int INCOME_IDENTIFIER = 8;
 
+	private static final DemoQuestion GENDER_Q = null;
+	private static final DemoQuestion CHILDREN_Q = null;
+	private static final DemoQuestion AGE_Q = null;
+	private static final DemoQuestion INCOME_Q = null;
+
 	public static ArrayList<String> identifiers;
 
 	private static final ArrayList<String[]> TB_PAIRS = new ArrayList<String[]>();
@@ -123,22 +128,13 @@ public class Writer{
 			String[] c = choices.get(i);
 			int choiceTabLength = (c[0].length() + c[1].length() + qbPos.length() + 4) / 4;
 			int addTab = tabNum - choiceTabLength;
-			if(c[1].length() > 0)
-				writer.println("R " + c[1].substring(0, 1).toUpperCase() + c[1].substring(1) +
-				"; " + qbPos + c[0] + Tagger.getTabs(addTab) + means[i]);
-			else{//rare case that choice label length is zero
-				writer.println("R " + "; " + qbPos + c[0] + Tagger.getTabs(addTab) + means[i]);
-				Logg.warning("Choice Lable with length 0 printed");
-			}
+
+			writer.println("R " + c[1] + "; " + qbPos + c[0] + Tagger.getTabs(addTab) + means[i]);
 		}
 		for(; i < choices.size(); i++){
 			String[] c = choices.get(i);
-			if(c[1].length() > 0)
-				writer.println("R " + c[1].substring(0,1).toUpperCase() + c[1].substring(1) + "; " + qbPos + c[0]);
-			else{//rare case that choice label length is zero
-				writer.println("R " + "; " + qbPos + c[0]);
-				Logg.warning("Choice Lable with length 0 printed");
-			}
+
+			writer.println("R " + c[1] + "; " + qbPos + c[0]);
 		}
 		writer.print(nullAndMean);
 	}
@@ -285,6 +281,46 @@ public class Writer{
 						"C TOTAL; all\n" +
 						bufferWithTags + "\n"
 		);
+
+
+		// === T1002 and so on (copy paste) ===
+		int tableNum = 2;
+
+		//Replace first three questions (check if these exist?)
+		bufferOfLines.remove(0);
+		bufferOfLines.remove(0);
+		bufferOfLines.remove(0);
+
+		ArrayList<String> ageAndGen = new ArrayList<String>();
+		ageAndGen.add("C 18-34;");
+		ageAndGen.add("C 35-44;");
+		ageAndGen.add("C 45-54;");
+		ageAndGen.add("C 55-64;");
+		ageAndGen.add("C 65+;");
+		ageAndGen.add("C Male;");
+		ageAndGen.add("C Female;");
+
+		ArrayList<String> income = new ArrayList<String>();
+		income.add("C <20K;");
+		income.add("C 20-40K;");
+		income.add("C 40-60K;");
+		income.add("C 60-80K;");
+		income.add("C 80-100K;");
+		income.add("C 100-250K;");
+
+		bufferOfLines.add(0, income);
+		bufferOfLines.add(0, ageAndGen);
+
+
+		for(ArrayList<String> set : bufferOfLines){
+			for(String line : set){
+				w.println(line);
+
+			}
+
+			w.println();
+		}
+		//w.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	}
 
 	private static ArrayList<QuestionBase> reorderQuestions(ArrayList<QuestionBase> unorderedQuestions){
@@ -343,7 +379,7 @@ public class Writer{
 	private static void addMoms(ArrayList<QuestionBase> questionBases){
 		QuestionBase genderQ = new QuestionBase();
 		QuestionBase childrenQ = new QuestionBase();
-		int childrenPos = 0;
+		int childrenPos = -1;
 
 		for(int i = 0; i < questionBases.size(); i++){
 			QuestionBase qb = questionBases.get(i);
@@ -352,11 +388,15 @@ public class Writer{
 				genderQ = qb;
 				continue;
 			}
-			if(qb.getIdentifier().equals(identifiers.get(CHILDREN_IDENTIFIER))){	//smelly
+			if(qb.getIdentifier().equals(identifiers.get(CHILDREN_IDENTIFIER))){		//smelly
 				childrenQ = qb;
 				childrenPos = i;
 			}
 		}
+
+		//Children Demo Question not detected, Abort!!
+		if(childrenPos == -1)
+			return;
 
 		DemoQuestion dq = new DemoQuestion();
 		dq.setIdentifier("MOMS");
@@ -406,8 +446,8 @@ public class Writer{
 	}
 
 	private static void init(){
-		questions = Qnair2.getQuestions();
-		demoQuestions = Qnair2.getDemoQuestions();
+		questions = Qnair.getQuestions();
+		demoQuestions = Qnair.getDemoQuestions();
 
 		TB_PAIRS.add(new String[]{"(?i).*\\bagree\\b.*",			"(?i).*\\bdisagree\\b.*"});
 		TB_PAIRS.add(new String[]{"(?i).*\\bapprove\\b.*",			"(?i).*\\bdisapprove\\b.*"});

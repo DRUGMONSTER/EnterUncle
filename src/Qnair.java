@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Qnair2{
+public class Qnair{
 	private static final ArrayList<Question> questions = new ArrayList<Question>();
 	private static final ArrayList<DemoQuestion> demoQuestions = new ArrayList<DemoQuestion>();
 	private static final Set<String> rejectableVariables = new HashSet<String>(Arrays.asList(new String[]{"TZONE", "LOC", "LDF", "LDE", "AREA", "FSA", "FSA1", "INTRO", "LANG", "IT2", "S1", "INT01", "INT99", "C3"}));

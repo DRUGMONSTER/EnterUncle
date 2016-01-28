@@ -14,18 +14,18 @@ public class Parser{
 
 		boolean success = readAndLoadFile(filepath, buffers);
 		if(!success)
-			return success;
+			return false;
 
 		formatAndAddQuestions(buffers, demographicKeywords);
 
-		ArrayList questions = Qnair2.getQuestions();
-		ArrayList demoQuestions = new Qnair2().getDemoQuestions();
+		ArrayList questions = Qnair.getQuestions();
+		ArrayList demoQuestions = Qnair.getDemoQuestions();
 
 		Logg.fine(questions.size() + " questions were added");
 		Logg.fine(demoQuestions.size() + " demographic questions were added");
 		Logg.fine(questions.size() + demoQuestions.size() + " questions total");
 
-		Qnair2.removeBadQuestions();
+		Qnair.removeBadQuestions();
 		return true;
 	}
 
@@ -43,6 +43,7 @@ public class Parser{
 		demographicKeywords.put("(?i).*\\bpart\\b.*\\bof\\b.*\\bcity\\b.*", 	"COMMUNITY");
 		demographicKeywords.put("(?i).*\\baddition\\b.*\\bcell phone\\b.*", 	"AlSO_LANDLINE");
 		demographicKeywords.put("(?i).*\\blandline\\b.*",						"REACHED");
+		demographicKeywords.put("(?i).*\\bborn in canada\\b.*",					"CANADA_BORN");
 	}
 
 	private static boolean readAndLoadFile(String filepath, ArrayList<ArrayList<String>> buffers){
@@ -86,8 +87,6 @@ public class Parser{
 
 
 				line = sc.nextLine();
-				//System.out.println(line);
-				//System.out.println("VV-" + sc.hasNextLine());
 				if(line.startsWith("*LL "))//next question reached
 					break;
 			}
@@ -138,7 +137,20 @@ public class Parser{
 			codeWidth = Integer.parseInt(rawVariable.substring(equalsPos + 1, spacePos));
 
 			String rawLabel = buffer.get(1).replace('\t', ' ');
-			label = rawLabel.substring(1, rawLabel.length() - 1);
+			label = rawLabel.substring(1, rawLabel.length() - 1); //remove square brackets around label
+
+			//Find and capitalize first letter
+			boolean firstLetter = false;
+			for(int i = 0; i < label.length(); i++){
+				if(!firstLetter && Character.isLetter(label.charAt(i)))
+					firstLetter = true;
+				if(Character.isLetter(label.charAt(i))){
+					System.out.println(label + " =-=-= " + i);
+					label = label.substring(0, i) + label.substring(i, i + 1).toUpperCase() + label.substring(i + 1);
+					System.out.println(label);
+					break;
+				}
+			}
 
 			//determine Question Identifier
 			if(demoQ){
@@ -176,6 +188,9 @@ public class Parser{
 					int choiceLabelEndPos = line.indexOf(']');
 					String choiceLabel = line.substring(1, choiceLabelEndPos);
 
+					if(choiceLabel.length() > 0)		//capitalize first letter
+						choiceLabel = choiceLabel.substring(0, 1).toUpperCase() + choiceLabel.substring(1);
+
 					int codeStartPos = line.indexOf('[', choiceLabelEndPos);
 					String code = line.substring(codeStartPos + 1, codeStartPos + 1 + codeWidth);
 
@@ -185,10 +200,10 @@ public class Parser{
 			pos += codeWidth;
 
 			if(demoQ){
-				Qnair2.addDemoQuestion(variableName, codeWidth, label, identifier, position, choices);
+				Qnair.addDemoQuestion(variableName, codeWidth, label, identifier, position, choices);
 				Logg.fine("Question " + variableName + " was added as demographic");
 			}else{
-				Qnair2.addQuestion(variableName, codeWidth, label, identifier, position, choices);
+				Qnair.addQuestion(variableName, codeWidth, label, identifier, position, choices);
 				Logg.fine("Question " + variableName + " was added");
 			}
 		}
