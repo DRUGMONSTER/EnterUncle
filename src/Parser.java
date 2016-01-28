@@ -4,19 +4,16 @@ import java.util.regex.Pattern;
 
 public class Parser{
 	private static final int START_POS = 246;
-	private static final Map<String, String> demographicKeywords = new LinkedHashMap<String, String>();
 
 	public static boolean parseASCFile(String filepath){
+		DemoMap.init();
 		ArrayList<ArrayList<String>> buffers = new ArrayList<ArrayList<String>>();
-
-		populateDemoMap(demographicKeywords);
-		Writer.identifiers = getUniqueIdentifiers();//REALLY SMELLY
 
 		boolean success = readAndLoadFile(filepath, buffers);
 		if(!success)
 			return false;
 
-		formatAndAddQuestions(buffers, demographicKeywords);
+		formatAndAddQuestions(buffers);
 
 		ArrayList questions = Qnair.getQuestions();
 		ArrayList demoQuestions = Qnair.getDemoQuestions();
@@ -27,25 +24,6 @@ public class Parser{
 
 		Qnair.removeBadQuestions();
 		return true;
-	}
-
-	private static void populateDemoMap(Map<String, String> demographicKeywords){
-		DemoMap.init();
-
-		demographicKeywords.put("(?i).*\\bgender\\b.*",							"GENDER");
-		demographicKeywords.put("(?i).*\\bchildren\\b.*",						"CHILDREN");
-		demographicKeywords.put("(?i).*\\bage\\?$",								"AGE");
-		demographicKeywords.put("(?i).*\\bold\\b.*",							"AGE");
-		demographicKeywords.put("(?i).*\\bproperty\\b.*",						"PROPERTY");
-		demographicKeywords.put("(?i).*\\beducation\\b.*",						"EDU");
-		demographicKeywords.put("(?i).*\\bwork or school\\b.*",					"TRANSIT");
-		demographicKeywords.put("(?i).*\\bethnic\\b.*", 						"ETHNIC");
-		demographicKeywords.put("(?i).*\\breligion\\b.*",						"RELIGION");
-		demographicKeywords.put("(?i).*\\bincome\\b.*", 						"INCOME");
-		demographicKeywords.put("(?i).*\\bpart\\b.*\\bof\\b.*\\bcity\\b.*", 	"COMMUNITY");
-		demographicKeywords.put("(?i).*\\baddition\\b.*\\bcell phone\\b.*", 	"AlSO_LANDLINE");
-		demographicKeywords.put("(?i).*\\blandline\\b.*",						"REACHED");
-		demographicKeywords.put("(?i).*\\bborn in canada\\b.*",					"CANADA_BORN");
 	}
 
 	private static boolean readAndLoadFile(String filepath, ArrayList<ArrayList<String>> buffers){
@@ -112,20 +90,17 @@ public class Parser{
 	}
 
 	//reads from buffers and adds questions and demo questions to Qnair
-	public static boolean formatAndAddQuestions(ArrayList<ArrayList<String>> buffers, Map<String, String> demographicKeywords){
+	public static boolean formatAndAddQuestions(ArrayList<ArrayList<String>> buffers){
 		int pos = START_POS;
 
 		for(ArrayList<String> buffer : buffers){
 			boolean demoQ = false;
-			String variableName = "";
 			String position = pos + "-";
-			int codeWidth = 0;
-			String label = "";
 			String identifier = "";
 			ArrayList<String[]> choices = new ArrayList<String[]>();//[0]=code; [1]=label;
 
 			String rawVariable = buffer.get(0);
-			variableName = rawVariable.substring(4, rawVariable.indexOf(" ", 4));
+			String variableName = rawVariable.substring(4, rawVariable.indexOf(" ", 4));
 			Logg.fine("Variable read: " + variableName);
 
 			//Mark demographic questions
@@ -136,10 +111,10 @@ public class Parser{
 
 			int equalsPos = rawVariable.indexOf("=");
 			int spacePos = rawVariable.indexOf(" ", equalsPos);
-			codeWidth = Integer.parseInt(rawVariable.substring(equalsPos + 1, spacePos));
+			int codeWidth = Integer.parseInt(rawVariable.substring(equalsPos + 1, spacePos));
 
 			String rawLabel = buffer.get(1).replace('\t', ' ');
-			label = rawLabel.substring(1, rawLabel.length() - 1); //remove square brackets around label
+			String label = rawLabel.substring(1, rawLabel.length() - 1); //remove square brackets around label
 
 			//Find and capitalize first letter
 			boolean firstLetter = false;
@@ -155,11 +130,12 @@ public class Parser{
 
 			//determine Question Identifier
 			if(demoQ){
+				String[] regexs = DemoMap.getRegexPatterns();
 				boolean set = false;
-				for(int i = 0; i < demographicKeywords.size(); i++){
-					String keyword = (String)demographicKeywords.keySet().toArray()[i];
-					if(Pattern.matches(keyword, label)){
-						identifier = demographicKeywords.get(keyword);
+				for(int i = 0; i < regexs.length; i++){
+					String regex = regexs[i];
+					if(Pattern.matches(regex, label)){
+						identifier = DemoMap.getIdentifier(regex);
 						set = true;
 						break;
 					}
@@ -209,17 +185,5 @@ public class Parser{
 			}
 		}
 		return true;
-	}
-
-	private static ArrayList<String> getUniqueIdentifiers(){
-		ArrayList<String> idents_r = new ArrayList<String>();
-		Set<String> idents = new HashSet<String>();
-		for(String s : demographicKeywords.values()){
-			if(!idents.contains(s)){						//might allready be unique
-				idents.add(s);
-				idents_r.add(s);
-			}
-		}
-		return idents_r;
 	}
 }

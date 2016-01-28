@@ -1,13 +1,13 @@
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 //Key       -> DiEntry
 //REGEXs -> (IDENT_STRING, DEMO_Q)
 
 
 public class DemoMap{
-	private  static Map<String, DiEntry> map = new LinkedHashMap<String, DiEntry>();
+	private static Map<String, DiEntry> map = new LinkedHashMap<String, DiEntry>();
 
+	//Populates the map
 	public static void init(){
 		map.put("(?i).*\\bgender\\b.*",							new DiEntry("GENDER"		, null));
 		map.put("(?i).*\\bchildren\\b.*",						new DiEntry("CHILDREN"		, null));
@@ -25,11 +25,25 @@ public class DemoMap{
 		map.put("(?i).*\\bborn in canada\\b.*",					new DiEntry("CANADA_BORN"	, null));
 	}
 
-	//use this in parser
-	public String[] getAllEntries(){
-		//return super.get(K).regex;
-		return null;
+	public static String[] getRegexPatterns(){
+		return map.keySet().toArray(new String[map.size()]);
 	}
+
+	public static String getIdentifier(String key){
+		return map.get(key).name;
+	}
+
+//	private static ArrayList<String> getUniqueIdentifiers(){
+//		ArrayList<String> idents_r = new ArrayList<String>();
+//		Set<String> idents = new HashSet<String>();
+//		for(String s : demographicKeywords.values()){
+//			if(!idents.contains(s)){						//might allready be unique
+//				idents.add(s);
+//				idents_r.add(s);
+//			}
+//		}
+//		return idents_r;
+//	}
 
 	static class DiEntry{
 		public String name;
