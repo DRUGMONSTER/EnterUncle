@@ -7,6 +7,12 @@ import java.util.*;
 public class DemoMap{
 	private static Map<String, DiEntry> map = new LinkedHashMap<String, DiEntry>();
 
+	private static DemoQuestion GENDER_Q = null;
+	private static DemoQuestion AGE_Q = null;
+	private static DemoQuestion INCOME_Q = null;
+	private static DemoQuestion CHILDREN_Q = null;
+	private static DemoQuestion COMMUNITY_Q = null;
+
 	//Populates the map
 	public static void init(){
 		map.put("(?i).*\\bgender\\b.*",							new DiEntry("GENDER"		, null));
@@ -29,21 +35,44 @@ public class DemoMap{
 		return map.keySet().toArray(new String[map.size()]);
 	}
 
-	public static String getIdentifier(String key){
-		return map.get(key).name;
+	public static String getIdentifier(String key, DemoQuestion dq){
+		DiEntry ent = map.get(key);
+		ent.dq = dq;
+		String ident = ent.name;
+
+		if(ident.equals("GENDER"))
+			GENDER_Q = dq;
+		else if(ident.equals("AGE"))
+			AGE_Q = dq;
+		else if(ident.equals("INCOME"))
+			INCOME_Q = dq;
+		else if(ident.equals("CHILDREN"))
+			CHILDREN_Q = dq;
+		else if(ident.equals("COMMUNITY"))
+			COMMUNITY_Q = dq;
+
+		return ident;
 	}
 
-//	private static ArrayList<String> getUniqueIdentifiers(){
-//		ArrayList<String> idents_r = new ArrayList<String>();
-//		Set<String> idents = new HashSet<String>();
-//		for(String s : demographicKeywords.values()){
-//			if(!idents.contains(s)){						//might allready be unique
-//				idents.add(s);
-//				idents_r.add(s);
-//			}
-//		}
-//		return idents_r;
-//	}
+	public static DemoQuestion getGenderQ(){
+		return GENDER_Q;
+	}
+
+	public static DemoQuestion getAgeQ(){
+		return AGE_Q;
+	}
+
+	public static DemoQuestion getIncomeQ(){
+		return INCOME_Q;
+	}
+
+	public static DemoQuestion getChildrenQ(){
+		return CHILDREN_Q;
+	}
+
+	public static DemoQuestion getCommunityQ(){
+		return COMMUNITY_Q;
+	}
 
 	static class DiEntry{
 		public String name;

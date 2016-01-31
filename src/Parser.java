@@ -94,6 +94,7 @@ public class Parser{
 		int pos = START_POS;
 
 		for(ArrayList<String> buffer : buffers){
+			DemoQuestion dq = new DemoQuestion();
 			boolean demoQ = false;
 			String position = pos + "-";
 			String identifier = "";
@@ -132,10 +133,9 @@ public class Parser{
 			if(demoQ){
 				String[] regexs = DemoMap.getRegexPatterns();
 				boolean set = false;
-				for(int i = 0; i < regexs.length; i++){
-					String regex = regexs[i];
+				for(String regex : regexs){
 					if(Pattern.matches(regex, label)){
-						identifier = DemoMap.getIdentifier(regex);
+						identifier = DemoMap.getIdentifier(regex, dq);
 						set = true;
 						break;
 					}
@@ -144,16 +144,16 @@ public class Parser{
 					identifier = "DEMO_QUESTION_ID_NOT_FOUND";
 			}else{
 				if(!label.isEmpty()){
-					int delimeter = label.indexOf(".");//find first period
+					int delimiter = label.indexOf(".");//find first period
 
-					if(delimeter == -1 || delimeter > 9)//period not found or too far away
-						delimeter = label.indexOf(" ");//use first space instead
+					if(delimiter == -1 || delimiter > 9)//period not found or too far away
+						delimiter = label.indexOf(" ");//use first space instead
 
-					if(delimeter == -1){//space not found either
+					if(delimiter == -1){//space not found either
 						identifier = variableName;
 						Logg.warning(variableName + " - question identifier not found and label not empty");
 					}else
-						identifier = label.substring(0, delimeter).toUpperCase();
+						identifier = label.substring(0, delimiter).toUpperCase();
 				}
 			}
 
@@ -177,7 +177,8 @@ public class Parser{
 			pos += codeWidth;
 
 			if(demoQ){
-				Qnair.addDemoQuestion(variableName, codeWidth, label, identifier, position, choices);
+				dq.setAll(variableName, codeWidth, label, identifier, position, choices);
+				Qnair.addDemoQuestion(dq);
 				Logg.fine("Question " + variableName + " was added as demographic");
 			}else{
 				Qnair.addQuestion(variableName, codeWidth, label, identifier, position, choices);

@@ -7,18 +7,6 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 public class Writer{
-	private static final int GENDER_IDENTIFIER = 0; //also pretty smelly
-	private static final int CHILDREN_IDENTIFIER = 1;
-	private static final int AGE_IDENTIFIER = 2;
-	private static final int INCOME_IDENTIFIER = 8;
-
-	private static final DemoQuestion GENDER_Q = null;
-	private static final DemoQuestion CHILDREN_Q = null;
-	private static final DemoQuestion AGE_Q = null;
-	private static final DemoQuestion INCOME_Q = null;
-
-	public static ArrayList<String> identifiers;
-
 	private static final ArrayList<String[]> TB_PAIRS = new ArrayList<String[]>();
 	private static String projectName;
 	private static ArrayList<Question> questions;
@@ -77,7 +65,7 @@ public class Writer{
 
 		writer.println();
 		write600s(writer);
-		write800s(writer, demoQuestions, 0);
+		write800s(writer, 0);
 		write900s(writer, checked.size());
 		write1000s(writer, checked);
 
@@ -88,7 +76,7 @@ public class Writer{
 		String qbPos = qb.getPosition();
 		ArrayList<String[]> choices = qb.getChoices();
 		String[] means = new String[0];
-		if(qb.getIdentifier().equals(identifiers.get(AGE_IDENTIFIER))){//smelly
+		if(qb == DemoMap.getAgeQ()){
 			means = new String[6];
 			means[0] = "; v20";
 			means[1] = "; v29.5";
@@ -96,7 +84,7 @@ public class Writer{
 			means[3] = "; v49.5";
 			means[4] = "; v59.5";
 			means[5] = "; v70";
-		}else if(qb.getIdentifier().equals(identifiers.get(INCOME_IDENTIFIER))){
+		}else if(qb == DemoMap.getIncomeQ()){
 			means = new String[7];
 			means[0] = "; v17500";
 			means[1] = "; v30000";
@@ -164,24 +152,17 @@ public class Writer{
 						"X calc F310:325 12 (W)\n\n");
 	}
 
-	private static void write800s(PrintWriter w, ArrayList<DemoQuestion> dqs, int region){
-		DemoQuestion genderDQ = null;
-		DemoQuestion ageDQ = null;
+	private static void write800s(PrintWriter w, int region){
+		DemoQuestion genderQ = DemoMap.getGenderQ();
+		DemoQuestion ageQ = DemoMap.getAgeQ();
 
+		if(genderQ == null)
+			return;
+		if(ageQ == null)
+			return;
 
-		for(DemoQuestion dq : dqs){
-			if(dq.getIdentifier().equals(identifiers.get(GENDER_IDENTIFIER)))	//Smelly
-				genderDQ = dq;
-			else if(dq.getIdentifier().equals(identifiers.get(AGE_IDENTIFIER)))
-				ageDQ = dq;
-		}
-
-		String genderPos = "0";
-		String  agePos = "0";
-		if(genderDQ != null)
-			genderPos = genderDQ.getPosition();
-		if(ageDQ != null)
-			agePos = ageDQ.getPosition();
+		String genderPos = genderQ.getPosition();
+		String agePos = ageQ.getPosition();
 
 		//0 = Toronto
 		if(region == 0){
@@ -202,13 +183,17 @@ public class Writer{
 				"R Female 65 +;\t\t"	+ genderPos + "2 " + agePos + "6; v 0.0869158024001612\n");
 
 			//If region demo exists
-			w.println(
-				"TABLE 803\n" +
-				"T Region Weight (Toronto)\n"	+
-				"R The former City of Toronto or East York;\t"	+ "999-1,2;\t"	+ "v 0.2970\n" + //needs edit
-				"R North York;\t\t\t\t\t\t\t\t"				 	+ "999-3;\t\t"	+ "v 0.2524\n" +
-				"R Etobicoke or York;\t\t\t\t\t\t"				+ "999-4,5;\t"	+ "v 0.2358\n" +
-				"R Scarborough;\t\t\t\t\t\t\t\t"				+ "999-6;\t\t"	+ "v 0.2148\n");
+			DemoQuestion communityQ = DemoMap.getCommunityQ();
+			if(communityQ != null){
+				String communityPos = communityQ.getPosition();
+				w.println(
+					"TABLE 803\n" +
+					"T Region Weight (Toronto)\n" +
+					"R The former City of Toronto or East York;\t"			+ communityPos + "1,2;\t" + "v 0.2970\n" +
+					"R North York;\t\t\t\t\t\t\t\t"							+ communityPos + "3;\t\t" + "v 0.2524\n" +
+					"R Etobicoke or York;\t\t\t\t\t\t"						+ communityPos + "4,5;\t" + "v 0.2358\n" +
+					"R Scarborough;\t\t\t\t\t\t\t\t"						+ communityPos + "6;\t\t" + "v 0.2148\n");
+			}
 		}
 
 		w.println(
@@ -251,8 +236,8 @@ public class Writer{
 		ArrayList<ArrayList<String>> bufferOfLines = new ArrayList<ArrayList<String>>();
 		ArrayList<QuestionBase> newOrder = reorderQuestions(checked);
 		addMoms(newOrder);
-		mergeAge(newOrder);
-		cropIncomeDQ(newOrder);
+		mergeAge();
+		cropIncomeDQ();
 		for(QuestionBase qb : newOrder){
 			String qbPos = qb.getPosition();
 			ArrayList<String> lines = new ArrayList<String>();
@@ -290,22 +275,25 @@ public class Writer{
 		bufferOfLines.remove(0);
 		bufferOfLines.remove(0);
 
+		String genPos = DemoMap.getGenderQ().getPosition();
+		String agePos = DemoMap.getAgeQ().getPosition();
 		ArrayList<String> ageAndGen = new ArrayList<String>();
-		ageAndGen.add("C 18-34;\t");
-		ageAndGen.add("C 35-44;\t");
-		ageAndGen.add("C 45-54;\t");
-		ageAndGen.add("C 55-64;\t");
-		ageAndGen.add("C 65+;\t\t");
-		ageAndGen.add("C Male;\t\t\t");
-		ageAndGen.add("C Female;\t\t");
+		ageAndGen.add("C 18-34;\t" + genPos + "1,2");
+		ageAndGen.add("C 35-44;\t" + genPos + "3");
+		ageAndGen.add("C 45-54;\t" + genPos + "4");
+		ageAndGen.add("C 55-64;\t" + genPos + "5");
+		ageAndGen.add("C 65+;\t\t" + genPos + "6");
+		ageAndGen.add("C Male;\t\t\t" + agePos + "1");
+		ageAndGen.add("C Female;\t\t" + agePos + "2");
 
+		String incomePos = DemoMap.getIncomeQ().getPosition();
 		ArrayList<String> income = new ArrayList<String>();
-		income.add("C <20K;\t\t");
-		income.add("C 20-40K;\t");
-		income.add("C 40-60K;\t");
-		income.add("C 60-80K;\t");
-		income.add("C 80-100K;\t");
-		income.add("C 100-250K;\t");
+		income.add("C <20K;\t\t"	 + incomePos + "1");
+		income.add("C 20-40K;\t"	 + incomePos + "2");
+		income.add("C 40-60K;\t"	 + incomePos + "3");
+		income.add("C 60-80K;\t"	 + incomePos + "4");
+		income.add("C 80-100K;\t"	 + incomePos + "5");
+		income.add("C 100-250K;\t"	 + incomePos + "6");
 
 		bufferOfLines.add(0, income);
 		bufferOfLines.add(0, ageAndGen);
@@ -324,7 +312,6 @@ public class Writer{
 
 			w.println();
 		}
-		//w.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	}
 
 	private static ArrayList<QuestionBase> reorderQuestions(ArrayList<QuestionBase> unorderedQuestions){
@@ -381,25 +368,12 @@ public class Writer{
 
 	//If children demo question is found, inserts a "MOMS" dummy question
 	private static void addMoms(ArrayList<QuestionBase> questionBases){
-		QuestionBase genderQ = new QuestionBase();
-		QuestionBase childrenQ = new QuestionBase();
+		QuestionBase genderQ = DemoMap.getGenderQ();
+		QuestionBase childrenQ = DemoMap.getChildrenQ();
 		int childrenPos = -1;
 
-		for(int i = 0; i < questionBases.size(); i++){
-			QuestionBase qb = questionBases.get(i);
-
-			if(qb.getIdentifier().equals(identifiers.get(GENDER_IDENTIFIER))){			//smelly
-				genderQ = qb;
-				continue;
-			}
-			if(qb.getIdentifier().equals(identifiers.get(CHILDREN_IDENTIFIER))){		//smelly
-				childrenQ = qb;
-				childrenPos = i;
-			}
-		}
-
 		//Children Demo Question not detected, Abort!!
-		if(childrenPos == -1)
+		if(childrenQ == null)
 			return;
 
 		DemoQuestion dq = new DemoQuestion();
@@ -410,15 +384,11 @@ public class Writer{
 	}
 
 	//If age demo question is found, merges < 24 with < 34
-	private static void mergeAge (ArrayList<QuestionBase> questionBases){
-		QuestionBase ageDQ = null;
+	private static void mergeAge(){
+		QuestionBase ageDQ = DemoMap.getAgeQ();
 
-		for(QuestionBase qb : questionBases){
-			if(qb.getIdentifier().equals(identifiers.get(AGE_IDENTIFIER)))            //smelly
-				ageDQ = qb;
-		}
-
-		if(ageDQ == null)//Age not found
+		//Age Demo Question not detected, Abort!!
+		if(ageDQ == null)
 			return;
 
 		ArrayList<String[]> choices = ageDQ.getChoices();
@@ -431,15 +401,11 @@ public class Writer{
 	}
 
 	//Removes "Prefer not to answer" and "> 200'000"
-	private static void cropIncomeDQ(ArrayList<QuestionBase> questionBases){
-		QuestionBase incomeDQ = null;
+	private static void cropIncomeDQ(){
+		QuestionBase incomeDQ = DemoMap.getIncomeQ();
 
-		for(QuestionBase qb : questionBases){
-			if(qb.getIdentifier().equals(identifiers.get(INCOME_IDENTIFIER)))            //smelly
-				incomeDQ = qb;
-		}
-
-		if(incomeDQ == null)//Income not found
+		//Income Demo Question not detected, Abort!!
+		if(incomeDQ == null)
 			return;
 
 		ArrayList<String[]> choices = incomeDQ.getChoices();

@@ -8,8 +8,6 @@ public class QuestionBase{
 	private String position;
 	private ArrayList<String[]> choices = new ArrayList<String[]>();//[0]=code; [1]=label;
 
-	//move "position" out of choices ArrayList. Make it a regular object variable
-
 	public QuestionBase(){
 		variable = "";
 		codeWidth = -1;
@@ -19,6 +17,17 @@ public class QuestionBase{
 	}
 
 	public QuestionBase(String var, int cw, String l, String ident, String pos, ArrayList<String[]> choices){
+		variable = var;
+		codeWidth = cw;
+		label = l;
+		questionIdentifier = ident;
+		position = pos;
+		for(String[] choice : choices){
+			addChoice(choice[0], choice[1]);
+		}
+	}
+
+	public void setAll(String var, int cw, String l, String ident, String pos, ArrayList<String[]> choices){
 		variable = var;
 		codeWidth = cw;
 		label = l;
