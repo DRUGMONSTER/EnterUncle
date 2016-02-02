@@ -76,7 +76,7 @@ public class Writer{
 		String qbPos = qb.getPosition();
 		ArrayList<String[]> choices = qb.getChoices();
 		String[] means = new String[0];
-		if(qb == DemoMap.getAgeQ()){
+		if(qb == DemoMap.getAgeDQ()){
 			means = new String[6];
 			means[0] = "; v20";
 			means[1] = "; v29.5";
@@ -84,7 +84,7 @@ public class Writer{
 			means[3] = "; v49.5";
 			means[4] = "; v59.5";
 			means[5] = "; v70";
-		}else if(qb == DemoMap.getIncomeQ()){
+		}else if(qb == DemoMap.getIncomeDQ()){
 			means = new String[7];
 			means[0] = "; v17500";
 			means[1] = "; v30000";
@@ -153,8 +153,8 @@ public class Writer{
 	}
 
 	private static void write800s(PrintWriter w, int region){
-		DemoQuestion genderQ = DemoMap.getGenderQ();
-		DemoQuestion ageQ = DemoMap.getAgeQ();
+		DemoQuestion genderQ = DemoMap.getGenderDQ();
+		DemoQuestion ageQ = DemoMap.getAgeDQ();
 
 		if(genderQ == null)
 			return;
@@ -183,7 +183,7 @@ public class Writer{
 				"R Female 65 +;\t\t"	+ genderPos + "2 " + agePos + "6; v 0.0869158024001612\n");
 
 			//If region demo exists
-			DemoQuestion communityQ = DemoMap.getCommunityQ();
+			DemoQuestion communityQ = DemoMap.getCommunityDQ();
 			if(communityQ != null){
 				String communityPos = communityQ.getPosition();
 				w.println(
@@ -241,6 +241,10 @@ public class Writer{
 		for(QuestionBase qb : newOrder){
 			String qbPos = qb.getPosition();
 			ArrayList<String> lines = new ArrayList<String>();
+			if(qb.getChoices().isEmpty()){
+				String line = "C " + qb.getIdentifier() + "; " + qbPos;
+				lines.add(line);
+			}
 			for(String choice[] : qb.getChoices()){
 				String line = "C " + qb.getIdentifier() + " - " + choice[1] + "; " + qbPos + choice[0];
 
@@ -275,8 +279,8 @@ public class Writer{
 		bufferOfLines.remove(0);
 		bufferOfLines.remove(0);
 
-		String genPos = DemoMap.getGenderQ().getPosition();
-		String agePos = DemoMap.getAgeQ().getPosition();
+		String genPos = DemoMap.getGenderDQ().getPosition();
+		String agePos = DemoMap.getAgeDQ().getPosition();
 		ArrayList<String> ageAndGen = new ArrayList<String>();
 		ageAndGen.add("C 18-34;\t" + genPos + "1,2");
 		ageAndGen.add("C 35-44;\t" + genPos + "3");
@@ -286,7 +290,7 @@ public class Writer{
 		ageAndGen.add("C Male;\t\t\t" + agePos + "1");
 		ageAndGen.add("C Female;\t\t" + agePos + "2");
 
-		String incomePos = DemoMap.getIncomeQ().getPosition();
+		String incomePos = DemoMap.getIncomeDQ().getPosition();
 		ArrayList<String> income = new ArrayList<String>();
 		income.add("C <20K;\t\t"	 + incomePos + "1");
 		income.add("C 20-40K;\t"	 + incomePos + "2");
@@ -320,15 +324,15 @@ public class Writer{
 		ArrayList<QuestionBase> ordered = new ArrayList<QuestionBase>();
 		ordered.addAll(unorderedQuestions);
 
-		DemoQuestion ageDQ = null;
-		DemoQuestion genderDQ = null;
-		DemoQuestion incomeDQ = null;
-		DemoQuestion communityDQ = null;
+		DemoQuestion ageDQ = DemoMap.getAgeDQ();
+		DemoQuestion genderDQ = DemoMap.getGenderDQ();
+		DemoQuestion incomeDQ = DemoMap.getIncomeDQ();
+		DemoQuestion communityDQ = DemoMap.getCommunityDQ();
 
 		for(QuestionBase qb : unorderedQuestions){
 			String ident = qb.getIdentifier();
 
-			if(ident.equals("AGE"))            //Smelly
+			if(ident.equals("AGE"))            //Smelly!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				ageDQ = (DemoQuestion)qb;
 			else if(ident.equals("GENDER"))
 				genderDQ = (DemoQuestion)qb;
@@ -368,24 +372,23 @@ public class Writer{
 
 	//If children demo question is found, inserts a "MOMS" dummy question
 	private static void addMoms(ArrayList<QuestionBase> questionBases){
-		QuestionBase genderQ = DemoMap.getGenderQ();
-		QuestionBase childrenQ = DemoMap.getChildrenQ();
-		int childrenPos = -1;
+		QuestionBase genderDQ = DemoMap.getGenderDQ();
+		QuestionBase childrenDQ = DemoMap.getChildrenDQ();
 
 		//Children Demo Question not detected, Abort!!
-		if(childrenQ == null)
+		if(childrenDQ == null)
 			return;
 
+		int childrenPos = questionBases.indexOf(childrenDQ);
 		DemoQuestion dq = new DemoQuestion();
 		dq.setIdentifier("MOMS");
-		dq.setPosition("(" + childrenQ.getPosition() + "1 " + genderQ.getPosition() + "2)");
-		dq.addChoice("", "");
+		dq.setPosition("(" + childrenDQ.getPosition() + "1 " + genderDQ.getPosition() + "2)");
 		questionBases.add(childrenPos + 1, dq);//inserts after children question
 	}
 
 	//If age demo question is found, merges < 24 with < 34
 	private static void mergeAge(){
-		QuestionBase ageDQ = DemoMap.getAgeQ();
+		QuestionBase ageDQ = DemoMap.getAgeDQ();
 
 		//Age Demo Question not detected, Abort!!
 		if(ageDQ == null)
@@ -402,7 +405,7 @@ public class Writer{
 
 	//Removes "Prefer not to answer" and "> 200'000"
 	private static void cropIncomeDQ(){
-		QuestionBase incomeDQ = DemoMap.getIncomeQ();
+		QuestionBase incomeDQ = DemoMap.getIncomeDQ();
 
 		//Income Demo Question not detected, Abort!!
 		if(incomeDQ == null)
