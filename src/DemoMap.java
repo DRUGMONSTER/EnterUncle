@@ -7,11 +7,11 @@ import java.util.*;
 public class DemoMap{
 	private static Map<String, DiEntry> map = new LinkedHashMap<String, DiEntry>();
 
-	private static DemoQuestion GENDER_Q = null;
-	private static DemoQuestion AGE_Q = null;
-	private static DemoQuestion INCOME_Q = null;
-	private static DemoQuestion CHILDREN_Q = null;
-	private static DemoQuestion COMMUNITY_Q = null;
+	private static DemoQuestion GENDER_DQ = null;
+	private static DemoQuestion AGE_DQ = null;
+	private static DemoQuestion INCOME_DQ = null;
+	private static DemoQuestion CHILDREN_DQ = null;
+	private static DemoQuestion COMMUNITY_DQ = null;
 
 	//Populates the map
 	public static void init(){
@@ -41,37 +41,37 @@ public class DemoMap{
 		String ident = ent.name;
 
 		if(ident.equals("GENDER"))
-			GENDER_Q = dq;
+			GENDER_DQ = dq;
 		else if(ident.equals("AGE"))
-			AGE_Q = dq;
+			AGE_DQ = dq;
 		else if(ident.equals("INCOME"))
-			INCOME_Q = dq;
+			INCOME_DQ = dq;
 		else if(ident.equals("CHILDREN"))
-			CHILDREN_Q = dq;
+			CHILDREN_DQ = dq;
 		else if(ident.equals("COMMUNITY"))
-			COMMUNITY_Q = dq;
+			COMMUNITY_DQ = dq;
 
 		return ident;
 	}
 
-	public static DemoQuestion getGenderQ(){
-		return GENDER_Q;
+	public static DemoQuestion getGenderDQ(){
+		return GENDER_DQ;
 	}
 
-	public static DemoQuestion getAgeQ(){
-		return AGE_Q;
+	public static DemoQuestion getAgeDQ(){
+		return AGE_DQ;
 	}
 
-	public static DemoQuestion getIncomeQ(){
-		return INCOME_Q;
+	public static DemoQuestion getIncomeDQ(){
+		return INCOME_DQ;
 	}
 
-	public static DemoQuestion getChildrenQ(){
-		return CHILDREN_Q;
+	public static DemoQuestion getChildrenDQ(){
+		return CHILDREN_DQ;
 	}
 
-	public static DemoQuestion getCommunityQ(){
-		return COMMUNITY_Q;
+	public static DemoQuestion getCommunityDQ(){
+		return COMMUNITY_DQ;
 	}
 
 	static class DiEntry{
