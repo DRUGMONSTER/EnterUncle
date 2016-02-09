@@ -12,6 +12,7 @@ public class DemoMap{
 	private static DemoQuestion INCOME_DQ = null;
 	private static DemoQuestion CHILDREN_DQ = null;
 	private static DemoQuestion COMMUNITY_DQ = null;
+	private static DemoQuestion ALSO_LANDLINE_DQ = null;
 
 	//Populates the map
 	public static void init(){
@@ -50,6 +51,8 @@ public class DemoMap{
 			CHILDREN_DQ = dq;
 		else if(ident.equals("COMMUNITY"))
 			COMMUNITY_DQ = dq;
+		else if(ident.equals("AlSO_LANDLINE"))
+			ALSO_LANDLINE_DQ = dq;
 
 		return ident;
 	}
@@ -72,6 +75,10 @@ public class DemoMap{
 
 	public static DemoQuestion getCommunityDQ(){
 		return COMMUNITY_DQ;
+	}
+
+	public static DemoQuestion getAlsoLandlineDQ(){
+		return ALSO_LANDLINE_DQ;
 	}
 
 	static class DiEntry{

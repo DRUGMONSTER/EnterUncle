@@ -238,6 +238,9 @@ public class Writer{
 		addMoms(newOrder);
 		mergeAge();
 		cropIncomeDQ();
+		System.out.println(newOrder.size());
+		addSampleMock(newOrder);
+		System.out.println("====\n\n====\n" + newOrder.size());
 		for(QuestionBase qb : newOrder){
 			String qbPos = qb.getPosition();
 			ArrayList<String> lines = new ArrayList<String>();
@@ -416,6 +419,25 @@ public class Writer{
 			choices.remove(choices.size() - 1);
 			choices.remove(choices.size() - 1);
 		}
+	}
+
+	//Removes "also landline", and add a sample mock question
+	private static void addSampleMock(ArrayList<QuestionBase> questionBases){
+		DemoQuestion alsoLandlineDQ = DemoMap.getAlsoLandlineDQ();
+
+		//Also_ Demo Question not detected, Abort!!
+		if(alsoLandlineDQ == null)
+			return;
+
+		int alsoLandlinePos = questionBases.indexOf(alsoLandlineDQ);
+		DemoQuestion dq = new DemoQuestion();
+		dq.setIdentifier("SAMPLE");
+		dq.setPosition("271-");
+		dq.addChoice("0", "Landline");
+		dq.addChoice("1", "Cellphone");
+
+		questionBases.remove(alsoLandlineDQ);
+		questionBases.add(alsoLandlinePos - 1, dq);//inserts before landline question
 	}
 
 	private static void init(){
