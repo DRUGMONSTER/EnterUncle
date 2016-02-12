@@ -29,7 +29,7 @@ public class GUI extends JFrame{
 
 	private Map<JCheckBox, Question> bannerQuestions = new LinkedHashMap<JCheckBox, Question>();
 	private Map<JCheckBox, DemoQuestion> bannerDemoQuestions = new LinkedHashMap<JCheckBox, DemoQuestion>();
-	private JRadioButton[] radioButtons = {new JRadioButton("Municipal"), new JRadioButton("Provincial"), new JRadioButton("Federal")};
+	private JRadioButton[] radioButtons = {new JRadioButton("Municipal", true), new JRadioButton("Provincial"), new JRadioButton("Federal")};
 	
 	public GUI(){
 		setTitle("Uncle Convert beta v" + VERSION);
@@ -105,7 +105,7 @@ public class GUI extends JFrame{
 			governmentLevelWrap.add(jrb);
 			governmentLevel.add(jrb);
 		}
-		governmentLevel.setSelected(radioButtons[0].getModel(), true);
+		//governmentLevel.setSelected(radioButtons[0].getModel(), true);
 		governmentLevelWrap.setPreferredSize(new Dimension(0, 23));
 		buttonWrap.add(governmentLevelWrap);
 
@@ -127,7 +127,7 @@ public class GUI extends JFrame{
 		public void actionPerformed(ActionEvent e){
 			if(e.getSource() == writeOutBTN){
 				//getSelected from governmentLevel ButtonGroup
-				governmentLevel.getSelection();
+				System.out.println(governmentLevel.getSelection() == radioButtons[0].getModel());//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 				if(Qnair.isEmpty()){
 					statusTF.setText("Can't Write - Empty Qnair");

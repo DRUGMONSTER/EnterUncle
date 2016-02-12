@@ -238,9 +238,9 @@ public class Writer{
 		addMoms(newOrder);
 		mergeAge();
 		cropIncomeDQ();
-		System.out.println(newOrder.size());
+		//System.out.println(newOrder.size());
 		addSampleMock(newOrder);
-		System.out.println("====\n\n====\n" + newOrder.size());
+		//System.out.println("====\n\n====\n" + newOrder.size());
 		for(QuestionBase qb : newOrder){
 			String qbPos = qb.getPosition();
 			ArrayList<String> lines = new ArrayList<String>();
