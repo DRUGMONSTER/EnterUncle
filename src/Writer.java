@@ -7,13 +7,14 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 public class Writer{
+	private static int govLvl = -1;
 	private static final ArrayList<String[]> TB_PAIRS = new ArrayList<String[]>();
 	private static String projectName;
 	private static ArrayList<Question> questions;
 	private static ArrayList<DemoQuestion> demoQuestions;
 
-	public static void writeFile(File file, ArrayList<QuestionBase> checked, int govLvl){
-		init();
+	public static void writeFile(File file, ArrayList<QuestionBase> checked, int aGovLvl){
+		init(aGovLvl);
 
 		PrintWriter writer;
 		String originalFilePath = file.getParentFile().toString();
@@ -197,12 +198,12 @@ public class Writer{
 		}
 
 		w.println(
-				"TABLE 804\n" +
-						"T weight execute\n" +
-						"X set qual off\n" +
-						"X weight unweight\n" +
-						"X weight 802 803\n" +
-						"X set qual off\n\n");
+			"TABLE 804\n" +
+			"T weight execute\n" +
+			"X set qual off\n" +
+			"X weight unweight\n" +
+			"X weight 802 803\n" +
+			"X set qual off\n\n");
 	}
 
 	private static void write900s(PrintWriter w, int checked){
@@ -212,14 +213,27 @@ public class Writer{
 			copyPasteTables += table + " ";
 		}
 
+		String partyPreference200s = "";
+		if(govLvl == GUI.PROVINCIAL)
+			partyPreference200s = "2 201 202 ";
 		int size = questions.size() + demoQuestions.size();
 		String excel = "excel(name'" + projectName + " - __NAME__ - " + getDate();
 		w.println(
-				"TABLE 901\n" +
-						"X run 1 thru " + size + " b1001 nofreq pdp 0 " + excel + "' sheet'&r')\n" +
-						"X run 1 thru " + size + " b1001 nofreq pdp 0 " + excel + " nosgtest' sheet'&r') nosgtest nottest\n" +
-						"X run 1 thru " + size + " b1001 novp pdp 0 " + excel + " novp' sheet'&r') nosgtest nottest\n" +
-						"X run 1 thru " + size + " b" + copyPasteTables + "nofreq pdp 0 " + excel + " copy-paste' sheet'&r &b') nosgtest nottest\n\n");
+			"TABLE 901\n" +
+			"X run 1 " + partyPreference200s + "thru " + size + " b1001 nofreq pdp 0 " + excel + "' sheet'&r')\n" +
+			"X run 1 " + partyPreference200s + "thru " + size + " b1001 nofreq pdp 0 " + excel + " nosgtest' sheet'&r') nosgtest nottest\n" +
+			"X run 1 " + partyPreference200s + "thru " + size + " b1001 novp pdp 0 " + excel + " novp' sheet'&r') nosgtest nottest\n" +
+			"X run 1 " + partyPreference200s + "thru " + size + " b" + copyPasteTables + "nofreq pdp 0 " + excel + " copy-paste' sheet'&r &b') nosgtest nottest\n");
+
+		if(govLvl == GUI.PROVINCIAL)
+			w.println(
+				"TABLE 902\n" +
+				"X run 1 " + partyPreference200s + "b1001 nofreq pdp 0 " + excel + "' sheet'&r')\n" +
+				"X run 1 " + partyPreference200s + "b1001 nofreq pdp 0 " + excel + " nosgtest' sheet'&r') nosgtest nottest\n" +
+				"X run 1 " + partyPreference200s + "b1001 novp pdp 0 " + excel + " novp' sheet'&r') nosgtest nottest\n" +
+				"X run 1 " + partyPreference200s + "b" + copyPasteTables + "nofreq pdp 0 " + excel + " copy-paste' sheet'&r &b') nosgtest nottest\n");
+
+		w.println();
 	}
 
 	private static void write1000s(PrintWriter w, ArrayList<QuestionBase> checked){
@@ -431,7 +445,8 @@ public class Writer{
 		Logg.info("Added Sample DQ");
 	}
 
-	private static void init(){
+	private static void init(int aGovLvl){
+		govLvl = aGovLvl;
 		questions = Qnair.getQuestions();
 		demoQuestions = Qnair.getDemoQuestions();
 
