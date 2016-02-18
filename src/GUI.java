@@ -14,6 +14,10 @@ import javax.swing.border.EmptyBorder;
 
 
 public class GUI extends JFrame{
+	public static final int MUNICIPAL = 0;
+	public static final int PROVINCIAL = 1;
+	public static final int FEDERAL = 2;
+
 	private static final String VERSION = "0.30b";
 	private static final long serialVersionUID = 1L;
 	private static final int FRAME_WIDTH = 720;
@@ -25,12 +29,12 @@ public class GUI extends JFrame{
 	private JTextField fileToConvPathTF;
 	private JTextField statusTF;
 	private JPanel bannerWrap;
-	private ButtonGroup governmentLevel;
 
+	private ButtonGroup governmentLevel;
 	private Map<JCheckBox, Question> bannerQuestions = new LinkedHashMap<JCheckBox, Question>();
 	private Map<JCheckBox, DemoQuestion> bannerDemoQuestions = new LinkedHashMap<JCheckBox, DemoQuestion>();
 	private JRadioButton[] radioButtons = {new JRadioButton("Municipal", true), new JRadioButton("Provincial"), new JRadioButton("Federal")};
-	
+
 	public GUI(){
 		setTitle("Uncle Convert beta v" + VERSION);
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -105,7 +109,6 @@ public class GUI extends JFrame{
 			governmentLevelWrap.add(jrb);
 			governmentLevel.add(jrb);
 		}
-		//governmentLevel.setSelected(radioButtons[0].getModel(), true);
 		governmentLevelWrap.setPreferredSize(new Dimension(0, 23));
 		buttonWrap.add(governmentLevelWrap);
 
@@ -126,8 +129,14 @@ public class GUI extends JFrame{
 	private class ButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			if(e.getSource() == writeOutBTN){
-				//getSelected from governmentLevel ButtonGroup
-				System.out.println(governmentLevel.getSelection() == radioButtons[0].getModel());//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				int govLvl = -1;
+				if(governmentLevel.getSelection() == radioButtons[MUNICIPAL].getModel())
+					govLvl = MUNICIPAL;
+				else if(governmentLevel.getSelection() == radioButtons[PROVINCIAL].getModel())
+					govLvl = PROVINCIAL;
+				else if(governmentLevel.getSelection() == radioButtons[FEDERAL].getModel())
+					govLvl = FEDERAL;
+
 
 				if(Qnair.isEmpty()){
 					statusTF.setText("Can't Write - Empty Qnair");
@@ -142,7 +151,7 @@ public class GUI extends JFrame{
 					if(((JCheckBox) entry.getKey()).isSelected())
 						checked.add((QuestionBase)entry.getValue());
 				}
-				Writer.writeFile(ascFile, checked);
+				Writer.writeFile(ascFile, checked, govLvl);
 
 				statusTF.setText("Conversion Complete");
 				System.out.println("DONE");

@@ -12,7 +12,7 @@ public class Writer{
 	private static ArrayList<Question> questions;
 	private static ArrayList<DemoQuestion> demoQuestions;
 
-	public static void writeFile(File file, ArrayList<QuestionBase> checked){
+	public static void writeFile(File file, ArrayList<QuestionBase> checked, int govLvl){
 		init();
 
 		PrintWriter writer;
@@ -332,19 +332,6 @@ public class Writer{
 		DemoQuestion incomeDQ = DemoMap.getIncomeDQ();
 		DemoQuestion communityDQ = DemoMap.getCommunityDQ();
 
-		for(QuestionBase qb : unorderedQuestions){
-			String ident = qb.getIdentifier();
-
-			if(ident.equals("AGE"))            //Smelly!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				ageDQ = (DemoQuestion)qb;
-			else if(ident.equals("GENDER"))
-				genderDQ = (DemoQuestion)qb;
-			else if(ident.equals("INCOME"))
-				incomeDQ = (DemoQuestion)qb;
-			else if(ident.equals("COMMUNITY"))
-				communityDQ = (DemoQuestion)qb;
-		}
-
 		if(communityDQ != null){
 			ordered.remove(communityDQ);
 			ordered.add(0, communityDQ);
@@ -387,6 +374,7 @@ public class Writer{
 		dq.setIdentifier("MOMS");
 		dq.setPosition("(" + childrenDQ.getPosition() + "1 " + genderDQ.getPosition() + "2)");
 		questionBases.add(childrenPos + 1, dq);//inserts after children question
+		Logg.info("\"Mom's\" added");
 	}
 
 	//If age demo question is found, merges < 24 with < 34
@@ -404,6 +392,7 @@ public class Writer{
 		String[] choice = choices.get(0);
 		choice[0] = "1," + choice[0];
 		choice[1] = "< 34";
+		Logg.info("Age Merged");
 	}
 
 	//Removes "Prefer not to answer" and "> 200'000"
@@ -419,6 +408,7 @@ public class Writer{
 			choices.remove(choices.size() - 1);
 			choices.remove(choices.size() - 1);
 		}
+		Logg.info("Income DQ cropped");
 	}
 
 	//Removes "also landline", and add a sample mock question
@@ -438,6 +428,7 @@ public class Writer{
 
 		questionBases.remove(alsoLandlineDQ);
 		questionBases.add(alsoLandlinePos - 1, dq);//inserts before landline question
+		Logg.info("Added Sample DQ");
 	}
 
 	private static void init(){

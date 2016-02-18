@@ -24,8 +24,8 @@ public class UncleConvert_DRV{
 	}
 
 	private static void test(){
-		//String fname = "G:\\FORUM\\FODF\\Tabs\\FODF.ASC";
-		String fname = "C:\\Users\\Plaxx\\Desktop\\Work\\Tabs\\ASC\\FOEC.ASC";
+		String fname = "G:\\FORUM\\FODF\\Tabs\\FODF.ASC";
+		//String fname = "C:\\Users\\Plaxx\\Desktop\\Work\\Tabs\\ASC\\FOEC.ASC";
 
 		Parser.parseASCFile(fname);
 
@@ -40,7 +40,7 @@ public class UncleConvert_DRV{
 		questionBases.add(Qnair.getQuestions().get(0));										// get first non-demo question
 		questionBases.add(Qnair.getQuestions().get(Qnair.getQuestions().size() - 1));		// get last non-demo question
 
-		Writer.writeFile(new File(fname), questionBases);
+		Writer.writeFile(new File(fname), questionBases, GUI.MUNICIPAL);
 
 		System.out.println("DONE");
 	}
