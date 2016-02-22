@@ -116,15 +116,15 @@ public class Qnair{
 	@SuppressWarnings("UnusedDeclaration")
 	public static void printAll(){
 		for(Question q : questions){
-			printQusetion(q);
+			printQuestion(q);
 		}
 
 		for(DemoQuestion dq : demoQuestions){
-			printQusetion(dq);
+			printQuestion(dq);
 		}
 	}
 
-	public static void printQusetion(QuestionBase q){
+	public static void printQuestion(QuestionBase q){
 		System.out.println(q.getVariable());
 		if(!q.getLabel().isEmpty())
 			System.out.println(q.getLabel());
