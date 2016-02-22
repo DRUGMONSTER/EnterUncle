@@ -18,7 +18,7 @@ public class GUI extends JFrame{
 	public static final int PROVINCIAL = 1;
 	public static final int FEDERAL = 2;
 
-	private static final String VERSION = "0.30b";
+	private static final String VERSION = "0.30.1b";
 	private static final long serialVersionUID = 1L;
 	private static final int FRAME_WIDTH = 720;
 	private static final int FRAME_HEIGHT = 480;
@@ -56,12 +56,8 @@ public class GUI extends JFrame{
 					@SuppressWarnings("unchecked")
 					List<File> droppedFiles = (List<File>)evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
 					ascFile = droppedFiles.get(0);
-					try{
-						readFile(ascFile);
-					}catch(Exception e){
-						e.printStackTrace();
-						statusTF.setText("File Read or Parse Error");
-					}
+					readFile(ascFile);
+					//statusTF.setText("File Read or Parse Error");
 				}catch(Exception ex){
 					statusTF.setText("Drag and Drop Error");
 				}
@@ -172,8 +168,8 @@ public class GUI extends JFrame{
 
 		boolean success = Parser.parseASCFile(fileToConvPathTF.getText());
 		if(!success){
-			Logg.severe("Read File but Qnair Buffers are empty");
-			statusTF.setText("Bad file, no questions loaded");
+			Logg.severe("Qnair Buffers are empty");
+			statusTF.setText("Bad file, no questions loaded. Try converting to UTF-8?");
 		}else
 			statusTF.setText("Read Successfully");
 

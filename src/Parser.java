@@ -9,9 +9,15 @@ public class Parser{
 		DemoMap.init();
 		ArrayList<ArrayList<String>> buffers = new ArrayList<ArrayList<String>>();
 
-		boolean success = readAndLoadFile(filepath, buffers);
-		if(!success)
+		try{
+			boolean success = readAndLoadFile(filepath, buffers);
+			if(!success)
+				return false;
+		}catch(Exception e){//if an exception is triggered somewhere in readAndLoadFile()
+			e.printStackTrace();
 			return false;
+		}
+
 
 		formatAndAddQuestions(buffers);
 
