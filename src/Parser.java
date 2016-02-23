@@ -15,6 +15,7 @@ public class Parser{
 				return false;
 		}catch(Exception e){//if an exception is triggered somewhere in readAndLoadFile()
 			e.printStackTrace();
+			Logg.severe("Failed to read file");
 			return false;
 		}
 

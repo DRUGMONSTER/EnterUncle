@@ -103,7 +103,7 @@ public class Qnair{
 			String[] choice = c_iter.next();
 			if(checkHearAgain(choice[1])){
 				c_iter.remove();
-				Logg.warning("Removed 'hear again' choice in " + bq.getVariable());
+				Logg.good("Removed 'hear again' choice in " + bq.getVariable());
 			}
 		}
 	}

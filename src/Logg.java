@@ -38,6 +38,12 @@ public class Logg{
 			logger.fine(msg);
 	}
 
+	//better stuff
+	public static void good(String msg){
+		if(on)
+			logger.finer(msg);
+	}
+
 	//neutral stuff
 	public static void info(String msg){
 		if(on)

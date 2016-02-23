@@ -14,6 +14,7 @@ public class Writer{
 	private static ArrayList<DemoQuestion> demoQuestions;
 
 	public static void writeFile(File file, ArrayList<QuestionBase> checked, int aGovLvl){
+		Logg.info("WRITE STARTED");
 		init(aGovLvl);
 
 		PrintWriter writer;
