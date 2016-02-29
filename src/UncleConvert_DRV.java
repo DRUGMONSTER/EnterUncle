@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class UncleConvert_DRV{
 	public static void main(String[] args){
 		Logg.init();
-		//test();
-		launchGUI();
+		test();
+		//launchGUI();
 	}
 
 	private static void launchGUI(){
@@ -24,7 +24,7 @@ public class UncleConvert_DRV{
 	}
 
 	private static void test(){
-		String fname = "G:\\FORUM\\FODF\\Tabs\\FODF.ASC";
+		String fname = "G:\\FORUM\\FOHi\\Tabs\\FOHi.ASC";
 		//String fname = "C:\\Users\\Plaxx\\Desktop\\Work\\Tabs\\ASC\\FOEC.ASC";
 
 		Parser.parseASCFile(fname);

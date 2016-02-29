@@ -125,12 +125,8 @@ public class Parser{
 			String label = rawLabel.substring(1, rawLabel.length() - 1); //remove square brackets around label
 
 			//Find and capitalize first letter
-			boolean firstLetter = false;
 			for(int i = 0; i < label.length(); i++){
-				if(!firstLetter && Character.isLetter(label.charAt(i))){
-					firstLetter = true;
-					continue;
-				}if(Character.isLetter(label.charAt(i))){
+				if(Character.isLetter(label.charAt(i))){
 					label = label.substring(0, i) + label.substring(i, i + 1).toUpperCase() + label.substring(i + 1);
 					break;
 				}
