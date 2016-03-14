@@ -151,7 +151,7 @@ public class Writer{
 						"X justify 89:93 right\n" +
 						"X if (r(89:93,0:XXX)) DEL\n" +
 						"X ex 804\n" +
-						"X calc F310:325 12 (W)\n\n");
+						"X calc F510:525 12 (W)\n\n");
 	}
 
 	private static void write800s(PrintWriter w, int region){
