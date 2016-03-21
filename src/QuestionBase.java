@@ -6,6 +6,9 @@ public class QuestionBase{
 	private String label;
 	private String questionIdentifier;
 	private String position;
+	private String skipCondition;
+	private int ifSkip;
+	private int elseSkip;
 	private ArrayList<String[]> choices = new ArrayList<String[]>();//[0]=code; [1]=label;
 
 	public QuestionBase(){
@@ -16,23 +19,25 @@ public class QuestionBase{
 		position = "";
 	}
 
-	public QuestionBase(String var, int cw, String l, String ident, String pos, ArrayList<String[]> choices){
+	public QuestionBase(String var, int cw, String l, String ident, String pos, String skipCon, ArrayList<String[]> choices){
 		variable = var;
 		codeWidth = cw;
 		label = l;
 		questionIdentifier = ident;
 		position = pos;
+		skipCondition = skipCon;
 		for(String[] choice : choices){
 			addChoice(choice[0], choice[1]);
 		}
 	}
 
-	public void setAll(String var, int cw, String l, String ident, String pos, ArrayList<String[]> choices){
+	public void setAll(String var, int cw, String l, String ident, String pos, String skipCon, ArrayList<String[]> choices){
 		variable = var;
 		codeWidth = cw;
 		label = l;
 		questionIdentifier = ident;
 		position = pos;
+		skipCondition = skipCon;
 		for(String[] choice : choices){
 			addChoice(choice[0], choice[1]);
 		}

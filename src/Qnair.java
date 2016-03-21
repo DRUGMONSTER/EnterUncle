@@ -30,12 +30,12 @@ public class Qnair{
 		return questions.isEmpty() && demoQuestions.isEmpty();
 	}
 
-	public static void addQuestion(String var, int cw, String l, String ident, String pos, ArrayList<String[]> choices){
-		questions.add(new Question(var, cw, l, ident, pos, choices));
+	public static void addQuestion(String var, int cw, String l, String ident, String pos, String skipCon, ArrayList<String[]> choices){
+		questions.add(new Question(var, cw, l, ident, pos, skipCon, choices));
 	}
 
-	public static void addDemoQuestion(String var, int cw, String l, String ident, String pos, ArrayList<String[]> choices){
-		demoQuestions.add(new DemoQuestion(var, cw, l, ident, pos, choices));
+	public static void addDemoQuestion(String var, int cw, String l, String ident, String pos, String skipCon, ArrayList<String[]> choices){
+		demoQuestions.add(new DemoQuestion(var, cw, l, ident, pos, skipCon, choices));
 	}
 
 	public static void addDemoQuestion(DemoQuestion dq){

@@ -105,6 +105,7 @@ public class Parser{
 			boolean demoQ = false;
 			String position = pos + "-";
 			String identifier = "";
+			String skipCondition = "";
 			ArrayList<String[]> choices = new ArrayList<String[]>();//[0]=code; [1]=label;
 
 			String rawVariable = buffer.get(0);
@@ -180,11 +181,11 @@ public class Parser{
 			pos += codeWidth;
 
 			if(demoQ){
-				dq.setAll(variableName, codeWidth, label, identifier, position, choices);
+				dq.setAll(variableName, codeWidth, label, identifier, position, skipCondition, choices);
 				Qnair.addDemoQuestion(dq);
 				Logg.fine("Question " + variableName + " was added as demographic");
 			}else{
-				Qnair.addQuestion(variableName, codeWidth, label, identifier, position, choices);
+				Qnair.addQuestion(variableName, codeWidth, label, identifier, position, skipCondition, choices);
 				Logg.fine("Question " + variableName + " was added");
 			}
 		}
