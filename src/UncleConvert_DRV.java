@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class UncleConvert_DRV{
 	public static void main(String[] args){
 		Logg.init();
-		System.out.println("DONE");
+		//System.out.println("DONE");
 
 		//test();
-		//launchGUI();
+		launchGUI();
 	}
 
 	private static void launchGUI(){

@@ -18,7 +18,7 @@ public class GUI extends JFrame{
 	public static final int PROVINCIAL = 1;
 	public static final int FEDERAL = 2;
 
-	private static final String VERSION = "0.32b";
+	private static final String VERSION = "0.32.2b";
 	private static final long serialVersionUID = 1L;
 	private static final int FRAME_WIDTH = 720;
 	private static final int FRAME_HEIGHT = 480;
