@@ -1,12 +1,11 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
 public class Writer{
+	private static BufferedReader stringReader;
 	private static int govLvl = -1;
 	private static final ArrayList<String[]> TB_PAIRS = new ArrayList<String[]>();
 	private static String projectName;
@@ -437,7 +436,7 @@ public class Writer{
 		int alsoLandlinePos = questionBases.indexOf(alsoLandlineDQ);
 		DemoQuestion dq = new DemoQuestion();
 		dq.setIdentifier("SAMPLE");
-		dq.setPosition("271-");
+		dq.setPosition("274-");
 		dq.addChoice("0", "Landline");
 		dq.addChoice("1", "Cellphone");
 
@@ -456,6 +455,13 @@ public class Writer{
 		TB_PAIRS.add(new String[]{"(?i).*\\bsupport\\b.*", 			"(?i).*\\boppose\\b.*"});
 		TB_PAIRS.add(new String[]{"(?i).*\\bhave\\s+heard\\b.*",	"(?i).*\\bhave\\s+not\\s+heard\\b.*"});
 		TB_PAIRS.add(new String[]{"(?i).*\\byes\\b.*",				"(?i).*\\bno\\b.*"});
+
+//		stringReader = new BufferedReader(new InputStreamReader(Writer.class.getResourceAsStream("strings.xml")));
+//		try{
+//			System.out.println(stringReader.readLine());
+//		}catch(IOException e){
+//			e.printStackTrace();
+//		}
 	}
 
 	private static int[] checkDichotomy(ArrayList<String[]> choices){
