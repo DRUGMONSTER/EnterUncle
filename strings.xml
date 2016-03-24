@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+    <canada>Test1</canada>
+    <cities>
+        <toronto>Test2</toronto>
+
+    </cities>
+    <provinces>
+        <ontario>Test3</ontario>
+    </provinces>
+</strings>
