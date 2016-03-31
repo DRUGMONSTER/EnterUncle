@@ -5,28 +5,27 @@ import java.util.ArrayList;
 public class UncleConvert_DRV{
 	public static void main(String[] args){
 		Logg.init();
-		//System.out.println("DONE");
+		//XML_Get.init();
 
-		//test();
-		launchGUI();
+		test();
+		//launchGUI();
 	}
 
 	private static void launchGUI(){
-		javax.swing.SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
-				try{
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				}catch(Exception e){
-					Logg.severe("Failed to set Look and Feel of system UI");
-				}
-				new GUI();
-				Logg.fine("GUI launched successfully");
+		javax.swing.SwingUtilities.invokeLater(() -> {
+			try{
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			}catch(Exception e){
+				Logg.severe("Failed to set Look and Feel of system UI");
 			}
+			new GUI();
+			Logg.fine("GUI launched successfully");
 		});
 	}
 
 	private static void test(){
-		String fname = "G:\\FORUM\\FOHi\\Tabs\\FOHi.ASC";
+		//String fname = "G:\\FORUM\\FOHi\\Tabs\\FOHi.ASC";
+		String fname = "G:\\FORUM\\FOiA\\Tabs\\FOiA.ASC";
 		//String fname = "C:\\Users\\Plaxx\\Desktop\\Work\\Tabs\\ASC\\FOEC.ASC";
 
 		Parser.parseASCFile(fname);
@@ -37,7 +36,7 @@ public class UncleConvert_DRV{
 		}
 
 		ArrayList<DemoQuestion> demoQuestions = Qnair.getDemoQuestions();
-		ArrayList<QuestionBase> questionBases = new ArrayList<QuestionBase>();
+		ArrayList<QuestionBase> questionBases = new ArrayList<>();
 		questionBases.addAll(demoQuestions);
 		questionBases.add(Qnair.getQuestions().get(0));										// get first non-demo question
 		questionBases.add(Qnair.getQuestions().get(Qnair.getQuestions().size() - 1));		// get last non-demo question

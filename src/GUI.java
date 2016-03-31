@@ -32,8 +32,8 @@ public class GUI extends JFrame{
 
 	private JPanel bannerWrap;
 	private ButtonGroup governmentLevel;
-	private Map<JCheckBox, Question> bannerQuestions = new LinkedHashMap<JCheckBox, Question>();
-	private Map<JCheckBox, DemoQuestion> bannerDemoQuestions = new LinkedHashMap<JCheckBox, DemoQuestion>();
+	private Map<JCheckBox, Question> bannerQuestions = new LinkedHashMap<>();
+	private Map<JCheckBox, DemoQuestion> bannerDemoQuestions = new LinkedHashMap<>();
 	private JRadioButton[] radioButtons = {new JRadioButton("Municipal", true), new JRadioButton("Provincial"), new JRadioButton("Federal")};
 
 	public GUI(){
@@ -142,7 +142,7 @@ public class GUI extends JFrame{
 					statusTF.setText("Can't Write - Empty Qnair");
 					return;
 				}
-				ArrayList<QuestionBase> checked = new ArrayList<QuestionBase>();
+				ArrayList<QuestionBase> checked = new ArrayList<>();
 				for(Map.Entry entry : bannerDemoQuestions.entrySet()){
 					if(((JCheckBox) entry.getKey()).isSelected())
 						checked.add((QuestionBase)entry.getValue());
@@ -178,6 +178,7 @@ public class GUI extends JFrame{
 			statusTF.setText("Read Successfully");
 
 
+		//populate banner pane
 		for(DemoQuestion dq : Qnair.getDemoQuestions()){
 			JCheckBox jcb = new JCheckBox(dq.getVariable());
 			jcb.setSelected(true);

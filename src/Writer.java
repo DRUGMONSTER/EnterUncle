@@ -1,13 +1,15 @@
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
 public class Writer{
-	private static BufferedReader stringReader;
 	private static int govLvl = -1;
-	private static final ArrayList<String[]> TB_PAIRS = new ArrayList<String[]>();
+	private static final ArrayList<String[]> TB_PAIRS = new ArrayList<>();
+	private static final ArrayList<String> MEAN_KEYWORDS = new ArrayList<>();
 	private static String projectName;
 	private static ArrayList<Question> questions;
 	private static ArrayList<DemoQuestion> demoQuestions;
@@ -38,6 +40,7 @@ public class Writer{
 
 			writeChoices(writer, q);
 
+			checkMeansNeeded(q.getChoices());
 			int[] positions = checkDichotomy(q.getChoices());
 			if(positions[0] != -1){								//Dichotomy found
 				writer.println("R ; null");
@@ -456,12 +459,10 @@ public class Writer{
 		TB_PAIRS.add(new String[]{"(?i).*\\bhave\\s+heard\\b.*",	"(?i).*\\bhave\\s+not\\s+heard\\b.*"});
 		TB_PAIRS.add(new String[]{"(?i).*\\byes\\b.*",				"(?i).*\\bno\\b.*"});
 
-//		stringReader = new BufferedReader(new InputStreamReader(Writer.class.getResourceAsStream("strings.xml")));
-//		try{
-//			System.out.println(stringReader.readLine());
-//		}catch(IOException e){
-//			e.printStackTrace();
-//		}
+		MEAN_KEYWORDS.add("Very Satisfied");
+		MEAN_KEYWORDS.add("Somewhat Satisfied");
+		MEAN_KEYWORDS.add("Somewhat Dissatisfied");
+		MEAN_KEYWORDS.add("Very Dissatisfied");
 	}
 
 	private static int[] checkDichotomy(ArrayList<String[]> choices){
@@ -469,7 +470,6 @@ public class Writer{
 		for(byte i = 0; i < choices.size(); i++){
 			String choiceLabel = choices.get(i)[1];
 			for(String[] tbPair : TB_PAIRS){
-				//dichotomyPositions[0] = -1;
 				//CHECK THIS!!! //Might not work //reorder the loops - for(pairs) first, then for(choices)
 				if(Pattern.matches(tbPair[0], choiceLabel))
 					dichotomyPositions[0] = i;
@@ -479,6 +479,16 @@ public class Writer{
 		}
 
 		return dichotomyPositions;
+	}
+
+	//Very Satisfied, Somewhat Satisfied, Somewhat Dissatisfied, Very Dissatisfied
+	private static boolean checkMeansNeeded(ArrayList<String[]> choices){
+		for(int i = 0; i < MEAN_KEYWORDS.size(); i++){
+			if(!MEAN_KEYWORDS.get(i).equalsIgnoreCase(choices.get(i)[1])){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private static String getDate(){
