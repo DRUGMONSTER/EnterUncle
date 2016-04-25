@@ -250,7 +250,7 @@ public class Writer{
 		//add lines to bufferLines without tags, remember length of longest line
 		int tabNum;
 		int maxLen = 0;
-		ArrayList<ArrayList<String>> bufferOfLines = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> bufferOfLines = new ArrayList<>();
 		ArrayList<QuestionBase> newOrder = reorderQuestions(checked);
 		addMoms(newOrder);
 		mergeAge();
@@ -260,7 +260,7 @@ public class Writer{
 		//System.out.println("====\n\n====\n" + newOrder.size());
 		for(QuestionBase qb : newOrder){
 			String qbPos = qb.getPosition();
-			ArrayList<String> lines = new ArrayList<String>();
+			ArrayList<String> lines = new ArrayList<>();
 			if(qb.getChoices().isEmpty()){
 				String line = "C " + qb.getIdentifier() + "; " + qbPos;
 				lines.add(line);
@@ -292,7 +292,7 @@ public class Writer{
 		);
 
 
-		// === T1002 and so on - (copy paste) ===
+		// === copy paste - (T1002 and so on) ===
 
 		//Replace first three questions
 		bufferOfLines.remove(0);
@@ -301,17 +301,17 @@ public class Writer{
 
 		String genPos = DemoMap.getGenderDQ().getPosition();
 		String agePos = DemoMap.getAgeDQ().getPosition();
-		ArrayList<String> ageAndGen = new ArrayList<String>();
-		ageAndGen.add("C 18-34;\t" + genPos + "1,2");
-		ageAndGen.add("C 35-44;\t" + genPos + "3");
-		ageAndGen.add("C 45-54;\t" + genPos + "4");
-		ageAndGen.add("C 55-64;\t" + genPos + "5");
-		ageAndGen.add("C 65+;\t\t" + genPos + "6");
-		ageAndGen.add("C Male;\t\t\t" + agePos + "1");
-		ageAndGen.add("C Female;\t\t" + agePos + "2");
+		ArrayList<String> ageAndGen = new ArrayList<>();
+		ageAndGen.add("C 18-34;\t" + agePos + "1,2");
+		ageAndGen.add("C 35-44;\t" + agePos + "3");
+		ageAndGen.add("C 45-54;\t" + agePos + "4");
+		ageAndGen.add("C 55-64;\t" + agePos + "5");
+		ageAndGen.add("C 65+;\t\t" + agePos + "6");
+		ageAndGen.add("C Male;\t\t\t" + genPos + "1");
+		ageAndGen.add("C Female;\t\t" + genPos + "2");
 
 		String incomePos = DemoMap.getIncomeDQ().getPosition();
-		ArrayList<String> income = new ArrayList<String>();
+		ArrayList<String> income = new ArrayList<>();
 		income.add("C <20K;\t\t"	 + incomePos + "1");
 		income.add("C 20-40K;\t"	 + incomePos + "2");
 		income.add("C 40-60K;\t"	 + incomePos + "3");
@@ -341,7 +341,7 @@ public class Writer{
 	private static ArrayList<QuestionBase> reorderQuestions(ArrayList<QuestionBase> unorderedQuestions){
 		Logg.info("Begin Reorder");
 
-		ArrayList<QuestionBase> ordered = new ArrayList<QuestionBase>();
+		ArrayList<QuestionBase> ordered = new ArrayList<>();
 		ordered.addAll(unorderedQuestions);
 
 		DemoQuestion ageDQ = DemoMap.getAgeDQ();
