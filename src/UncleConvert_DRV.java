@@ -7,8 +7,8 @@ public class UncleConvert_DRV{
 		Logg.init();
 		//XML_Get.init();
 
-		test();
-		//launchGUI();
+		//test();
+		launchGUI();
 	}
 
 	private static void launchGUI(){

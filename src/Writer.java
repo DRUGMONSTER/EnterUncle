@@ -437,14 +437,24 @@ public class Writer{
 			return;
 
 		int alsoLandlinePos = questionBases.indexOf(alsoLandlineDQ);
-		DemoQuestion dq = new DemoQuestion();
-		dq.setIdentifier("SAMPLE");
-		dq.setPosition("274-");
-		dq.addChoice("0", "Landline");
-		dq.addChoice("1", "Cellphone");
+		DemoQuestion sampleMock = new DemoQuestion();
+		sampleMock.setIdentifier("SAMPLE");
+		switch(govLvl){
+			case GUI.MUNICIPAL:
+				sampleMock.setPosition("265-");
+				break;
+			case GUI.PROVINCIAL:
+				sampleMock.setPosition("274-");
+				break;
+			case GUI.FEDERAL:
+				sampleMock.setPosition("271-");
+				break;
+		}
+		sampleMock.addChoice("0", "Landline");
+		sampleMock.addChoice("1", "Cellphone");
 
 		questionBases.remove(alsoLandlineDQ);
-		questionBases.add(alsoLandlinePos - 1, dq);//inserts before landline question
+		questionBases.add(alsoLandlinePos - 1, sampleMock);//inserts before landline question
 		Logg.info("Added Sample DQ");
 	}
 
