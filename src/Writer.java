@@ -432,7 +432,7 @@ public class Writer{
 	private static void addSampleMock(ArrayList<QuestionBase> questionBases){
 		DemoQuestion alsoLandlineDQ = DemoMap.getAlsoLandlineDQ();
 
-		//Also_ Demo Question not detected, Abort!!
+		//Also_Demo Question not detected, Abort!!
 		if(alsoLandlineDQ == null)
 			return;
 
@@ -454,7 +454,7 @@ public class Writer{
 		sampleMock.addChoice("1", "Cellphone");
 
 		questionBases.remove(alsoLandlineDQ);
-		questionBases.add(alsoLandlinePos - 1, sampleMock);//inserts before landline question//
+		questionBases.add(alsoLandlinePos - 1, sampleMock);//inserts before landline question
 		Logg.info("Added Sample DQ");
 	}
 
