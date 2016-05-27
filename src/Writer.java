@@ -255,9 +255,10 @@ public class Writer{
 		addMoms(newOrder);
 		mergeAge();
 		cropIncomeDQ();
-		//System.out.println(newOrder.size());
 		addSampleMock(newOrder);
-		//System.out.println("====\n\n====\n" + newOrder.size());
+		if(govLvl == GUI.PROVINCIAL)
+			addRegion();
+
 		for(QuestionBase qb : newOrder){
 			String qbPos = qb.getPosition();
 			ArrayList<String> lines = new ArrayList<>();
@@ -294,6 +295,7 @@ public class Writer{
 
 		// === copy paste - (T1002 and so on) ===
 
+		//Will FAIL if not enough selected for the banner
 		//Replace first three questions
 		bufferOfLines.remove(0);
 		bufferOfLines.remove(0);
@@ -456,6 +458,11 @@ public class Writer{
 		questionBases.remove(alsoLandlineDQ);
 		questionBases.add(alsoLandlinePos - 1, sampleMock);//inserts before landline question
 		Logg.info("Added Sample DQ");
+	}
+
+	private static void addRegion(){
+
+
 	}
 
 	private static void init(int aGovLvl){

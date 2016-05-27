@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <strings>
     <canada>Test1</canada>
-    <cities>
-        <toronto>Test2</toronto>
 
+    <cities>
+        <toronto>
+            1; v 0.0610926254927089
+            2; v 0.0865217867900710
+            3; v 0.1062743449869340
+            4; v 0.0940080833817855
+            5; v 0.0638166372586212
+            6; v 0.0664017332645658
+            1; v 0.0601363799159130
+            2; v 0.0952507479982239
+            3; v 0.1118448669616400
+            4; v 0.0995811310975810
+            5; v 0.0681558604517945
+            6; v 0.0869158024001612
+        </toronto>
     </cities>
+
     <provinces>
         <ontario>Test3</ontario>
     </provinces>

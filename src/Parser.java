@@ -165,6 +165,9 @@ public class Parser{
 			for(int i = 3; i < buffer.size(); i++){
 				String line = buffer.get(i);
 
+				if(line.isEmpty())
+					continue;
+
 				if(line.charAt(0) == '['){
 					int choiceLabelEndPos = line.indexOf(']');
 					String choiceLabel = line.substring(1, choiceLabelEndPos);
