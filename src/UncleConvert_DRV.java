@@ -6,9 +6,8 @@ public class UncleConvert_DRV{
 	public static void main(String[] args){
 		Logg.init();
 		XML_Get.init();
-		System.out.println(XML_Get.getWeightsFromCity("toronto"));
 
-		//test();
+		test();
 		//launchGUI();
 	}
 
@@ -25,8 +24,8 @@ public class UncleConvert_DRV{
 	}
 
 	private static void test(){
-		//String fname = "G:\\FORUM\\FOHi\\Tabs\\FOHi.ASC";
-		String fname = "G:\\Public Works\\Tabs\\PWG1.ASC";
+		String fname = "G:\\FORUM\\FOiJ\\Tabs\\FOiJ.ASC";
+		//String fname = "G:\\Public Works\\Tabs\\PWG1.ASC";
 		//String fname = "C:\\Users\\Plaxx\\Desktop\\Work\\Tabs\\ASC\\FOEC.ASC";
 
 		Parser.parseASCFile(fname);

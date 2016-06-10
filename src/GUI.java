@@ -177,6 +177,7 @@ public class GUI extends JFrame{
 		}else
 			statusTF.setText("Read Successfully");
 
+		 Qnair.guessRegion();
 
 		//populate banner pane
 		for(DemoQuestion dq : Qnair.getDemoQuestions()){

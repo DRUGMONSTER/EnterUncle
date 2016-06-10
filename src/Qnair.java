@@ -1,9 +1,14 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class Qnair{
-	private static final ArrayList<Question> questions = new ArrayList<Question>();
-	private static final ArrayList<DemoQuestion> demoQuestions = new ArrayList<DemoQuestion>();
-	private static final Set<String> rejectableVariables = new HashSet<String>(Arrays.asList(new String[]{"TZONE", "LOC", "LDF", "LDE", "AREA", "FSA", "FSA1", "INTRO", "LANG", "IT2", "S1", "INT01", "INT99", "C3"}));
+	private static final ArrayList<Question> questions = new ArrayList<>();
+	private static final ArrayList<DemoQuestion> demoQuestions = new ArrayList<>();
+	private static final Set<String> rejectableVariables = new HashSet<>(Arrays.asList(new String[]{"TZONE", "LOC", "LDF", "LDE", "AREA", "FSA", "FSA1", "LANG", "IT2", "S1", "INT01", "INT99", "C3"}));
+	public static String region = "";//Guess initially
 
 	public static void clearQuestions(){
 		questions.clear();
@@ -34,6 +39,7 @@ public class Qnair{
 		questions.add(new Question(var, cw, l, ident, pos, skipCon, choices));
 	}
 
+	@SuppressWarnings("unused")
 	public static void addDemoQuestion(String var, int cw, String l, String ident, String pos, String skipCon, ArrayList<String[]> choices){
 		demoQuestions.add(new DemoQuestion(var, cw, l, ident, pos, skipCon, choices));
 	}
@@ -111,6 +117,11 @@ public class Qnair{
 	private static boolean checkHearAgain(String lbl){
 		String lowerLable = lbl.toLowerCase();
 		return (lowerLable.contains("hear") && lowerLable.contains("again")) || (lowerLable.contains("repeat") && lowerLable.contains("answers"));
+	}
+
+	public static String guessRegion(){
+		System.out.println(questions.get(0).getLabel());
+		return "";
 	}
 
 	@SuppressWarnings("UnusedDeclaration")

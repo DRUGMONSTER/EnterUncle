@@ -66,7 +66,7 @@ public class Parser{
 
 		//Load question lines into buffer
 		while(sc.hasNextLine()){
-			ArrayList<String> buf = new ArrayList<String>();
+			ArrayList<String> buf = new ArrayList<>();
 
 			while(true){
 				buf.add(line);
@@ -106,7 +106,7 @@ public class Parser{
 			String position = pos + "-";
 			String identifier = "";
 			String skipCondition = "";
-			ArrayList<String[]> choices = new ArrayList<String[]>();//[0]=code; [1]=label;
+			ArrayList<String[]> choices = new ArrayList<>();//[0]=code; [1]=label;
 
 			String rawVariable = buffer.get(0);
 			String variableName = rawVariable.substring(4, rawVariable.indexOf(" ", 4));

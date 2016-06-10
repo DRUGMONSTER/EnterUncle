@@ -1,4 +1,6 @@
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,8 +27,32 @@ public class XML_Get{
 		}
 	}
 
-	public static String getWeightsFromCity(String city){
+	public static String[] getWeightsForToronto(){
+		return getWeightsForCity("cities", "toronto");
+	}
 
-		return doc.getDocumentElement().getElementsByTagName(city).toString();
+	public static String[] getWeightsForOntario(){
+		return getWeightsForCity("provinces", "ontario");
+	}
+
+	public static String[] getWeightsForCanada(){
+		NodeList weightNodes = doc.getDocumentElement().getElementsByTagName("canada").item(0).getChildNodes();
+
+		String[] weights = new String[weightNodes.getLength()/2];
+		for(int i = 0, j = 1; i < weights.length; i++, j += 2){
+			weights[i] = weightNodes.item(j).getFirstChild().getNodeValue();
+			System.out.println(weights[i]);
+		}
+		return weights;
+	}
+
+	public static String[] getWeightsForCity(String level, String city){
+		NodeList weightNodes = ((Element)doc.getDocumentElement().getElementsByTagName(level).item(0)).getElementsByTagName(city).item(0).getChildNodes();
+
+		String[] weights = new String[weightNodes.getLength()/2];
+		for(int i = 0, j = 1; i < weights.length; i++, j += 2){
+			weights[i] = weightNodes.item(j).getFirstChild().getNodeValue();
+		}
+		return weights;
 	}
 }

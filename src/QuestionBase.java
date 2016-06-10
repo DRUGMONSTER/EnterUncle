@@ -6,6 +6,7 @@ public class QuestionBase{
 	private String label;
 	private String questionIdentifier;
 	private String position;
+	private String specialMessage;
 	private String skipCondition;
 	private int ifSkip;
 	private int elseSkip;
