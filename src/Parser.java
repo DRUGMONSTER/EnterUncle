@@ -7,10 +7,12 @@ public class Parser{
 
 	public static boolean parseASCFile(String filepath){
 		DemoMap.init();
-		ArrayList<ArrayList<String>> buffers = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> buffers = new ArrayList<>();
+		ArrayList<RawQuestion> rawQuestions = new ArrayList<>();
 
 		try{
-			boolean success = readAndLoadFile(filepath, buffers);
+			//boolean success = readAndLoadFile(filepath, buffers);
+			boolean success = readAndParseQuestions(filepath, rawQuestions);
 			if(!success)
 				return false;
 		}catch(Exception e){//if an exception is triggered somewhere in readAndLoadFile()
@@ -93,6 +95,74 @@ public class Parser{
 		sc.close();
 		Logg.info("Buffers size: " + buffers.size());
 
+		return true;
+	}
+
+	private static boolean readAndParseQuestions(String filepath, ArrayList<RawQuestion> rawQuestions){
+		Scanner sc;
+		try{
+			sc = new Scanner(new File(filepath), "UTF-8");
+		}catch(Exception e){
+			Logg.severe("Can't open asc file " + e.getMessage());
+			return false;
+		}
+
+		sc.nextLine();
+		sc.nextLine();
+		sc.nextLine();
+		sc.nextLine();
+		sc.nextLine();
+		String line = sc.nextLine();
+		while(sc.hasNextLine()){
+			if(line.startsWith("*LA")){
+				Logg.fine("\"*LA\" Language Found - Stopped Parsing");
+				break;                //Stop Parsing
+			}
+
+			RawQuestion rq = new RawQuestion();
+
+			//This is the order these commands appear in .ASC files
+			if(line.startsWith("*LL")){
+				Logg.info("\"*LL\" Long Label Found");
+				Logg.info("Line: " + line);
+
+				rq.variable = line;
+				rq.label = sc.nextLine();
+				line = sc.nextLine();
+			}
+			if(line.startsWith("*SL")){
+				Logg.fine("\"*SL\" Short Label Found");
+				Logg.info("Line: " + line);
+
+				rq.specialMessage = sc.nextLine();
+				line = sc.nextLine();
+			}
+			if(line.startsWith("*SK")){
+				Logg.info("\"*SK\" Skip Found");
+				Logg.info("Line: " + line);
+
+				rq.skipDestination = sc.nextLine();
+				if(!rq.skipDestination.equals("->*"))
+					rq.skipCondition = sc.nextLine();
+
+				line = sc.nextLine();
+			}
+			if(line.startsWith("*CL")){
+				Logg.info("\"*CL\" Code List Found");
+				Logg.info("Line: " + line);
+
+				String choice = sc.nextLine();
+				do{
+					rq.choices.add(choice);
+					choice = sc.nextLine();
+				}while(!choice.startsWith("---"));
+				line = sc.nextLine();
+			}
+			rawQuestions.add(rq);
+		}
+
+
+		sc.close();
 		return true;
 	}
 
@@ -193,5 +263,14 @@ public class Parser{
 			}
 		}
 		return true;
+	}
+
+	private static class RawQuestion{
+		public String variable = "";
+		public String label = "";
+		public String specialMessage = "";
+		public String skipDestination = "";
+		public String skipCondition = "";
+		public ArrayList<String> choices = new ArrayList<>();
 	}
 }
