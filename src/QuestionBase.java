@@ -10,7 +10,7 @@ public class QuestionBase{
 	private String skipCondition;
 	private int ifSkip;
 	private int elseSkip;
-	private ArrayList<String[]> choices = new ArrayList<>();//[0]=code; [1]=label;
+	private ArrayList<String[]> choices = new ArrayList<>();//[0]=code; [1]=label; [2]=skipDestination
 
 	public QuestionBase(){
 		variable = "";

@@ -1,5 +1,6 @@
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Parser{
@@ -22,7 +23,7 @@ public class Parser{
 		}
 
 
-		formatAndAddQuestions(buffers);
+		formatAndAddQuestions(rawQuestions);
 
 		ArrayList questions = Qnair.getQuestions();
 		ArrayList demoQuestions = Qnair.getDemoQuestions();
@@ -113,21 +114,45 @@ public class Parser{
 		sc.nextLine();
 		sc.nextLine();
 		String line = sc.nextLine();
-		while(sc.hasNextLine()){
-			if(line.startsWith("*LA")){
-				Logg.fine("\"*LA\" Language Found - Stopped Parsing");
+		while(true){
+			if(line.startsWith("-----")){
+				Logg.fine("Stopped Parsing");
 				break;                //Stop Parsing
 			}
 
 			RawQuestion rq = new RawQuestion();
 
 			//This is the order these commands appear in .ASC files
+			if(line.startsWith("*ME")){
+				Logg.info("\"*ME\" Message to the Interviewer Found");
+				Logg.info("Line: " + line);
+
+				sc.nextLine();//do nothing
+				line = sc.nextLine();
+			}
 			if(line.startsWith("*LL")){
 				Logg.info("\"*LL\" Long Label Found");
 				Logg.info("Line: " + line);
 
 				rq.variable = line;
 				rq.label = sc.nextLine();
+
+				while(!rq.label.endsWith("]")){//if multiple lines
+					line = sc.nextLine();
+
+					if(line.length() < 8)
+						rq.label += line;
+					else
+						rq.label += "\n" + line;
+				}
+
+				line = sc.nextLine();
+			}
+			if(line.startsWith("*MA")){
+				Logg.info("\"*MA\" Mask Found");
+				Logg.info("Line: " + line);
+
+				sc.nextLine();//do nothing
 				line = sc.nextLine();
 			}
 			if(line.startsWith("*SL")){
@@ -146,6 +171,9 @@ public class Parser{
 					rq.skipCondition = sc.nextLine();
 
 				line = sc.nextLine();
+
+				if(line.startsWith("TRC")) //(Truncate) Random question found, just skip
+					line = sc.nextLine();
 			}
 			if(line.startsWith("*CL")){
 				Logg.info("\"*CL\" Code List Found");
@@ -167,7 +195,7 @@ public class Parser{
 	}
 
 	//reads from buffers and adds questions and demo questions to Qnair
-	public static boolean formatAndAddQuestions(ArrayList<ArrayList<String>> buffers){
+	public static boolean formatAndAddQuestions1(ArrayList<ArrayList<String>> buffers){
 		int pos = START_POS;
 
 		for(ArrayList<String> buffer : buffers){
@@ -263,6 +291,56 @@ public class Parser{
 			}
 		}
 		return true;
+	}
+
+	public static void formatAndAddQuestions(ArrayList<RawQuestion> rawQuestions){
+		int pos = START_POS;
+
+		for(RawQuestion rq : rawQuestions){
+			boolean demoQ = false;
+			//String position = pos + "-";
+			//String identifier = "";
+			//String skipCondition = "";
+			//ArrayList<String[]> choices = new ArrayList<>();//[0]=code; [1]=label;
+
+			String[] rawVariableParts = rq.variable.split(" ");
+			String variableName = rawVariableParts[1];
+			Logg.fine("Variable read: " + variableName);
+
+			int codeWidth = Integer.parseInt(rawVariableParts[2].substring(2));
+			pos += codeWidth;
+
+			//Mark demographic questions
+			if(variableName.charAt(0) == 'D'){
+				Logg.fine("Variable " + variableName + " was marked as demographic");
+				demoQ = true;
+			}
+
+			//Replace tabs and remove square brackets around label
+			String rawLabel = rq.label.replace('\t', ' ');
+			String label = rawLabel.substring(1, rawLabel.length() - 1);
+
+			//Find and capitalize first letter
+			for(int i = 0; i < label.length(); i++){
+				if(Character.isLetter(label.charAt(i))){
+					label = label.substring(0, i) + label.substring(i, i + 1).toUpperCase() + label.substring(i + 1);
+					break;
+				}
+			}
+
+
+
+
+
+			if(demoQ){
+				//dq.setAll(variableName, codeWidth, label, identifier, position, skipCondition, choices);
+				//Qnair.addDemoQuestion(dq);
+				Logg.fine("Question " + variableName + " was added as demographic");
+			}else{
+				//Qnair.addQuestion(variableName, codeWidth, label, identifier, position, skipCondition, choices);
+				Logg.fine("Question " + variableName + " was added");
+			}
+		}
 	}
 
 	private static class RawQuestion{
