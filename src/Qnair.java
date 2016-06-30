@@ -3,6 +3,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class Qnair{
 	private static final ArrayList<Question> questions = new ArrayList<>();
@@ -35,17 +36,14 @@ public class Qnair{
 		return questions.isEmpty() && demoQuestions.isEmpty();
 	}
 
-	public static void addQuestion(String var, int cw, String l, String ident, String pos, String skipCon, ArrayList<String[]> choices){
-		questions.add(new Question(var, cw, l, ident, pos, skipCon, choices));
+	public static void addQuestion(String var, int cw, String l, String sl, String ident, String pos, String skipCon, String skipDest, ArrayList<String[]> choices){
+		//TODO No unused
+		questions.add(new Question(var, cw, l, sl, ident, pos, skipCon, skipDest, choices));
 	}
 
-	@SuppressWarnings("unused")
-	public static void addDemoQuestion(String var, int cw, String l, String ident, String pos, String skipCon, ArrayList<String[]> choices){
-		demoQuestions.add(new DemoQuestion(var, cw, l, ident, pos, skipCon, choices));
-	}
-
-	public static void addDemoQuestion(DemoQuestion dq){
-		demoQuestions.add(dq);
+	public static void addDemoQuestion(String var, int cw, String l, String sl, String ident, String pos, String skipCon, String skipDest, ArrayList<String[]> choices){
+		//TODO No unused
+		demoQuestions.add(new DemoQuestion(var, cw, l, sl, ident, pos, skipCon, skipDest, choices));
 	}
 
 	//This also removes hear again choices
@@ -117,6 +115,22 @@ public class Qnair{
 	private static boolean checkHearAgain(String lbl){
 		String lowerLable = lbl.toLowerCase();
 		return (lowerLable.contains("hear") && lowerLable.contains("again")) || (lowerLable.contains("repeat") && lowerLable.contains("answers"));
+	}
+
+	public static void setDemoIdentifiers(){
+		String[] regexs = DemoMap.getRegexPatterns();
+		boolean set = false;
+		for(DemoQuestion dq : demoQuestions){
+			for(String regex : regexs){
+				if(Pattern.matches(regex, dq.getLabel())){
+					dq.setIdentifier(DemoMap.getIdentifier(regex, dq));
+					set = true;
+					break;
+				}
+			}
+			if(!set)
+				dq.setIdentifier("DEMO_QUESTION_ID_NOT_FOUND");
+		}
 	}
 
 	public static String guessRegion(){

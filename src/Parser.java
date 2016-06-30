@@ -22,7 +22,6 @@ public class Parser{
 			return false;
 		}
 
-
 		formatAndAddQuestions(rawQuestions);
 
 		ArrayList questions = Qnair.getQuestions();
@@ -159,7 +158,7 @@ public class Parser{
 				Logg.fine("\"*SL\" Short Label Found");
 				Logg.info("Line: " + line);
 
-				rq.specialMessage = sc.nextLine();
+				rq.shortLabel = sc.nextLine();
 				line = sc.nextLine();
 			}
 			if(line.startsWith("*SK")){
@@ -282,26 +281,23 @@ public class Parser{
 			pos += codeWidth;
 
 			if(demoQ){
-				dq.setAll(variableName, codeWidth, label, identifier, position, skipCondition, choices);
-				Qnair.addDemoQuestion(dq);
+				//dq.setAll(variableName, codeWidth, label, identifier, position, skipCondition, choices);
+				//Qnair.addDemoQuestion(dq);
 				Logg.fine("Question " + variableName + " was added as demographic");
 			}else{
-				Qnair.addQuestion(variableName, codeWidth, label, identifier, position, skipCondition, choices);
+				//Qnair.addQuestion(variableName, codeWidth, label, identifier, position, skipCondition, choices);
 				Logg.fine("Question " + variableName + " was added");
 			}
 		}
 		return true;
 	}
 
+	//reads from rawQuestions and adds questions and demo questions to Qnair
 	public static void formatAndAddQuestions(ArrayList<RawQuestion> rawQuestions){
 		int pos = START_POS;
 
 		for(RawQuestion rq : rawQuestions){
 			boolean demoQ = false;
-			//String position = pos + "-";
-			//String identifier = "";
-			//String skipCondition = "";
-			//ArrayList<String[]> choices = new ArrayList<>();//[0]=code; [1]=label;
 
 			String[] rawVariableParts = rq.variable.split(" ");
 			String variableName = rawVariableParts[1];
@@ -309,6 +305,7 @@ public class Parser{
 
 			int codeWidth = Integer.parseInt(rawVariableParts[2].substring(2));
 			pos += codeWidth;
+			String position = pos + "-";
 
 			//Mark demographic questions
 			if(variableName.charAt(0) == 'D'){
@@ -321,32 +318,82 @@ public class Parser{
 			String label = rawLabel.substring(1, rawLabel.length() - 1);
 
 			//Find and capitalize first letter
-			for(int i = 0; i < label.length(); i++){
+			int periodIndex = label.indexOf('.');
+			if(periodIndex < 0)
+				periodIndex = 0;
+			for(int i = periodIndex; i < label.length(); i++){
 				if(Character.isLetter(label.charAt(i))){
 					label = label.substring(0, i) + label.substring(i, i + 1).toUpperCase() + label.substring(i + 1);
 					break;
 				}
 			}
 
+			//Add shortLabel
+			String shortLabel = "";
+			if(!rq.shortLabel.isEmpty())
+				shortLabel = rq.shortLabel.substring(1, rq.shortLabel.length() - 1);
+
+			//Determine Question Identifier
+			String identifier = "";
+			if(!demoQ){
+				if(!label.isEmpty()){
+					int delimiter = label.indexOf(".");		//find first period
+
+					if(delimiter == -1 || delimiter > 9)	//period not found or too far away
+						delimiter = label.indexOf(" ");		//use first space instead
+
+					if(delimiter == -1){					//space not found either
+						identifier = variableName;
+						Logg.warning(variableName + " - question identifier not found and label not empty");
+					}else
+						identifier = label.substring(0, delimiter).toUpperCase();
+				}
+			}
+
+			//Add Skips
+			String skipCondition = rq.skipCondition;
+			String skipDestination = rq.skipDestination;
 
 
+			//Add Choices
+			ArrayList<String[]> choices = new ArrayList<>();//[0]=code; [1]=label; [2]=skipDestination;
+			for(int i = 0; i < rq.choices.size(); i++){
+				String line = rq.choices.get(i);
+
+				int choiceLabelEndPos = line.indexOf(']');
+				String choiceLabel = line.substring(1, choiceLabelEndPos);
+
+				if(choiceLabel.length() > 0)		//capitalize first letter
+					choiceLabel = choiceLabel.substring(0, 1).toUpperCase() + choiceLabel.substring(1);
+
+				int codeStartPos = line.indexOf('[', choiceLabelEndPos);
+				String code = line.substring(codeStartPos + 1, codeStartPos + 1 + codeWidth);
+
+				String skipToQuestion = "";
+				int skipStartPos = line.indexOf('>', codeStartPos);
+				if(skipStartPos != -1)
+					skipToQuestion = line.substring(skipStartPos + 1, line.length());
+
+				choices.add(new String[]{code, choiceLabel, skipToQuestion});
+			}
 
 
 			if(demoQ){
-				//dq.setAll(variableName, codeWidth, label, identifier, position, skipCondition, choices);
-				//Qnair.addDemoQuestion(dq);
+				Qnair.addDemoQuestion(variableName, codeWidth, label, shortLabel, identifier, position, skipCondition, skipDestination, choices);
 				Logg.fine("Question " + variableName + " was added as demographic");
 			}else{
-				//Qnair.addQuestion(variableName, codeWidth, label, identifier, position, skipCondition, choices);
+				Qnair.addQuestion(variableName, codeWidth, label, shortLabel, identifier, position, skipCondition, skipDestination, choices);
 				Logg.fine("Question " + variableName + " was added");
 			}
 		}
+
+		Qnair.setDemoIdentifiers();
 	}
 
 	private static class RawQuestion{
 		public String variable = "";
 		public String label = "";
-		public String specialMessage = "";
+		public String shortLabel = "";
 		public String skipDestination = "";
 		public String skipCondition = "";
 		public ArrayList<String> choices = new ArrayList<>();

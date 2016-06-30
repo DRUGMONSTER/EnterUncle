@@ -1,4 +1,5 @@
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 //Key       -> DiEntry
 //REGEXs -> (IDENT_STRING, DEMO_Q)
@@ -36,8 +37,8 @@ public class DemoMap{
 		return map.keySet().toArray(new String[map.size()]);
 	}
 
-	public static String getIdentifier(String key, DemoQuestion dq){
-		DiEntry ent = map.get(key);
+	public static String getIdentifier(String questionLabel, DemoQuestion dq){
+		DiEntry ent = map.get(questionLabel);
 		ent.dq = dq;
 		String ident = ent.name;
 

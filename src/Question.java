@@ -5,7 +5,7 @@ public class Question extends QuestionBase{
 		super();
 	}
 
-	public Question(String var, int cw, String l, String ident, String pos, String skipCon, ArrayList<String[]> choices){
-		super(var, cw, l, ident, pos, skipCon, choices);
+	public Question(String var, int cw, String l, String sl, String ident, String pos, String skipCon, String skipDest, ArrayList<String[]> choices){
+		super(var, cw, l, sl, ident, pos, skipCon, skipDest, choices);
 	}
 }

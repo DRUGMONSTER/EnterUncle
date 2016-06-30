@@ -6,7 +6,7 @@ public class QuestionBase{
 	private String label;
 	private String questionIdentifier;
 	private String position;
-	private String specialMessage;
+	private String shortLabel;
 	private String skipCondition;
 	private int ifSkip;
 	private int elseSkip;
@@ -20,7 +20,9 @@ public class QuestionBase{
 		position = "";
 	}
 
-	public QuestionBase(String var, int cw, String l, String ident, String pos, String skipCon, ArrayList<String[]> choices){
+	public QuestionBase(String var, int cw, String l, String sl, String ident, String pos, String skipCon, String skipDest, ArrayList<String[]> choices){
+		//TODO no unused params
+		//TODO ifSkip and elseSkip
 		variable = var;
 		codeWidth = cw;
 		label = l;
