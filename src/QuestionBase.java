@@ -18,20 +18,27 @@ public class QuestionBase{
 		label = "";
 		questionIdentifier = "";
 		position = "";
+		shortLabel = "";
+		skipCondition = "";
+		ifSkip = 0;
+		elseSkip = 0;
 	}
 
-	public QuestionBase(String var, int cw, String l, String sl, String ident, String pos, String skipCon, String skipDest, ArrayList<String[]> choices){
-		//TODO no unused params
-		//TODO ifSkip and elseSkip
+	public QuestionBase(String var, int cw, String l, String sl, String ident, String pos, String skipCon, int is, int es, ArrayList<String[]> ch){
 		variable = var;
 		codeWidth = cw;
 		label = l;
 		questionIdentifier = ident;
 		position = pos;
+		shortLabel = sl;
 		skipCondition = skipCon;
-		for(String[] choice : choices){
-			addChoice(choice[0], choice[1]);
-		}
+		ifSkip = is;
+		elseSkip = es;
+
+		choices = ch;
+		//for(String[] choice : choices){
+		//	addChoice(choice[0], choice[1]);
+		//}
 	}
 
 	public void setAll(String var, int cw, String l, String ident, String pos, String skipCon, ArrayList<String[]> choices){
@@ -88,6 +95,10 @@ public class QuestionBase{
 
 	public String getPosition(){
 		return position;
+	}
+
+	public String getShortLabel(){
+		return shortLabel;
 	}
 
 	public ArrayList<String[]> getChoices(){

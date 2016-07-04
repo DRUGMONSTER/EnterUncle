@@ -36,14 +36,12 @@ public class Qnair{
 		return questions.isEmpty() && demoQuestions.isEmpty();
 	}
 
-	public static void addQuestion(String var, int cw, String l, String sl, String ident, String pos, String skipCon, String skipDest, ArrayList<String[]> choices){
-		//TODO No unused
-		questions.add(new Question(var, cw, l, sl, ident, pos, skipCon, skipDest, choices));
+	public static void addQuestion(String var, int cw, String l, String sl, String ident, String pos, String skipCon, int ifSkipDest, int elseSkipDest, ArrayList<String[]> choices){
+		questions.add(new Question(var, cw, l, sl, ident, pos, skipCon, ifSkipDest, elseSkipDest, choices));
 	}
 
-	public static void addDemoQuestion(String var, int cw, String l, String sl, String ident, String pos, String skipCon, String skipDest, ArrayList<String[]> choices){
-		//TODO No unused
-		demoQuestions.add(new DemoQuestion(var, cw, l, sl, ident, pos, skipCon, skipDest, choices));
+	public static void addDemoQuestion(String var, int cw, String l, String sl, String ident, String pos, String skipCon, int ifSkipDest, int elseSkipDest, ArrayList<String[]> choices){
+		demoQuestions.add(new DemoQuestion(var, cw, l, sl, ident, pos, skipCon, ifSkipDest, elseSkipDest, choices));
 	}
 
 	//This also removes hear again choices

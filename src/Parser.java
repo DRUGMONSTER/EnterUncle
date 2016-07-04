@@ -352,8 +352,19 @@ public class Parser{
 
 			//Add Skips
 			String skipCondition = rq.skipCondition;
-			String skipDestination = rq.skipDestination;
+			int skipDestinationIf = 0;
+			int skipDestinationElse = 0;
 
+			boolean hasSlash = rq.skipDestination.contains("/");
+
+			//int elseSkipStartPos = rq.skipDestination.indexOf(' ');
+			//if(elseSkipStartPos != -1){
+			//	skipDestinationElse = Integer.parseInt(rq.skipDestination.substring(elseSkipStartPos + 6));
+			//	skipDestinationIf = Integer.parseInt(rq.skipDestination.substring(2, elseSkipStartPos));
+			//}
+			//else{
+			//	skipDestinationIf = Integer.parseInt(rq.skipDestination.substring(2));
+			//}
 
 			//Add Choices
 			ArrayList<String[]> choices = new ArrayList<>();//[0]=code; [1]=label; [2]=skipDestination;
@@ -379,10 +390,10 @@ public class Parser{
 
 
 			if(demoQ){
-				Qnair.addDemoQuestion(variableName, codeWidth, label, shortLabel, identifier, position, skipCondition, skipDestination, choices);
+				Qnair.addDemoQuestion(variableName, codeWidth, label, shortLabel, identifier, position, skipCondition, skipDestinationIf, skipDestinationElse, choices);
 				Logg.fine("Question " + variableName + " was added as demographic");
 			}else{
-				Qnair.addQuestion(variableName, codeWidth, label, shortLabel, identifier, position, skipCondition, skipDestination, choices);
+				Qnair.addQuestion(variableName, codeWidth, label, shortLabel, identifier, position, skipCondition, skipDestinationIf, skipDestinationElse, choices);
 				Logg.fine("Question " + variableName + " was added");
 			}
 		}
