@@ -293,7 +293,7 @@ public class Parser{
 	}
 
 	//reads from rawQuestions and adds questions and demo questions to Qnair
-	public static void formatAndAddQuestions(ArrayList<RawQuestion> rawQuestions){
+	private static void formatAndAddQuestions(ArrayList<RawQuestion> rawQuestions){
 		int pos = START_POS;
 
 		for(RawQuestion rq : rawQuestions){
@@ -402,11 +402,11 @@ public class Parser{
 	}
 
 	private static class RawQuestion{
-		public String variable = "";
-		public String label = "";
-		public String shortLabel = "";
-		public String skipDestination = "";
-		public String skipCondition = "";
-		public ArrayList<String> choices = new ArrayList<>();
+		String variable = "";
+		String label = "";
+		String shortLabel = "";
+		String skipDestination = "";
+		String skipCondition = "";
+		ArrayList<String> choices = new ArrayList<>();
 	}
 }
