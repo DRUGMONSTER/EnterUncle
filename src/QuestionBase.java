@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 
+@SuppressWarnings("WeakerAccess")
 public class QuestionBase{
-	private String variable;
+	public String variable;
 	private int codeWidth;
-	private String label;
-	private String questionIdentifier;
-	private String position;
+	public String label;
+	public String identifier;
+	public String position;
 	private String shortLabel;
 	private String skipCondition;
 	private int ifSkip;
@@ -16,7 +17,7 @@ public class QuestionBase{
 		variable = "";
 		codeWidth = -1;
 		label = "";
-		questionIdentifier = "";
+		identifier = "";
 		position = "";
 		shortLabel = "";
 		skipCondition = "";
@@ -28,7 +29,7 @@ public class QuestionBase{
 		variable = var;
 		codeWidth = cw;
 		label = l;
-		questionIdentifier = ident;
+		identifier = ident;
 		position = pos;
 		shortLabel = sl;
 		skipCondition = skipCon;
@@ -45,60 +46,16 @@ public class QuestionBase{
 		variable = var;
 		codeWidth = cw;
 		label = l;
-		questionIdentifier = ident;
+		identifier = ident;
 		position = pos;
 		skipCondition = skipCon;
 		for(String[] choice : choices){
 			addChoice(choice[0], choice[1]);
 		}
 	}
-
-	public void setVariable(String var){
-		variable = var;
-	}
-
-	public void setCodeWidth(int aCodeWidth){
-		codeWidth = aCodeWidth;
-	}
-	
-	public void setLable(String l){
-		label = l;
-	}
-	
-	public void setIdentifier(String qIdent){
-		questionIdentifier = qIdent;
-	}
-
-	public void setPosition(String pos){
-		position = pos;
-	}
 	
 	public void addChoice(String code, String label){
 		choices.add(new String[] {code, label});
-	}
-	
-	public String getVariable(){
-		return variable;
-	}
-
-	public int getCodeWidth(){
-		return codeWidth;
-	}
-	
-	public String getLabel(){
-		return label;
-	}
-
-	public String getIdentifier(){
-		return questionIdentifier;
-	}
-
-	public String getPosition(){
-		return position;
-	}
-
-	public String getShortLabel(){
-		return shortLabel;
 	}
 
 	public ArrayList<String[]> getChoices(){

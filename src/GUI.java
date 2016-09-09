@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 
+@SuppressWarnings("WeakerAccess")
 public class GUI extends JFrame{
 	public static final int MUNICIPAL = 0;
 	public static final int PROVINCIAL = 1;
@@ -181,13 +182,13 @@ public class GUI extends JFrame{
 
 		//populate banner pane
 		for(DemoQuestion dq : Qnair.getDemoQuestions()){
-			JCheckBox jcb = new JCheckBox(dq.getVariable());
+			JCheckBox jcb = new JCheckBox(dq.variable);
 			jcb.setSelected(true);
 			bannerWrap.add(jcb);
 			bannerDemoQuestions.put(jcb, dq);
 		}
 		for(Question q : Qnair.getQuestions()){
-			JCheckBox jcb = new JCheckBox(q.getVariable());
+			JCheckBox jcb = new JCheckBox(q.variable);
 			bannerWrap.add(jcb);
 			bannerQuestions.put(jcb, q);
 		}

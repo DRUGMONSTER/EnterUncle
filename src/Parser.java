@@ -133,7 +133,7 @@ public class Parser{
 				Logg.info("\"*LL\" Long Label Found");
 				Logg.info("Line: " + line);
 
-				rq.variable = line;
+				rq.variableRaw = line;
 				rq.label = sc.nextLine();
 
 				while(!rq.label.endsWith("]")){//if multiple lines
@@ -244,6 +244,7 @@ public class Parser{
 				if(!set)
 					identifier = "DEMO_QUESTION_ID_NOT_FOUND";
 			}else{
+				//noinspection Duplicates
 				if(!label.isEmpty()){
 					int delimiter = label.indexOf(".");//find first period
 
@@ -295,17 +296,26 @@ public class Parser{
 	//reads from rawQuestions and adds questions and demo questions to Qnair
 	private static void formatAndAddQuestions(ArrayList<RawQuestion> rawQuestions){
 		int pos = START_POS;
-
+		
+		//Set VariableName and Position of RawQuestions first
 		for(RawQuestion rq : rawQuestions){
-			boolean demoQ = false;
-
-			String[] rawVariableParts = rq.variable.split(" ");
+			String[] rawVariableParts = rq.variableRaw.split(" ");
 			String variableName = rawVariableParts[1];
 			Logg.fine("Variable read: " + variableName);
 
 			int codeWidth = Integer.parseInt(rawVariableParts[2].substring(2));
 			pos += codeWidth;
 			String position = pos + "-";
+			
+			
+			rq.variable = variableName;
+			rq.codeWidth = codeWidth;
+			rq.position = position;
+		}
+
+		for(RawQuestion rq : rawQuestions){
+			boolean demoQ = false;
+			String variableName = rq.variable;
 
 			//Mark demographic questions
 			if(variableName.charAt(0) == 'D'){
@@ -354,17 +364,21 @@ public class Parser{
 			String skipCondition = rq.skipCondition;
 			int skipDestinationIf = 0;
 			int skipDestinationElse = 0;
-
-			boolean hasSlash = rq.skipDestination.contains("/");
-
-			//int elseSkipStartPos = rq.skipDestination.indexOf(' ');
-			//if(elseSkipStartPos != -1){
-			//	skipDestinationElse = Integer.parseInt(rq.skipDestination.substring(elseSkipStartPos + 6));
-			//	skipDestinationIf = Integer.parseInt(rq.skipDestination.substring(2, elseSkipStartPos));
-			//}
-			//else{
-			//	skipDestinationIf = Integer.parseInt(rq.skipDestination.substring(2));
-			//}
+			
+			//If a slash is present, just ignore it
+			int offSet = (rq.skipDestination.contains("/")) ? 3 : 2;
+			
+			int elseSkipStartPos = rq.skipDestination.indexOf(' ');
+			if(elseSkipStartPos != -1){
+				skipDestinationElse = Integer.parseInt(rq.skipDestination.substring(elseSkipStartPos + 6));
+				skipDestinationIf = Integer.parseInt(rq.skipDestination.substring(offSet, elseSkipStartPos));
+			}
+			else{
+				skipDestinationIf = Integer.parseInt(rq.skipDestination.substring(offSet));
+			}
+			
+			//skip may a variable name, find it, then calculate it relative position
+			//TODO
 
 			//Add Choices
 			ArrayList<String[]> choices = new ArrayList<>();//[0]=code; [1]=label; [2]=skipDestination;
@@ -378,7 +392,7 @@ public class Parser{
 					choiceLabel = choiceLabel.substring(0, 1).toUpperCase() + choiceLabel.substring(1);
 
 				int codeStartPos = line.indexOf('[', choiceLabelEndPos);
-				String code = line.substring(codeStartPos + 1, codeStartPos + 1 + codeWidth);
+				String code = line.substring(codeStartPos + 1, codeStartPos + 1 + rq.codeWidth);
 
 				String skipToQuestion = "";
 				int skipStartPos = line.indexOf('>', codeStartPos);
@@ -390,10 +404,10 @@ public class Parser{
 
 
 			if(demoQ){
-				Qnair.addDemoQuestion(variableName, codeWidth, label, shortLabel, identifier, position, skipCondition, skipDestinationIf, skipDestinationElse, choices);
+				Qnair.addDemoQuestion(variableName, rq.codeWidth, label, shortLabel, identifier, rq.position, skipCondition, skipDestinationIf, skipDestinationElse, choices);
 				Logg.fine("Question " + variableName + " was added as demographic");
 			}else{
-				Qnair.addQuestion(variableName, codeWidth, label, shortLabel, identifier, position, skipCondition, skipDestinationIf, skipDestinationElse, choices);
+				Qnair.addQuestion(variableName, rq.codeWidth, label, shortLabel, identifier, rq.position, skipCondition, skipDestinationIf, skipDestinationElse, choices);
 				Logg.fine("Question " + variableName + " was added");
 			}
 		}
@@ -402,11 +416,14 @@ public class Parser{
 	}
 
 	private static class RawQuestion{
+		String variableRaw = "";
 		String variable = "";
+		int codeWidth = 0;
 		String label = "";
+		String position = "";
 		String shortLabel = "";
-		String skipDestination = "";
 		String skipCondition = "";
+		String skipDestination = "";
 		ArrayList<String> choices = new ArrayList<>();
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("WeakerAccess")
 public class Qnair{
 	private static final ArrayList<Question> questions = new ArrayList<>();
 	private static final ArrayList<DemoQuestion> demoQuestions = new ArrayList<>();
@@ -49,10 +50,10 @@ public class Qnair{
 		Iterator<Question> iter = questions.iterator();
 		while(iter.hasNext()){
 			Question q = iter.next();
-			String variable = q.getVariable();
+			String variable = q.variable;
 
 			//Remove questions with no label
-			if(q.getLabel().isEmpty()){
+			if(q.label.isEmpty()){
 				iter.remove();
 				Logg.info("Removed " + variable + " - no label");
 				continue;
@@ -86,9 +87,9 @@ public class Qnair{
 		Iterator<DemoQuestion> d_iter = demoQuestions.iterator();
 		while(d_iter.hasNext()){
 			DemoQuestion dq = d_iter.next();
-			String variable = dq.getVariable();
+			String variable = dq.variable;
 
-			if(dq.getLabel().isEmpty()){
+			if(dq.label.isEmpty()){
 				d_iter.remove();
 				Logg.info("Removed " + variable + " - no label");
 				continue;
@@ -105,7 +106,7 @@ public class Qnair{
 			String[] choice = c_iter.next();
 			if(checkHearAgain(choice[1])){
 				c_iter.remove();
-				Logg.good("Removed 'hear again' choice in " + bq.getVariable());
+				Logg.good("Removed 'hear again' choice in " + bq.variable);
 			}
 		}
 	}
@@ -120,19 +121,19 @@ public class Qnair{
 		boolean set = false;
 		for(DemoQuestion dq : demoQuestions){
 			for(String regex : regexs){
-				if(Pattern.matches(regex, dq.getLabel())){
-					dq.setIdentifier(DemoMap.getIdentifier(regex, dq));
+				if(Pattern.matches(regex, dq.label)){
+					dq.identifier = DemoMap.getIdentifier(regex, dq);
 					set = true;
 					break;
 				}
 			}
 			if(!set)
-				dq.setIdentifier("DEMO_QUESTION_ID_NOT_FOUND");
+				dq.identifier = "DEMO_QUESTION_ID_NOT_FOUND";
 		}
 	}
 
 	public static String guessRegion(){
-		System.out.println(questions.get(0).getLabel());
+		System.out.println(questions.get(0).label);
 		return "";
 	}
 
@@ -148,13 +149,13 @@ public class Qnair{
 	}
 
 	public static void printQuestion(QuestionBase q){
-		System.out.println(q.getVariable());
-		if(!q.getLabel().isEmpty())
-			System.out.println(q.getLabel());
+		System.out.println(q.variable);
+		if(!q.label.isEmpty())
+			System.out.println(q.label);
 		else
 			System.out.println("EMPTY LABEL");
-		System.out.println(q.getIdentifier());
-		System.out.println(q.getPosition());
+		System.out.println(q.identifier);
+		System.out.println(q.position);
 		ArrayList<String[]> choices = q.getChoices();
 		for(String[] c : choices)
 			System.out.println(c[0] + "|--|" + c[1]);

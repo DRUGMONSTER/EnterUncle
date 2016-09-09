@@ -32,11 +32,11 @@ public class Writer{
 
 		//Print Questions
 		for(Question q : questions){
-			String variable = q.getVariable();
+			String variable = q.variable;
 			writer.println("TABLE " + tableNum++);
 
-			writer.println("T " + q.getLabel());
-			writer.println("T &wt Q" + q.getIdentifier());
+			writer.println("T " + q.label);
+			writer.println("T &wt Q" + q.identifier);
 
 			writeChoices(writer, q);
 
@@ -51,20 +51,20 @@ public class Writer{
 			}
 
 			writer.println();
-			Logg.info("Wrote question " + q.getVariable());
+			Logg.info("Wrote question " + variable);
 		}
 
 		//Print Demo Questions
 		for(DemoQuestion dq : demoQuestions){
 			writer.println("TABLE " + tableNum++);
 
-			writer.println("T " + dq.getLabel());
-			writer.println("T &wt " + dq.getIdentifier());
+			writer.println("T " + dq.label);
+			writer.println("T &wt " + dq.identifier);
 
 			writeChoices(writer, dq);
 
 			writer.println();
-			Logg.info("Wrote demo question " + dq.getVariable());
+			Logg.info("Wrote demo question " + dq.variable);
 		}
 
 		writer.println();
@@ -77,7 +77,7 @@ public class Writer{
 	}
 
 	private static void writeChoices(PrintWriter writer, QuestionBase qb){
-		String qbPos = qb.getPosition();
+		String qbPos = qb.position;
 		ArrayList<String[]> choices = qb.getChoices();
 		String[] means = new String[0];
 		if(qb == DemoMap.getAgeDQ()){
@@ -165,8 +165,8 @@ public class Writer{
 		if(ageQ == null)
 			return;
 
-		String genderPos = genderQ.getPosition();
-		String agePos = ageQ.getPosition();
+		String genderPos = genderQ.position;
+		String agePos = ageQ.position;
 
 		//0 = Toronto
 		if(region == 0){
@@ -189,7 +189,7 @@ public class Writer{
 			//If region demo exists
 			DemoQuestion communityQ = DemoMap.getCommunityDQ();
 			if(communityQ != null){
-				String communityPos = communityQ.getPosition();
+				String communityPos = communityQ.position;
 				w.println(
 					"TABLE 803\n" +
 					"T Region Weight (Toronto)\n" +
@@ -260,14 +260,14 @@ public class Writer{
 			addRegion();
 
 		for(QuestionBase qb : newOrder){
-			String qbPos = qb.getPosition();
+			String qbPos = qb.position;
 			ArrayList<String> lines = new ArrayList<>();
 			if(qb.getChoices().isEmpty()){
-				String line = "C " + qb.getIdentifier() + "; " + qbPos;
+				String line = "C " + qb.identifier + "; " + qbPos;
 				lines.add(line);
 			}
 			for(String choice[] : qb.getChoices()){
-				String line = "C " + qb.getIdentifier() + " - " + choice[1] + "; " + qbPos + choice[0];
+				String line = "C " + qb.identifier + " - " + choice[1] + "; " + qbPos + choice[0];
 
 				if(line.length() > maxLen)
 					maxLen = line.length();
@@ -301,8 +301,8 @@ public class Writer{
 		bufferOfLines.remove(0);
 		bufferOfLines.remove(0);
 
-		String genPos = DemoMap.getGenderDQ().getPosition();
-		String agePos = DemoMap.getAgeDQ().getPosition();
+		String genPos = DemoMap.getGenderDQ().position;
+		String agePos = DemoMap.getAgeDQ().position;
 		ArrayList<String> ageAndGen = new ArrayList<>();
 		ageAndGen.add("C 18-34;\t" + agePos + "1,2");
 		ageAndGen.add("C 35-44;\t" + agePos + "3");
@@ -312,7 +312,7 @@ public class Writer{
 		ageAndGen.add("C Male;\t\t\t" + genPos + "1");
 		ageAndGen.add("C Female;\t\t" + genPos + "2");
 
-		String incomePos = DemoMap.getIncomeDQ().getPosition();
+		String incomePos = DemoMap.getIncomeDQ().position;
 		ArrayList<String> income = new ArrayList<>();
 		income.add("C <20K;\t\t"	 + incomePos + "1");
 		income.add("C 20-40K;\t"	 + incomePos + "2");
@@ -390,8 +390,8 @@ public class Writer{
 
 		int childrenPos = questionBases.indexOf(childrenDQ);
 		DemoQuestion dq = new DemoQuestion();
-		dq.setIdentifier("MOMS");
-		dq.setPosition("(" + childrenDQ.getPosition() + "1 " + genderDQ.getPosition() + "2)");
+		dq.identifier = "MOMS";
+		dq.position = "(" + childrenDQ.position + "1 " + genderDQ.position + "2)";
 		questionBases.add(childrenPos + 1, dq);//inserts after children question
 		Logg.info("\"Mom's\" added");
 	}
@@ -440,16 +440,16 @@ public class Writer{
 
 		int alsoLandlinePos = questionBases.indexOf(alsoLandlineDQ);
 		DemoQuestion sampleMock = new DemoQuestion();
-		sampleMock.setIdentifier("SAMPLE");
+		sampleMock.identifier = "SAMPLE";
 		switch(govLvl){
 			case GUI.MUNICIPAL:
-				sampleMock.setPosition("265-");
+				sampleMock.position = "265-";
 				break;
 			case GUI.PROVINCIAL:
-				sampleMock.setPosition("274-");
+				sampleMock.position = "274-";
 				break;
 			case GUI.FEDERAL:
-				sampleMock.setPosition("271-");
+				sampleMock.position = "271-";
 				break;
 		}
 		sampleMock.addChoice("0", "Landline");
