@@ -360,26 +360,36 @@ public class Parser{
 				}
 			}
 
-			//Add Skips
+			//Add Skips)
 			String skipCondition = rq.skipCondition;
 			int skipDestinationIf = 0;
 			int skipDestinationElse = 0;
 			
-			//If a slash is present, just ignore it
-			int offSet = (rq.skipDestination.contains("/")) ? 3 : 2;
-			
-			int elseSkipStartPos = rq.skipDestination.indexOf(' ');
-			if(elseSkipStartPos != -1){
-				skipDestinationElse = Integer.parseInt(rq.skipDestination.substring(elseSkipStartPos + 6));
-				skipDestinationIf = Integer.parseInt(rq.skipDestination.substring(offSet, elseSkipStartPos));
+			if(!skipCondition.isEmpty()){
+				String skipDestinationIfStr = "";
+				String skipDestinationElseStr = "";
+				
+				//If a slash is present, just ignore it
+				int offSet = (rq.skipDestination.contains("/")) ? 3 : 2;
+				
+				int elseSkipStartPos = rq.skipDestination.indexOf(' ');
+				if(elseSkipStartPos != -1){
+					skipDestinationElseStr = rq.skipDestination.substring(elseSkipStartPos + 6);
+					skipDestinationIfStr = rq.skipDestination.substring(offSet, elseSkipStartPos);
+				}else{
+					skipDestinationIfStr = rq.skipDestination.substring(offSet);
+				}
+				
+				//skip may be a variable name, if it is, find it, then calculate it's relative position
+				//if(skipCondition)
+				
+				
 			}
-			else{
-				skipDestinationIf = Integer.parseInt(rq.skipDestination.substring(offSet));
-			}
 			
-			//skip may a variable name, find it, then calculate it relative position
-			//TODO
-
+			
+			
+			
+			
 			//Add Choices
 			ArrayList<String[]> choices = new ArrayList<>();//[0]=code; [1]=label; [2]=skipDestination;
 			for(int i = 0; i < rq.choices.size(); i++){
