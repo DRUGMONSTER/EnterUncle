@@ -10,6 +10,9 @@ public class Writer{
 	private static int govLvl = -1;
 	private static final ArrayList<String[]> TB_PAIRS = new ArrayList<>();
 	private static final ArrayList<String> MEAN_KEYWORDS = new ArrayList<>();
+	private static final String MUNICIPAL = "";
+	private static final String PROVINCIAL = "";
+	private static final String FEDERAL = "";
 	private static String projectName;
 	private static ArrayList<Question> questions;
 	private static ArrayList<DemoQuestion> demoQuestions;
@@ -148,7 +151,7 @@ public class Writer{
 						"X ex 901\n\n" +
 
 						"TABLE 699\n" +
-						"T Load data, weight by voter turnout, run initial analysis tabs\n" +
+						"T Load data, run all tabs for SPSS weight by everything\n" +
 						"X load rep char from 'Y:\\" + projectName + "\\" + projectName + "_COMP.TXT'\n" +
 						"X justify 89:93 right\n" +
 						"X if (r(89:93,0:XXX)) DEL\n" +

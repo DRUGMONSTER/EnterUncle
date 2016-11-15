@@ -37,9 +37,6 @@ public class QuestionBase{
 		elseSkip = es;
 
 		choices = ch;
-		//for(String[] choice : choices){
-		//	addChoice(choice[0], choice[1]);
-		//}
 	}
 
 	public void setAll(String var, int cw, String l, String ident, String pos, String skipCon, ArrayList<String[]> choices){

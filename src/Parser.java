@@ -4,11 +4,11 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Parser{
-	private static final int START_POS = 246;
+	private static final int START_POS = 248;
 
 	public static boolean parseASCFile(String filepath){
 		DemoMap.init();
-		ArrayList<ArrayList<String>> buffers = new ArrayList<>();
+		//ArrayList<ArrayList<String>> buffers = new ArrayList<>();
 		ArrayList<RawQuestion> rawQuestions = new ArrayList<>();
 
 		try{
@@ -16,7 +16,7 @@ public class Parser{
 			boolean success = readAndParseQuestions(filepath, rawQuestions);
 			if(!success)
 				return false;
-		}catch(Exception e){//if an exception is triggered somewhere in readAndLoadFile()
+		}catch(Exception e){//if an exception is triggered somewhere in readAndParseQuestions()
 			e.printStackTrace();
 			Logg.severe("Failed to read file");
 			return false;
@@ -179,6 +179,7 @@ public class Parser{
 				Logg.info("Line: " + line);
 
 				String choice = sc.nextLine();
+				rq.choices = new ArrayList<>();
 				do{
 					rq.choices.add(choice);
 					choice = sc.nextLine();
@@ -298,11 +299,12 @@ public class Parser{
 		int pos = START_POS;
 		
 		//Set VariableName and Position of RawQuestions first
-		for(RawQuestion rq : rawQuestions){
+		for(int i = 0; i < rawQuestions.size(); i++){
+			RawQuestion rq = rawQuestions.get(i);
 			String[] rawVariableParts = rq.variableRaw.split(" ");
 			String variableName = rawVariableParts[1];
 			Logg.fine("Variable read: " + variableName);
-
+			
 			int codeWidth = Integer.parseInt(rawVariableParts[2].substring(2));
 			pos += codeWidth;
 			String position = pos + "-";
@@ -311,6 +313,7 @@ public class Parser{
 			rq.variable = variableName;
 			rq.codeWidth = codeWidth;
 			rq.position = position;
+			rq.quePosition = i;
 		}
 
 		for(RawQuestion rq : rawQuestions){
@@ -340,7 +343,7 @@ public class Parser{
 
 			//Add shortLabel
 			String shortLabel = "";
-			if(!rq.shortLabel.isEmpty())
+			if(rq.shortLabel != null)
 				shortLabel = rq.shortLabel.substring(1, rq.shortLabel.length() - 1);
 
 			//Determine Question Identifier
@@ -360,13 +363,13 @@ public class Parser{
 				}
 			}
 
-			//Add Skips)
+			//Add Skips
 			String skipCondition = rq.skipCondition;
 			int skipDestinationIf = 0;
 			int skipDestinationElse = 0;
 			
 			if(!skipCondition.isEmpty()){
-				String skipDestinationIfStr = "";
+				String skipDestinationIfStr;
 				String skipDestinationElseStr = "";
 				
 				//If a slash is present, just ignore it
@@ -380,14 +383,10 @@ public class Parser{
 					skipDestinationIfStr = rq.skipDestination.substring(offSet);
 				}
 				
-				//skip may be a variable name, if it is, find it, then calculate it's relative position
-				//if(skipCondition)
-				
-				
+				//skip destination may be a variable name, if it is, find it, then calculate it's relative position
+				skipDestinationIf = findQuePosition(skipDestinationIfStr, rq.quePosition, rawQuestions);
+				skipDestinationElse = findQuePosition(skipDestinationElseStr, rq.quePosition, rawQuestions);
 			}
-			
-			
-			
 			
 			
 			//Add Choices
@@ -412,7 +411,6 @@ public class Parser{
 				choices.add(new String[]{code, choiceLabel, skipToQuestion});
 			}
 
-
 			if(demoQ){
 				Qnair.addDemoQuestion(variableName, rq.codeWidth, label, shortLabel, identifier, rq.position, skipCondition, skipDestinationIf, skipDestinationElse, choices);
 				Logg.fine("Question " + variableName + " was added as demographic");
@@ -424,16 +422,33 @@ public class Parser{
 
 		Qnair.setDemoIdentifiers();
 	}
+	
+	private static int findQuePosition(String relativeSkipDestination, int quePosition, ArrayList<RawQuestion> rawQuestions){
+		int position = -1;
+		try{
+			position = quePosition + Integer.parseInt(relativeSkipDestination);
+		}catch(NumberFormatException e){
+			if(relativeSkipDestination.charAt(0) == '/')
+				relativeSkipDestination = relativeSkipDestination.substring(1);
+			for(RawQuestion rq2 : rawQuestions){
+				if(rq2.variable.equals(relativeSkipDestination)){
+					position = rq2.quePosition;
+				}
+			}
+		}
+		return position;
+	}
 
 	private static class RawQuestion{
-		String variableRaw = "";
-		String variable = "";
-		int codeWidth = 0;
-		String label = "";
-		String position = "";
-		String shortLabel = "";
-		String skipCondition = "";
-		String skipDestination = "";
-		ArrayList<String> choices = new ArrayList<>();
+		String variableRaw;
+		String variable;
+		int codeWidth;
+		int quePosition;
+		String label;
+		String position;
+		String shortLabel;
+		String skipCondition;
+		String skipDestination;
+		ArrayList<String> choices;
 	}
 }
