@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("WeakerAccess")
 public class Writer{
 	private static int govLvl = -1;
 	private static final ArrayList<String[]> TB_PAIRS = new ArrayList<>();
 	private static final ArrayList<String> MEAN_KEYWORDS = new ArrayList<>();
-	private static final String MUNICIPAL = "";
-	private static final String PROVINCIAL = "";
-	private static final String FEDERAL = "";
+	private static final String MUNICIPAL_SAMPLE_POSITION = "265-";
+	private static final String PROVINCIAL_SAMPLE_POSITION = "274-";
+	private static final String FEDERAL_SAMPLE_POSITION = "271-";
 	private static String projectName;
 	private static ArrayList<Question> questions;
 	private static ArrayList<DemoQuestion> demoQuestions;
@@ -446,13 +447,13 @@ public class Writer{
 		sampleMock.identifier = "SAMPLE";
 		switch(govLvl){
 			case GUI.MUNICIPAL:
-				sampleMock.position = "265-";
+				sampleMock.position = MUNICIPAL_SAMPLE_POSITION;
 				break;
 			case GUI.PROVINCIAL:
-				sampleMock.position = "274-";
+				sampleMock.position = PROVINCIAL_SAMPLE_POSITION;
 				break;
 			case GUI.FEDERAL:
-				sampleMock.position = "271-";
+				sampleMock.position = FEDERAL_SAMPLE_POSITION;
 				break;
 		}
 		sampleMock.addChoice("0", "Landline");

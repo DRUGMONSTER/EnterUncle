@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("WeakerAccess")
 public class Parser{
 	private static final int START_POS = 248;
 
@@ -35,6 +36,7 @@ public class Parser{
 		return true;
 	}
 
+	/*
 	private static boolean readAndLoadFile(String filepath, ArrayList<ArrayList<String>> buffers){
 		File ascFile = new File(filepath);
 		Scanner sc;
@@ -96,7 +98,7 @@ public class Parser{
 		Logg.info("Buffers size: " + buffers.size());
 
 		return true;
-	}
+	}//*/
 
 	private static boolean readAndParseQuestions(String filepath, ArrayList<RawQuestion> rawQuestions){
 		Scanner sc;
@@ -194,6 +196,7 @@ public class Parser{
 		return true;
 	}
 
+	/*
 	//reads from buffers and adds questions and demo questions to Qnair
 	public static boolean formatAndAddQuestions1(ArrayList<ArrayList<String>> buffers){
 		int pos = START_POS;
@@ -292,7 +295,7 @@ public class Parser{
 			}
 		}
 		return true;
-	}
+	}//*/
 
 	//reads from rawQuestions and adds questions and demo questions to Qnair
 	private static void formatAndAddQuestions(ArrayList<RawQuestion> rawQuestions){
@@ -419,8 +422,20 @@ public class Parser{
 				Logg.fine("Question " + variableName + " was added");
 			}
 		}
-
-		Qnair.setDemoIdentifiers();
+		
+		//Set Identifiers for DemoQuestions
+		boolean set = false;
+		for(DemoQuestion dq : Qnair.getDemoQuestions()){
+			for(String regex : DemoMap.getRegexPatterns()){
+				if(Pattern.matches(regex, dq.label)){
+					dq.identifier = DemoMap.getIdentifier(regex, dq);
+					set = true;
+					break;
+				}
+			}
+			if(!set)
+				dq.identifier = "DEMO_QUESTION_ID_NOT_FOUND";
+		}
 	}
 	
 	private static int findQuePosition(String relativeSkipDestination, int quePosition, ArrayList<RawQuestion> rawQuestions){

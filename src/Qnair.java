@@ -19,7 +19,7 @@ public class Qnair{
 
 	@SuppressWarnings("UnusedDeclaration")
 	public static ArrayList<QuestionBase> getAllQuestions(){
-		ArrayList<QuestionBase> temp = new ArrayList<QuestionBase>();
+		ArrayList<QuestionBase> temp = new ArrayList<>();
 		temp.addAll(questions);
 		temp.addAll(demoQuestions);
 		return temp;
@@ -115,23 +115,7 @@ public class Qnair{
 		String lowerLable = lbl.toLowerCase();
 		return (lowerLable.contains("hear") && lowerLable.contains("again")) || (lowerLable.contains("repeat") && lowerLable.contains("answers"));
 	}
-
-	public static void setDemoIdentifiers(){
-		String[] regexs = DemoMap.getRegexPatterns();
-		boolean set = false;
-		for(DemoQuestion dq : demoQuestions){
-			for(String regex : regexs){
-				if(Pattern.matches(regex, dq.label)){
-					dq.identifier = DemoMap.getIdentifier(regex, dq);
-					set = true;
-					break;
-				}
-			}
-			if(!set)
-				dq.identifier = "DEMO_QUESTION_ID_NOT_FOUND";
-		}
-	}
-
+	
 	public static String guessRegion(){
 		System.out.println(questions.get(0).label);
 		return "";
