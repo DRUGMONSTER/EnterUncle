@@ -11,9 +11,9 @@ public class Writer{
 	private static int govLvl = -1;
 	private static final ArrayList<String[]> TB_PAIRS = new ArrayList<>();
 	private static final ArrayList<String> MEAN_KEYWORDS = new ArrayList<>();
-	private static final String MUNICIPAL_SAMPLE_POSITION = "265-";
-	private static final String PROVINCIAL_SAMPLE_POSITION = "274-";
-	private static final String FEDERAL_SAMPLE_POSITION = "271-";
+	private static final String MUNICIPAL_SAMPLE_POSITION = "267-";
+	private static final String PROVINCIAL_SAMPLE_POSITION = "276-";
+	private static final String FEDERAL_SAMPLE_POSITION = "273-";
 	private static String projectName;
 	private static ArrayList<Question> questions;
 	private static ArrayList<DemoQuestion> demoQuestions;
