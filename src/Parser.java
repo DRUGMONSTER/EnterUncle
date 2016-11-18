@@ -181,7 +181,6 @@ public class Parser{
 				Logg.info("Line: " + line);
 
 				String choice = sc.nextLine();
-				rq.choices = new ArrayList<>();
 				do{
 					rq.choices.add(choice);
 					choice = sc.nextLine();
@@ -190,7 +189,6 @@ public class Parser{
 			}
 			rawQuestions.add(rq);
 		}
-
 
 		sc.close();
 		return true;
@@ -349,7 +347,7 @@ public class Parser{
 			if(rq.shortLabel != null)
 				shortLabel = rq.shortLabel.substring(1, rq.shortLabel.length() - 1);
 
-			//Determine Question Identifier
+			//Determine Question Identifier from label
 			String identifier = "";
 			if(!demoQ){
 				if(!label.isEmpty()){
@@ -371,45 +369,46 @@ public class Parser{
 			int skipDestinationIf = 0;
 			int skipDestinationElse = 0;
 			
-			if(!skipCondition.isEmpty()){
+			if(skipCondition != null){
 				String skipDestinationIfStr;
 				String skipDestinationElseStr = "";
 				
-				//If a slash is present, just ignore it
-				int offSet = (rq.skipDestination.contains("/")) ? 3 : 2;
-				
+				boolean elseExists = false;
+				int offSet = 2;
 				int elseSkipStartPos = rq.skipDestination.indexOf(' ');
 				if(elseSkipStartPos != -1){
 					skipDestinationElseStr = rq.skipDestination.substring(elseSkipStartPos + 6);
 					skipDestinationIfStr = rq.skipDestination.substring(offSet, elseSkipStartPos);
+					elseExists = true;
 				}else{
 					skipDestinationIfStr = rq.skipDestination.substring(offSet);
 				}
 				
 				//skip destination may be a variable name, if it is, find it, then calculate it's relative position
 				skipDestinationIf = findQuePosition(skipDestinationIfStr, rq.quePosition, rawQuestions);
-				skipDestinationElse = findQuePosition(skipDestinationElseStr, rq.quePosition, rawQuestions);
+				if(elseExists)
+					skipDestinationElse = findQuePosition(skipDestinationElseStr, rq.quePosition, rawQuestions);
 			}
 			
 			
 			//Add Choices
 			ArrayList<String[]> choices = new ArrayList<>();//[0]=code; [1]=label; [2]=skipDestination;
 			for(int i = 0; i < rq.choices.size(); i++){
-				String line = rq.choices.get(i);
+				String rawChoiceStr = rq.choices.get(i);
 
-				int choiceLabelEndPos = line.indexOf(']');
-				String choiceLabel = line.substring(1, choiceLabelEndPos);
+				int choiceLabelEndPos = rawChoiceStr.indexOf(']');
+				String choiceLabel = rawChoiceStr.substring(1, choiceLabelEndPos);
 
 				if(choiceLabel.length() > 0)		//capitalize first letter
 					choiceLabel = choiceLabel.substring(0, 1).toUpperCase() + choiceLabel.substring(1);
 
-				int codeStartPos = line.indexOf('[', choiceLabelEndPos);
-				String code = line.substring(codeStartPos + 1, codeStartPos + 1 + rq.codeWidth);
+				int codeStartPos = rawChoiceStr.indexOf('[', choiceLabelEndPos) + 1;
+				String code = rawChoiceStr.substring(codeStartPos, codeStartPos + rq.codeWidth);
 
 				String skipToQuestion = "";
-				int skipStartPos = line.indexOf('>', codeStartPos);
+				int skipStartPos = rawChoiceStr.indexOf('>', codeStartPos);
 				if(skipStartPos != -1)
-					skipToQuestion = line.substring(skipStartPos + 1, line.length());
+					skipToQuestion = rawChoiceStr.substring(skipStartPos + 1, rawChoiceStr.length());
 
 				choices.add(new String[]{code, choiceLabel, skipToQuestion});
 			}
@@ -443,11 +442,16 @@ public class Parser{
 		try{
 			position = quePosition + Integer.parseInt(relativeSkipDestination);
 		}catch(NumberFormatException e){
+			
+			//If a slash is present, just ignore it
 			if(relativeSkipDestination.charAt(0) == '/')
 				relativeSkipDestination = relativeSkipDestination.substring(1);
+			
+			//Find the variable that the skip points to
 			for(RawQuestion rq2 : rawQuestions){
 				if(rq2.variable.equals(relativeSkipDestination)){
 					position = rq2.quePosition;
+					break;
 				}
 			}
 		}
@@ -464,6 +468,6 @@ public class Parser{
 		String shortLabel;
 		String skipCondition;
 		String skipDestination;
-		ArrayList<String> choices;
+		ArrayList<String> choices = new ArrayList<>();
 	}
 }
