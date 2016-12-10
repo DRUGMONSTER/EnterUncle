@@ -11,6 +11,7 @@ public class UncleConvert_DRV{
 		//launchGUI();
 	}
 
+	@SuppressWarnings("unused")
 	private static void launchGUI(){
 		javax.swing.SwingUtilities.invokeLater(() -> {
 			try{

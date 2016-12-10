@@ -5,8 +5,9 @@ import java.util.Map;
 //REGEXs -> (IDENT_STRING, DEMO_Q)
 
 
+@SuppressWarnings("WeakerAccess")
 public class DemoMap{
-	private static Map<String, DiEntry> map = new LinkedHashMap<String, DiEntry>();
+	private static Map<String, DiEntry> map = new LinkedHashMap<>();
 
 	private static DemoQuestion GENDER_DQ = null;
 	private static DemoQuestion AGE_DQ = null;
@@ -41,19 +42,27 @@ public class DemoMap{
 		DiEntry ent = map.get(questionLabel);
 		ent.dq = dq;
 		String ident = ent.name;
-
-		if(ident.equals("GENDER"))
-			GENDER_DQ = dq;
-		else if(ident.equals("AGE"))
-			AGE_DQ = dq;
-		else if(ident.equals("INCOME"))
-			INCOME_DQ = dq;
-		else if(ident.equals("CHILDREN"))
-			CHILDREN_DQ = dq;
-		else if(ident.equals("COMMUNITY"))
-			COMMUNITY_DQ = dq;
-		else if(ident.equals("AlSO_LANDLINE"))
-			ALSO_LANDLINE_DQ = dq;
+		
+		switch(ident){
+			case "GENDER":
+				GENDER_DQ = dq;
+				break;
+			case "AGE":
+				AGE_DQ = dq;
+				break;
+			case "INCOME":
+				INCOME_DQ = dq;
+				break;
+			case "CHILDREN":
+				CHILDREN_DQ = dq;
+				break;
+			case "COMMUNITY":
+				COMMUNITY_DQ = dq;
+				break;
+			case "AlSO_LANDLINE":
+				ALSO_LANDLINE_DQ = dq;
+				break;
+		}
 
 		return ident;
 	}
