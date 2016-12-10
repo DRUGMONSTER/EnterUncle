@@ -8,13 +8,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
 public class XML_Get{
-	private static Document doc;
+	private static Element docElement;
 
 	public static void init(){
 		try{
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			doc = documentBuilder.parse(Writer.class.getResourceAsStream("strings.xml"));
+			docElement = documentBuilder.parse(Writer.class.getResourceAsStream("strings.xml")).getDocumentElement();
 		}catch(SAXException e){
 			System.out.println("SAX");
 			e.printStackTrace();
@@ -28,31 +28,43 @@ public class XML_Get{
 	}
 
 	public static String[] getWeightsForToronto(){
-		return getWeightsForCity("cities", "toronto");
+		return getWeightsForRegion("cities", "toronto");
 	}
 
 	public static String[] getWeightsForOntario(){
-		return getWeightsForCity("provinces", "ontario");
+		return getWeightsForRegion("provinces", "ontario");
 	}
 
 	public static String[] getWeightsForCanada(){
-		NodeList weightNodes = doc.getDocumentElement().getElementsByTagName("canada").item(0).getChildNodes();
+		NodeList weightNodes = getElementOf(getElementOf(docElement, "weights"), "canada").getChildNodes();
 
-		String[] weights = new String[weightNodes.getLength()/2];
-		for(int i = 0, j = 1; i < weights.length; i++, j += 2){
-			weights[i] = weightNodes.item(j).getFirstChild().getNodeValue();
-			System.out.println(weights[i]);
-		}
-		return weights;
+		return nodeListToArray(weightNodes);
 	}
 
-	public static String[] getWeightsForCity(String level, String city){
-		NodeList weightNodes = ((Element)doc.getDocumentElement().getElementsByTagName(level).item(0)).getElementsByTagName(city).item(0).getChildNodes();
-
-		String[] weights = new String[weightNodes.getLength()/2];
-		for(int i = 0, j = 1; i < weights.length; i++, j += 2){
-			weights[i] = weightNodes.item(j).getFirstChild().getNodeValue();
+	public static String[] getWeightsForRegion(String level, String region){
+		NodeList weightNodes = getElementOf(getElementOf(getElementOf(docElement, "weights"), level), region).getChildNodes();
+		return nodeListToArray(weightNodes);
+	}
+	
+	public static String[][] getOntarioRegionTable205(){
+		NodeList choiceLabelNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable205"), "choiceLabels").getChildNodes();
+		String[] choiceLabels = nodeListToArray(choiceLabelNodes);
+		
+		NodeList valueNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable205"), "values").getChildNodes();
+		String[] values = nodeListToArray(valueNodes);
+		
+		return new String[][]{choiceLabels, values};
+	}
+	
+	private static Element getElementOf(Element e, String tag){
+		return (Element)e.getElementsByTagName(tag).item(0);
+	}
+	
+	private static String[] nodeListToArray(NodeList nl){
+		String[] strings = new String[nl.getLength()/2];
+		for(int i = 0, j = 1; i < strings.length; i++, j += 2){
+			strings[i] = nl.item(j).getFirstChild().getNodeValue();
 		}
-		return weights;
+		return strings;
 	}
 }

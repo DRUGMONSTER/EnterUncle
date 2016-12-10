@@ -3,6 +3,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@SuppressWarnings("WeakerAccess")
 public class Logg{
 	public static Logger logger; // perhaps make not static, check if you can have an on/off switch with a regular logger.
 	public static boolean on;

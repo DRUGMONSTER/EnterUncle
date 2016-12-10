@@ -8,19 +8,20 @@ import java.util.regex.Pattern;
 
 @SuppressWarnings("WeakerAccess")
 public class Writer{
-	private static int govLvl = -1;
+	//private static int govLvl = -1;
 	private static final ArrayList<String[]> TB_PAIRS = new ArrayList<>();
 	private static final ArrayList<String> MEAN_KEYWORDS = new ArrayList<>();
 	private static final String MUNICIPAL_SAMPLE_POSITION = "267-";
 	private static final String PROVINCIAL_SAMPLE_POSITION = "276-";
 	private static final String FEDERAL_SAMPLE_POSITION = "273-";
+	private static final String ONTARIO_REGION_POSITION = "271:273";
 	private static String projectName;
 	private static ArrayList<Question> questions;
 	private static ArrayList<DemoQuestion> demoQuestions;
 
-	public static void writeFile(File file, ArrayList<QuestionBase> checked, int aGovLvl){
+	public static void writeFile(File file, ArrayList<QuestionBase> checked, int govLvl){
 		Logg.info("WRITE STARTED");
-		init(aGovLvl);
+		init();
 
 		PrintWriter writer;
 		String originalFilePath = file.getParentFile().toString();
@@ -72,14 +73,15 @@ public class Writer{
 		}
 
 		writer.println();
+		write200s(writer, govLvl);
 		write600s(writer);
 		write800s(writer, 0);
-		write900s(writer, checked.size());
-		write1000s(writer, checked);
+		write900s(writer, checked.size(), govLvl);
+		write1000s(writer, checked, govLvl);
 
 		writer.close();
 	}
-
+	
 	private static void writeChoices(PrintWriter writer, QuestionBase qb){
 		String qbPos = qb.position;
 		ArrayList<String[]> choices = qb.getChoices();
@@ -134,6 +136,22 @@ public class Writer{
 		}
 		writer.print(nullAndMean);
 	}
+	
+	private static void write200s(PrintWriter w, int govLvl){
+		if(govLvl == GUI.PROVINCIAL){
+			String[][] t205 = XML_Get.getOntarioRegionTable205();
+			StringBuilder buffer = new StringBuilder();
+			
+			buffer.append("TABLE 205\n").append("T REGION\n").append("T &wt REGION\n");
+			
+			for(int i = 0; i < t205[0].length; i++){
+				buffer.append(t205[0][i]).append(ONTARIO_REGION_POSITION).append(t205[1][i]).append("\n");
+			}
+			
+			w.println(buffer);
+		}
+		w.println();
+	}
 
 	private static void write600s(PrintWriter w){
 		w.println(
@@ -160,7 +178,7 @@ public class Writer{
 						"X calc F510:525 12 (W)\n\n");
 	}
 
-	private static void write800s(PrintWriter w, int region){
+	private static void write800s(PrintWriter w, int govLvl){
 		DemoQuestion genderQ = DemoMap.getGenderDQ();
 		DemoQuestion ageQ = DemoMap.getAgeDQ();
 
@@ -173,7 +191,7 @@ public class Writer{
 		String agePos = ageQ.position;
 
 		//0 = Toronto
-		if(region == 0){
+		if(govLvl == 0){
 			w.println(
 				"TABLE 802\n" +
 				"T Age Gender Weight General Pop - Toronto\n" +
@@ -209,11 +227,14 @@ public class Writer{
 			"T weight execute\n" +
 			"X set qual off\n" +
 			"X weight unweight\n" +
+			"X set qual (not " + genderPos + "-3)\n" +
 			"X weight 802 803\n" +
+			"X set qual (" + genderPos + "-3)\n" +
+			"X cw(1)\n" +
 			"X set qual off\n\n");
 	}
 
-	private static void write900s(PrintWriter w, int checked){
+	private static void write900s(PrintWriter w, int checked, int govLvl){
 		String copyPasteTables = "";
 		for(int i = 0; i < checked; i++){
 			String table = "" + (1002 + i);
@@ -243,7 +264,7 @@ public class Writer{
 		w.println();
 	}
 
-	private static void write1000s(PrintWriter w, ArrayList<QuestionBase> checked){
+	private static void write1000s(PrintWriter w, ArrayList<QuestionBase> checked, int govLvl){
 		Logg.info("Begin writing 1000s");
 
 		if(checked.isEmpty()){
@@ -259,7 +280,7 @@ public class Writer{
 		addMoms(newOrder);
 		mergeAge();
 		cropIncomeDQ();
-		addSampleMock(newOrder);
+		addSampleMock(newOrder, govLvl);
 		if(govLvl == GUI.PROVINCIAL)
 			addRegion();
 
@@ -434,8 +455,8 @@ public class Writer{
 		Logg.info("Income DQ cropped");
 	}
 
-	//Removes "also landline", and add a sample mock question
-	private static void addSampleMock(ArrayList<QuestionBase> questionBases){
+	//Removes "also landline", and adds a sample mock question
+	private static void addSampleMock(ArrayList<QuestionBase> questionBases, int govLvl){
 		DemoQuestion alsoLandlineDQ = DemoMap.getAlsoLandlineDQ();
 
 		//Also_Demo Question not detected, Abort!!
@@ -469,8 +490,7 @@ public class Writer{
 
 	}
 
-	private static void init(int aGovLvl){
-		govLvl = aGovLvl;
+	private static void init(){
 		questions = Qnair.getQuestions();
 		demoQuestions = Qnair.getDemoQuestions();
 
