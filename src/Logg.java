@@ -3,13 +3,11 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@SuppressWarnings("WeakerAccess")
-public class Logg{
-	public static Logger logger; // perhaps make not static, check if you can have an on/off switch with a regular logger.
-	public static boolean on;
+class Logg{
+	private static Logger logger; // perhaps make not static, check if you can have an on/off switch with a regular logger.
+	private static boolean on;
 
-	@SuppressWarnings("UnusedDeclaration")
-	public static void init(){
+	static{
 		on = true;
 		logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 		logger.setLevel(Level.ALL);
@@ -28,31 +26,31 @@ public class Logg{
 	}
 
 	//bad stuff
-	public static void severe(String msg){
+	static void severe(String msg){
 		if(on)
 			logger.severe(msg);
 	}
 
 	//good stuff
-	public static void fine(String msg){
+	static void fine(String msg){
 		if(on)
 			logger.fine(msg);
 	}
 
 	//better stuff
-	public static void good(String msg){
+	static void good(String msg){
 		if(on)
 			logger.finer(msg);
 	}
 
 	//neutral stuff
-	public static void info(String msg){
+	static void info(String msg){
 		if(on)
 			logger.info(msg);
 	}
 
 	//potentially dangerous stuff
-	public static void warning(String msg){
+	static void warning(String msg){
 		if(on)
 			logger.warning(msg);
 	}

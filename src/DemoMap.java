@@ -17,7 +17,7 @@ public class DemoMap{
 	private static DemoQuestion ALSO_LANDLINE_DQ = null;
 
 	//Populates the map
-	public static void init(){
+	static{
 		map.put("(?i).*\\bgender\\b.*",							new DiEntry("GENDER"		, null));
 		map.put("(?i).*\\bchildren\\b.*",						new DiEntry("CHILDREN"		, null));
 		map.put("(?i).*\\bage\\?$",								new DiEntry("AGE"			, null));

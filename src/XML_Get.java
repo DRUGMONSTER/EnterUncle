@@ -10,7 +10,7 @@ import java.io.IOException;
 public class XML_Get{
 	private static Element docElement;
 
-	public static void init(){
+	static{
 		try{
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();

@@ -3,14 +3,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 @SuppressWarnings("WeakerAccess")
 public class Qnair{
 	private static final ArrayList<Question> questions = new ArrayList<>();
 	private static final ArrayList<DemoQuestion> demoQuestions = new ArrayList<>();
 	private static final Set<String> rejectableVariables = new HashSet<>(Arrays.asList(new String[]{"TZONE", "LOC", "LDF", "LDE", "AREA", "FSA", "FSA1", "LANG", "IT2", "S1", "INT01", "INT99", "C3", "INT"}));
-	public static String region = "";//Guess initially
 
 	public static void clearQuestions(){
 		questions.clear();
@@ -114,11 +112,6 @@ public class Qnair{
 	private static boolean checkHearAgain(String lbl){
 		String lowerLable = lbl.toLowerCase();
 		return (lowerLable.contains("hear") && lowerLable.contains("again")) || (lowerLable.contains("repeat") && lowerLable.contains("answers"));
-	}
-	
-	public static String guessRegion(){
-		System.out.println(questions.get(0).label);
-		return "";
 	}
 
 	@SuppressWarnings("UnusedDeclaration")

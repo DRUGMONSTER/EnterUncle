@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 public class UncleConvert_DRV{
 	public static void main(String[] args){
-		Logg.init();
-		XML_Get.init();
-
 		test();
 		//launchGUI();
 	}
@@ -28,7 +25,8 @@ public class UncleConvert_DRV{
 		//String fname = "G:\\FORUM\\FOiJ\\Tabs\\FOiJ.ASC";
 		//String fname = "G:\\Public Works\\Tabs\\PWG1.ASC";
 		//String fname = "C:\\Users\\Plaxx\\Desktop\\Work\\Tabs\\ASC\\FOiJ.ASC";
-		String fname = "E:\\MAN_SON\\Dropbox\\Work\\Tabs\\ASC\\FOiJ.ASC";
+		String fname = "E:\\MAN_SON\\Dropbox\\Work\\Tabs\\ASC\\FOJT.ASC";
+		GovernmentLevel govLvl = GovernmentLevel.MUNICIPAL;
 
 		Parser.parseASCFile(fname);
 
@@ -43,7 +41,7 @@ public class UncleConvert_DRV{
 		questionBases.add(Qnair.getQuestions().get(0));										// get first non-demo question
 		questionBases.add(Qnair.getQuestions().get(Qnair.getQuestions().size() - 1));		// get last non-demo question
 
-		Writer.writeFile(new File(fname), questionBases, GUI.PROVINCIAL);
+		Writer.writeFile(new File(fname), questionBases, govLvl);
 
 		System.out.println("DONE");
 	}

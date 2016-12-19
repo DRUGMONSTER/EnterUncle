@@ -1,25 +1,37 @@
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.*;
-import java.util.List;
 
-import javax.swing.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 
 @SuppressWarnings("WeakerAccess")
 public class GUI extends JFrame{
-	public static final int MUNICIPAL = 0;
-	public static final int PROVINCIAL = 1;
-	public static final int FEDERAL = 2;
-
-	private static final String VERSION = "0.33b";
+	private static final String VERSION = "0.34b";
 	private static final long serialVersionUID = 1L;
 	private static final int FRAME_WIDTH = 720;
 	private static final int FRAME_HEIGHT = 480;
@@ -130,13 +142,13 @@ public class GUI extends JFrame{
 				if(written)
 					readFile(ascFile);
 
-				int govLvl = -1;
-				if(governmentLevel.getSelection() == radioButtons[MUNICIPAL].getModel())
-					govLvl = MUNICIPAL;
-				else if(governmentLevel.getSelection() == radioButtons[PROVINCIAL].getModel())
-					govLvl = PROVINCIAL;
-				else if(governmentLevel.getSelection() == radioButtons[FEDERAL].getModel())
-					govLvl = FEDERAL;
+				GovernmentLevel govLvl = GovernmentLevel.MUNICIPAL;
+				if(governmentLevel.getSelection() == radioButtons[0].getModel())
+					govLvl = GovernmentLevel.MUNICIPAL;
+				else if(governmentLevel.getSelection() == radioButtons[1].getModel())
+					govLvl = GovernmentLevel.PROVINCIAL;
+				else if(governmentLevel.getSelection() == radioButtons[2].getModel())
+					govLvl = GovernmentLevel.FEDERAL;
 
 
 				if(Qnair.isEmpty()){
@@ -177,8 +189,6 @@ public class GUI extends JFrame{
 			statusTF.setText("Bad file, no questions loaded. Try converting to UTF-8?");
 		}else
 			statusTF.setText("Read Successfully");
-
-		 Qnair.guessRegion();
 
 		//populate banner pane
 		for(DemoQuestion dq : Qnair.getDemoQuestions()){

@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 
 @SuppressWarnings("WeakerAccess")
 public class Writer{
-	//private static int govLvl = -1;
 	private static final ArrayList<String[]> TB_PAIRS = new ArrayList<>();
 	private static final ArrayList<String> MEAN_KEYWORDS = new ArrayList<>();
 	private static final String MUNICIPAL_SAMPLE_POSITION = "267-";
@@ -18,10 +17,26 @@ public class Writer{
 	private static String projectName;
 	private static ArrayList<Question> questions;
 	private static ArrayList<DemoQuestion> demoQuestions;
+	
+	static{
+		questions = Qnair.getQuestions();
+		demoQuestions = Qnair.getDemoQuestions();
+		
+		TB_PAIRS.add(new String[]{"(?i).*\\bagree\\b.*",			"(?i).*\\bdisagree\\b.*"});
+		TB_PAIRS.add(new String[]{"(?i).*\\bapprove\\b.*",			"(?i).*\\bdisapprove\\b.*"});
+		TB_PAIRS.add(new String[]{"(?i).*\\bsupport\\b.*", 			"(?i).*\\boppose\\b.*"});
+		TB_PAIRS.add(new String[]{"(?i).*\\bhave\\s+heard\\b.*",	"(?i).*\\bhave\\s+not\\s+heard\\b.*"});
+		TB_PAIRS.add(new String[]{"(?i).*\\byes\\b.*",				"(?i).*\\bno\\b.*"});
+		
+		MEAN_KEYWORDS.add("Very Satisfied");
+		MEAN_KEYWORDS.add("Somewhat Satisfied");
+		MEAN_KEYWORDS.add("Somewhat Dissatisfied");
+		MEAN_KEYWORDS.add("Very Dissatisfied");
+	}
 
-	public static void writeFile(File file, ArrayList<QuestionBase> checked, int govLvl){
+	public static void writeFile(File file, ArrayList<QuestionBase> checked, GovernmentLevel govLvl){
 		Logg.info("WRITE STARTED");
-		init();
+		//init();
 
 		PrintWriter writer;
 		String originalFilePath = file.getParentFile().toString();
@@ -75,7 +90,7 @@ public class Writer{
 		writer.println();
 		write200s(writer, govLvl);
 		write600s(writer);
-		write800s(writer, 0);
+		write800s(writer, govLvl);
 		write900s(writer, checked.size(), govLvl);
 		write1000s(writer, checked, govLvl);
 
@@ -137,8 +152,8 @@ public class Writer{
 		writer.print(nullAndMean);
 	}
 	
-	private static void write200s(PrintWriter w, int govLvl){
-		if(govLvl == GUI.PROVINCIAL){
+	private static void write200s(PrintWriter w, GovernmentLevel govLvl){
+		if(govLvl == GovernmentLevel.PROVINCIAL){
 			String[][] t205 = XML_Get.getOntarioRegionTable205();
 			StringBuilder buffer = new StringBuilder();
 			
@@ -159,7 +174,7 @@ public class Writer{
 						"T Load data, run all tabs for checking purposes\n" +
 						"X load rep char from 'Y:\\" + projectName + "\\" + projectName + "_COMP.TXT'\n" +
 						"X justify 89:93 right\n" +
-						"X ex 901\n\n" +
+						"X ;ex 901\n\n" +
 
 						"TABLE 602\n" +
 						"T Load data, weight by age, gender, region\n" +
@@ -178,7 +193,7 @@ public class Writer{
 						"X calc F510:525 12 (W)\n\n");
 	}
 
-	private static void write800s(PrintWriter w, int govLvl){
+	private static void write800s(PrintWriter w, GovernmentLevel govLvl){
 		DemoQuestion genderQ = DemoMap.getGenderDQ();
 		DemoQuestion ageQ = DemoMap.getAgeDQ();
 
@@ -191,7 +206,7 @@ public class Writer{
 		String agePos = ageQ.position;
 
 		//0 = Toronto
-		if(govLvl == 0){
+		if(govLvl == GovernmentLevel.MUNICIPAL){
 			w.println(
 				"TABLE 802\n" +
 				"T Age Gender Weight General Pop - Toronto\n" +
@@ -234,7 +249,7 @@ public class Writer{
 			"X set qual off\n\n");
 	}
 
-	private static void write900s(PrintWriter w, int checked, int govLvl){
+	private static void write900s(PrintWriter w, int checked, GovernmentLevel govLvl){
 		String copyPasteTables = "";
 		for(int i = 0; i < checked; i++){
 			String table = "" + (1002 + i);
@@ -242,7 +257,7 @@ public class Writer{
 		}
 
 		String partyPreference200s = "";
-		if(govLvl == GUI.PROVINCIAL)
+		if(govLvl == GovernmentLevel.PROVINCIAL)
 			partyPreference200s = "2 201 202 3 ";
 		int size = questions.size() + demoQuestions.size();
 		String excel = "excel(name'" + projectName + " - __NAME__ - " + getDate();
@@ -253,7 +268,7 @@ public class Writer{
 			"X run 1 " + partyPreference200s + "thru " + size + " b1001 novp pdp 0 " + excel + " novp' sheet'&r') nosgtest nottest\n" +
 			"X run 1 " + partyPreference200s + "thru " + size + " b" + copyPasteTables + "nofreq pdp 0 " + excel + " copy-paste' sheet'&r &b') nosgtest nottest\n");
 
-		if(govLvl == GUI.PROVINCIAL)
+		if(govLvl == GovernmentLevel.PROVINCIAL)
 			w.println(
 				"TABLE 902\n" +
 				"X run 1 " + partyPreference200s + "b1001 nofreq pdp 0 " + excel + "' sheet'&r')\n" +
@@ -264,7 +279,7 @@ public class Writer{
 		w.println();
 	}
 
-	private static void write1000s(PrintWriter w, ArrayList<QuestionBase> checked, int govLvl){
+	private static void write1000s(PrintWriter w, ArrayList<QuestionBase> checked, GovernmentLevel govLvl){
 		Logg.info("Begin writing 1000s");
 
 		if(checked.isEmpty()){
@@ -275,15 +290,9 @@ public class Writer{
 		//add lines to bufferLines without tags, remember length of longest line
 		int tabNum;
 		int maxLen = 0;
-		ArrayList<ArrayList<String>> bufferOfLines = new ArrayList<>();
-		ArrayList<QuestionBase> newOrder = reorderQuestions(checked);
-		addMoms(newOrder);
-		mergeAge();
-		cropIncomeDQ();
-		addSampleMock(newOrder, govLvl);
-		if(govLvl == GUI.PROVINCIAL)
-			addRegion();
+		ArrayList<QuestionBase> newOrder = modify(checked, govLvl);
 
+		ArrayList<ArrayList<String>> bufferOfLines = new ArrayList<>();
 		for(QuestionBase qb : newOrder){
 			String qbPos = qb.position;
 			ArrayList<String> lines = new ArrayList<>();
@@ -302,7 +311,9 @@ public class Writer{
 			bufferOfLines.add(lines);
 		}
 		tabNum = maxLen / 4 + 3;
-
+		
+		int childrenDQpos = newOrder.indexOf(DemoMap.getChildrenDQ());
+		//TODO: In bufferOfLines, merge children with moms
 
 		//add tags to the lines in bufferOfLines
 		StringBuilder tags = new StringBuilder();
@@ -364,146 +375,107 @@ public class Writer{
 			w.println();
 		}
 	}
-
-	private static ArrayList<QuestionBase> reorderQuestions(ArrayList<QuestionBase> unorderedQuestions){
-		Logg.info("Begin Reorder");
-
-		ArrayList<QuestionBase> ordered = new ArrayList<>();
-		ordered.addAll(unorderedQuestions);
+	
+	//Makes several modifications to the banner
+	private static ArrayList<QuestionBase> modify(ArrayList<QuestionBase> unmodifiedQuestions, GovernmentLevel govLvl){
+		ArrayList<QuestionBase> questions = new ArrayList<>();
+		questions.addAll(unmodifiedQuestions);
 
 		DemoQuestion ageDQ = DemoMap.getAgeDQ();
 		DemoQuestion genderDQ = DemoMap.getGenderDQ();
 		DemoQuestion incomeDQ = DemoMap.getIncomeDQ();
 		DemoQuestion communityDQ = DemoMap.getCommunityDQ();
+		DemoQuestion childrenDQ = DemoMap.getChildrenDQ();
+		DemoQuestion alsoLandlineDQ = DemoMap.getAlsoLandlineDQ();
 
+		//Begin Reorder
 		if(communityDQ != null){
-			ordered.remove(communityDQ);
-			ordered.add(0, communityDQ);
+			questions.remove(communityDQ);
+			questions.add(0, communityDQ);
 			Logg.fine("Community Demo Question found, moved to front");
 		}
 
 		if(incomeDQ != null){
-			ordered.remove(incomeDQ);
-			ordered.add(0, incomeDQ);
+			questions.remove(incomeDQ);
+			questions.add(0, incomeDQ);
 			Logg.fine("Income Demo Question found, moved to front");
 		}
 
 		if(genderDQ != null){
-			ordered.remove(genderDQ);
-			ordered.add(0, genderDQ);
+			questions.remove(genderDQ);
+			questions.add(0, genderDQ);
 			Logg.fine("Gender Demo Question found, moved to front");
 		}
 
 		if(ageDQ != null){
-			ordered.remove(ageDQ);
-			ordered.add(0, ageDQ);
+			questions.remove(ageDQ);
+			questions.add(0, ageDQ);
 			Logg.fine("Age Demo Question found, moved to front");
 		}
+		Logg.fine("Reorder Finished");
+		//Finished Reorder
 
-		Logg.info("Exit Reorder");
-		return ordered;
-	}
-
-	//If children demo question is found, inserts a "MOMS" dummy question
-	private static void addMoms(ArrayList<QuestionBase> questionBases){
-		QuestionBase genderDQ = DemoMap.getGenderDQ();
-		QuestionBase childrenDQ = DemoMap.getChildrenDQ();
-
-		//Children Demo Question not detected, Abort!!
-		if(childrenDQ == null)
-			return;
-
-		int childrenPos = questionBases.indexOf(childrenDQ);
-		DemoQuestion dq = new DemoQuestion();
-		dq.identifier = "MOMS";
-		dq.position = "(" + childrenDQ.position + "1 " + genderDQ.position + "2)";
-		questionBases.add(childrenPos + 1, dq);//inserts after children question
-		Logg.info("\"Mom's\" added");
-	}
-
-	//If age demo question is found, merges < 24 with < 34
-	private static void mergeAge(){
-		QuestionBase ageDQ = DemoMap.getAgeDQ();
-
-		//Age Demo Question not detected, Abort!!
-		if(ageDQ == null)
-			return;
-
-		ArrayList<String[]> choices = ageDQ.getChoices();
-		if(choices.get(0)[1].contains("25"))
-			choices.remove(0);
-
-		String[] choice = choices.get(0);
-		choice[0] = "1," + choice[0];
-		choice[1] = "< 34";
-		Logg.info("Age Merged");
-	}
-
-	//Removes "Prefer not to answer" and "> 200'000"
-	private static void cropIncomeDQ(){
-		QuestionBase incomeDQ = DemoMap.getIncomeDQ();
-
-		//Income Demo Question not detected, Abort!!
-		if(incomeDQ == null)
-			return;
-
-		ArrayList<String[]> choices = incomeDQ.getChoices();
-		if(choices.size() > 1){
-			choices.remove(choices.size() - 1);
-			choices.remove(choices.size() - 1);
+		
+		//If children demo question is found, inserts a "MOMS" dummy question
+		if(childrenDQ != null && genderDQ != null){
+			int childrenPos = questions.indexOf(childrenDQ);
+			DemoQuestion dq = new DemoQuestion();
+			dq.identifier = "MOMS";
+			dq.position = "(" + childrenDQ.position + "1 " + genderDQ.position + "2)";
+			questions.add(childrenPos + 1, dq);//inserts after children question
+			Logg.info("\"Mom's\" added");
 		}
-		Logg.info("Income DQ cropped");
-	}
-
-	//Removes "also landline", and adds a sample mock question
-	private static void addSampleMock(ArrayList<QuestionBase> questionBases, int govLvl){
-		DemoQuestion alsoLandlineDQ = DemoMap.getAlsoLandlineDQ();
-
-		//Also_Demo Question not detected, Abort!!
-		if(alsoLandlineDQ == null)
-			return;
-
-		int alsoLandlinePos = questionBases.indexOf(alsoLandlineDQ);
-		DemoQuestion sampleMock = new DemoQuestion();
-		sampleMock.identifier = "SAMPLE";
-		switch(govLvl){
-			case GUI.MUNICIPAL:
-				sampleMock.position = MUNICIPAL_SAMPLE_POSITION;
-				break;
-			case GUI.PROVINCIAL:
-				sampleMock.position = PROVINCIAL_SAMPLE_POSITION;
-				break;
-			case GUI.FEDERAL:
-				sampleMock.position = FEDERAL_SAMPLE_POSITION;
-				break;
+		
+		
+		//If age demo question is found, merges < 24 with < 34
+		if(ageDQ != null){
+			ArrayList<String[]> choices = ageDQ.getChoices();
+			if(choices.get(0)[1].contains("25"))
+				choices.remove(0);
+			
+			String[] choice = choices.get(0);
+			choice[0] = "1," + choice[0];
+			choice[1] = "< 34";
+			Logg.info("Age Merged");
 		}
-		sampleMock.addChoice("0", "Landline");
-		sampleMock.addChoice("1", "Cellphone");
-
-		questionBases.remove(alsoLandlineDQ);
-		questionBases.add(alsoLandlinePos - 1, sampleMock);//inserts before landline question
-		Logg.info("Added Sample DQ");
-	}
-
-	private static void addRegion(){
-
-
-	}
-
-	private static void init(){
-		questions = Qnair.getQuestions();
-		demoQuestions = Qnair.getDemoQuestions();
-
-		TB_PAIRS.add(new String[]{"(?i).*\\bagree\\b.*",			"(?i).*\\bdisagree\\b.*"});
-		TB_PAIRS.add(new String[]{"(?i).*\\bapprove\\b.*",			"(?i).*\\bdisapprove\\b.*"});
-		TB_PAIRS.add(new String[]{"(?i).*\\bsupport\\b.*", 			"(?i).*\\boppose\\b.*"});
-		TB_PAIRS.add(new String[]{"(?i).*\\bhave\\s+heard\\b.*",	"(?i).*\\bhave\\s+not\\s+heard\\b.*"});
-		TB_PAIRS.add(new String[]{"(?i).*\\byes\\b.*",				"(?i).*\\bno\\b.*"});
-
-		MEAN_KEYWORDS.add("Very Satisfied");
-		MEAN_KEYWORDS.add("Somewhat Satisfied");
-		MEAN_KEYWORDS.add("Somewhat Dissatisfied");
-		MEAN_KEYWORDS.add("Very Dissatisfied");
+		
+		
+		//If income demo question is found, Removes "Prefer not to answer" and "> 200'000"
+		if(incomeDQ != null){
+			ArrayList<String[]> choices = incomeDQ.getChoices();
+			if(choices.size() > 1){
+				choices.remove(choices.size() - 1);
+				choices.remove(choices.size() - 1);
+			}
+			Logg.info("Income DQ shortened");
+		}
+		
+			
+		//If alsoLandline demo question is found, removes "also landline", and adds a sample mock-question
+		if(alsoLandlineDQ != null){
+			int alsoLandlinePos = questions.indexOf(alsoLandlineDQ);
+			DemoQuestion sampleMock = new DemoQuestion();
+			sampleMock.identifier = "SAMPLE";
+			switch(govLvl){
+				case MUNICIPAL:
+					sampleMock.position = MUNICIPAL_SAMPLE_POSITION;
+					break;
+				case PROVINCIAL:
+					sampleMock.position = PROVINCIAL_SAMPLE_POSITION;
+					break;
+				case FEDERAL:
+					sampleMock.position = FEDERAL_SAMPLE_POSITION;
+					break;
+			}
+			sampleMock.addChoice("0", "Landline");
+			sampleMock.addChoice("1", "Cellphone");
+			
+			questions.remove(alsoLandlineDQ);
+			questions.add(alsoLandlinePos - 1, sampleMock);//inserts before landline question
+			Logg.info("Added Sample DQ");
+		}
+		
+		return questions;
 	}
 
 	private static int[] checkDichotomy(ArrayList<String[]> choices){
