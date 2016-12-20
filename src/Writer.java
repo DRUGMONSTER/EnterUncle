@@ -312,8 +312,11 @@ public class Writer{
 		}
 		tabNum = maxLen / 4 + 3;
 		
+		//In bufferOfLines, merge children with moms
 		int childrenDQpos = newOrder.indexOf(DemoMap.getChildrenDQ());
-		//TODO: In bufferOfLines, merge children with moms
+		int momsDQpos = childrenDQpos + 1;
+		bufferOfLines.get(childrenDQpos).add(bufferOfLines.get(momsDQpos).get(0));
+		bufferOfLines.remove(momsDQpos);
 
 		//add tags to the lines in bufferOfLines
 		StringBuilder tags = new StringBuilder();
