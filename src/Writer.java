@@ -36,7 +36,6 @@ public class Writer{
 
 	public static void writeFile(File file, ArrayList<QuestionBase> checked, GovernmentLevel govLvl){
 		Logg.info("WRITE STARTED");
-		//init();
 
 		PrintWriter writer;
 		String originalFilePath = file.getParentFile().toString();
@@ -86,15 +85,16 @@ public class Writer{
 			writer.println();
 			Logg.info("Wrote demo question " + dq.variable);
 		}
-
 		writer.println();
+		
 		write200s(writer, govLvl);
 		write600s(writer);
 		write800s(writer, govLvl);
-		write900s(writer, checked.size(), govLvl);
+		write900s(writer, govLvl, checked.size());
 		write1000s(writer, checked, govLvl);
 
 		writer.close();
+		Logg.info("WRITE FINISHED");
 	}
 	
 	private static void writeChoices(PrintWriter writer, QuestionBase qb){
@@ -249,10 +249,14 @@ public class Writer{
 			"X set qual off\n\n");
 	}
 
-	private static void write900s(PrintWriter w, int checked, GovernmentLevel govLvl){
+	private static void write900s(PrintWriter w, GovernmentLevel govLvl, int checked){
+		//Calc how many Copy-Paste Tables there will be
+		//Offset is -2 because age and gender are merged, and also_landline is removed
+		int copyPasteTablesNum = checked - 2;
+		
 		String copyPasteTables = "";
-		for(int i = 0; i < checked; i++){
-			String table = "" + (1002 + i);
+		for(int i = 0; i < copyPasteTablesNum; i++){
+			String table = 1002 + i + "";				//checked could be zero
 			copyPasteTables += table + " ";
 		}
 
@@ -268,7 +272,7 @@ public class Writer{
 			"X run 1 " + partyPreference200s + "thru " + size + " b1001 novp pdp 0 " + excel + " novp' sheet'&r') nosgtest nottest\n" +
 			"X run 1 " + partyPreference200s + "thru " + size + " b" + copyPasteTables + "nofreq pdp 0 " + excel + " copy-paste' sheet'&r &b') nosgtest nottest\n");
 
-		if(govLvl == GovernmentLevel.PROVINCIAL)
+		if(govLvl == GovernmentLevel.PROVINCIAL || govLvl == GovernmentLevel.FEDERAL)
 			w.println(
 				"TABLE 902\n" +
 				"X run 1 " + partyPreference200s + "b1001 nofreq pdp 0 " + excel + "' sheet'&r')\n" +
@@ -281,19 +285,17 @@ public class Writer{
 
 	private static void write1000s(PrintWriter w, ArrayList<QuestionBase> checked, GovernmentLevel govLvl){
 		Logg.info("Begin writing 1000s");
-
+		
 		if(checked.isEmpty()){
 			Logg.severe("No banner questions were selected");
 			return;
 		}
-
-		//add lines to bufferLines without tags, remember length of longest line
-		int tabNum;
+		
+		//Add commands to uncleCommands, remember length of longest line
 		int maxLen = 0;
-		ArrayList<QuestionBase> newOrder = modify(checked, govLvl);
-
-		ArrayList<ArrayList<String>> bufferOfLines = new ArrayList<>();
-		for(QuestionBase qb : newOrder){
+		ArrayList<QuestionBase> modified = modify(checked, govLvl);
+		ArrayList<ArrayList<String>> uncleCommands = new ArrayList<>();
+		for(QuestionBase qb : modified){
 			String qbPos = qb.position;
 			ArrayList<String> lines = new ArrayList<>();
 			if(qb.getChoices().isEmpty()){
@@ -302,26 +304,26 @@ public class Writer{
 			}
 			for(String choice[] : qb.getChoices()){
 				String line = "C " + qb.identifier + " - " + choice[1] + "; " + qbPos + choice[0];
-
+				
 				if(line.length() > maxLen)
 					maxLen = line.length();
-
+				
 				lines.add(line);
 			}
-			bufferOfLines.add(lines);
+			uncleCommands.add(lines);
 		}
-		tabNum = maxLen / 4 + 3;
+		int tabNum = maxLen / 4 + 3;
 		
-		//In bufferOfLines, merge children with moms
-		int childrenDQpos = newOrder.indexOf(DemoMap.getChildrenDQ());
+		//In uncleCommands, merge children with moms
+		int childrenDQpos = modified.indexOf(DemoMap.getChildrenDQ());
 		int momsDQpos = childrenDQpos + 1;
-		bufferOfLines.get(childrenDQpos).add(bufferOfLines.get(momsDQpos).get(0));
-		bufferOfLines.remove(momsDQpos);
-
-		//add tags to the lines in bufferOfLines
+		uncleCommands.get(childrenDQpos).add(uncleCommands.get(momsDQpos).get(0));
+		uncleCommands.remove(momsDQpos);
+		
+		//add tags to the commands
 		StringBuilder tags = new StringBuilder();
-		String bufferWithTags = Tagger.tag(bufferOfLines, tabNum, tags);
-
+		String bufferWithTags = Tagger.tag(uncleCommands, tabNum, tags);
+		
 		w.println(
 			"TABLE 1001\n" +
 			"O sgtest sgcomp ttcomp .99 high 1 cc(red) .95 high 2 cc(green) '" + tags + "autotag (below paren center)\n" +
@@ -330,15 +332,14 @@ public class Writer{
 			"C TOTAL; all\n" +
 			bufferWithTags + "\n"
 		);
-
-
-		// === copy paste - (T1002 and so on) ===
-
-		//Will FAIL if not enough selected for the banner
-		//Replace first three questions
-		bufferOfLines.remove(0);
-		bufferOfLines.remove(0);
-		bufferOfLines.remove(0);
+	
+		
+		//=== Copy-Paste tables, T1002 and so on ===
+		
+		//Replace first three questions and replace with a modified version
+		uncleCommands.remove(0);
+		uncleCommands.remove(0);
+		uncleCommands.remove(0);
 
 		String genPos = DemoMap.getGenderDQ().position;
 		String agePos = DemoMap.getAgeDQ().position;
@@ -360,11 +361,21 @@ public class Writer{
 		income.add("C 80-100K;\t"	 + incomePos + "5");
 		income.add("C 100-250K;\t"	 + incomePos + "6");
 
-		bufferOfLines.add(0, income);
-		bufferOfLines.add(0, ageAndGen);
-
+		uncleCommands.add(0, income);
+		uncleCommands.add(0, ageAndGen);
+		
+		//Merge Sample and Reached
+		//Since uncleCommands was modified (two merges) an offset of -2 is needed
+		int posOfReached = modified.indexOf(DemoMap.getReachedDq()) - 2;
+		int posOfSample = posOfReached - 1;
+		for(String s: uncleCommands.get(posOfReached)){
+		    uncleCommands.get(posOfSample).add(s);
+		}
+		uncleCommands.remove(posOfReached);
+		
+		
 		int tableNum = 2;
-		for(ArrayList<String> set : bufferOfLines){
+		for(ArrayList<String> set : uncleCommands){
 			w.println("TABLE 1" + String.format("%03d", tableNum));
 			w.println("R Sample; all; novp nor now space 1 freq");
 			w.println("C Total; all");
@@ -372,14 +383,12 @@ public class Writer{
 
 			for(String line : set){
 				w.println(line);
-
 			}
-
 			w.println();
 		}
 	}
 	
-	//Makes several modifications to the banner
+	//Makes several modifications to the questions and adds them to a new ArrayList
 	private static ArrayList<QuestionBase> modify(ArrayList<QuestionBase> unmodifiedQuestions, GovernmentLevel govLvl){
 		ArrayList<QuestionBase> questions = new ArrayList<>();
 		questions.addAll(unmodifiedQuestions);

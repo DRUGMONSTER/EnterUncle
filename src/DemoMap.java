@@ -5,8 +5,7 @@ import java.util.Map;
 //REGEXs -> (IDENT_STRING, DEMO_Q)
 
 
-@SuppressWarnings("WeakerAccess")
-public class DemoMap{
+class DemoMap{
 	private static Map<String, DiEntry> map = new LinkedHashMap<>();
 
 	private static DemoQuestion GENDER_DQ = null;
@@ -15,7 +14,8 @@ public class DemoMap{
 	private static DemoQuestion CHILDREN_DQ = null;
 	private static DemoQuestion COMMUNITY_DQ = null;
 	private static DemoQuestion ALSO_LANDLINE_DQ = null;
-
+	private static DemoQuestion REACHED_DQ = null;
+	
 	//Populates the map
 	static{
 		map.put("(?i).*\\bgender\\b.*",							new DiEntry("GENDER"		, null));
@@ -34,11 +34,11 @@ public class DemoMap{
 		map.put("(?i).*\\bborn in canada\\b.*",					new DiEntry("CANADA_BORN"	, null));
 	}
 
-	public static String[] getRegexPatterns(){
+	static String[] getRegexPatterns(){
 		return map.keySet().toArray(new String[map.size()]);
 	}
 
-	public static String getIdentifier(String questionLabel, DemoQuestion dq){
+	static String getIdentifier(String questionLabel, DemoQuestion dq){
 		DiEntry ent = map.get(questionLabel);
 		ent.dq = dq;
 		String ident = ent.name;
@@ -62,40 +62,47 @@ public class DemoMap{
 			case "AlSO_LANDLINE":
 				ALSO_LANDLINE_DQ = dq;
 				break;
+			case "REACHED":
+				REACHED_DQ = dq;
+				break;
 		}
 
 		return ident;
 	}
 
-	public static DemoQuestion getGenderDQ(){
+	static DemoQuestion getGenderDQ(){
 		return GENDER_DQ;
 	}
 
-	public static DemoQuestion getAgeDQ(){
+	static DemoQuestion getAgeDQ(){
 		return AGE_DQ;
 	}
 
-	public static DemoQuestion getIncomeDQ(){
+	static DemoQuestion getIncomeDQ(){
 		return INCOME_DQ;
 	}
 
-	public static DemoQuestion getChildrenDQ(){
+	static DemoQuestion getChildrenDQ(){
 		return CHILDREN_DQ;
 	}
 
-	public static DemoQuestion getCommunityDQ(){
+	static DemoQuestion getCommunityDQ(){
 		return COMMUNITY_DQ;
 	}
 
-	public static DemoQuestion getAlsoLandlineDQ(){
+	static DemoQuestion getAlsoLandlineDQ(){
 		return ALSO_LANDLINE_DQ;
 	}
-
+	
+	static DemoQuestion getReachedDq(){
+		return REACHED_DQ;
+	}
+	
 	static class DiEntry{
-		public String name;
-		public DemoQuestion dq;
+		private String name;
+		private DemoQuestion dq;
 
-		public DiEntry(String aName, DemoQuestion aDQ){
+		DiEntry(String aName, DemoQuestion aDQ){
 			name = aName;
 			dq = aDQ;
 		}

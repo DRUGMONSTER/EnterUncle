@@ -12,7 +12,7 @@ class Logg{
 		logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 		logger.setLevel(Level.ALL);
 		try{
-			logger.addHandler(new FileHandler("E:\\EnterUncle.log"));
+			logger.addHandler(new FileHandler("C:\\EnterUncle.log"));
 		}catch(IOException e1){
 			try{
 				logger.addHandler(new FileHandler("C:\\Users\\RZamberg\\Desktop\\EnterUncle.log"));
