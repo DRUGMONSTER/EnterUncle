@@ -6,8 +6,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
-@SuppressWarnings("WeakerAccess")
-public class XML_Get{
+class XML_Get{
 	private static Element docElement;
 
 	static{
@@ -27,26 +26,21 @@ public class XML_Get{
 		}
 	}
 
-	public static String[] getWeightsForToronto(){
+	static String[] getWeightsForToronto(){
 		return getWeightsForRegion("cities", "toronto");
 	}
 
-	public static String[] getWeightsForOntario(){
+	static String[] getWeightsForOntario(){
 		return getWeightsForRegion("provinces", "ontario");
 	}
 
-	public static String[] getWeightsForCanada(){
+	static String[] getWeightsForCanada(){
 		NodeList weightNodes = getElementOf(getElementOf(docElement, "weights"), "canada").getChildNodes();
 
 		return nodeListToArray(weightNodes);
 	}
-
-	public static String[] getWeightsForRegion(String level, String region){
-		NodeList weightNodes = getElementOf(getElementOf(getElementOf(docElement, "weights"), level), region).getChildNodes();
-		return nodeListToArray(weightNodes);
-	}
 	
-	public static String[][] getOntarioRegionTable205(){
+	static String[][] getOntarioRegionTable205(){
 		NodeList choiceLabelNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable205"), "choiceLabels").getChildNodes();
 		String[] choiceLabels = nodeListToArray(choiceLabelNodes);
 		
@@ -54,6 +48,11 @@ public class XML_Get{
 		String[] values = nodeListToArray(valueNodes);
 		
 		return new String[][]{choiceLabels, values};
+	}
+	
+	private static String[] getWeightsForRegion(String level, String region){
+		NodeList weightNodes = getElementOf(getElementOf(getElementOf(docElement, "weights"), level), region).getChildNodes();
+		return nodeListToArray(weightNodes);
 	}
 	
 	private static Element getElementOf(Element e, String tag){

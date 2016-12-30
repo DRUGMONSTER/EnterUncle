@@ -315,10 +315,13 @@ public class Writer{
 		int tabNum = maxLen / 4 + 3;
 		
 		//In uncleCommands, merge children with moms
-		int childrenDQpos = modified.indexOf(DemoMap.getChildrenDQ());
-		int momsDQpos = childrenDQpos + 1;
-		uncleCommands.get(childrenDQpos).add(uncleCommands.get(momsDQpos).get(0));
-		uncleCommands.remove(momsDQpos);
+		DemoQuestion childrenDQ = DemoMap.getChildrenDQ();
+		if(childrenDQ != null){
+			int childrenDQpos = modified.indexOf(childrenDQ);
+			int momsDQpos = childrenDQpos + 1;
+			uncleCommands.get(childrenDQpos).add(uncleCommands.get(momsDQpos).get(0));
+			uncleCommands.remove(momsDQpos);
+		}
 		
 		//add tags to the commands
 		StringBuilder tags = new StringBuilder();
@@ -402,9 +405,19 @@ public class Writer{
 
 		//Begin Reorder
 		if(communityDQ != null){
-			questions.remove(communityDQ);
-			questions.add(0, communityDQ);
-			Logg.fine("Community Demo Question found, moved to front");
+			communityDQ.identifier += " 2";
+			ArrayList<String[]> community2Choices = communityDQ.getChoices();
+			
+			DemoQuestion community1 = new DemoQuestion();
+			community1.identifier = "COMMUNITY 1";
+			community1.addChoice("1", community2Choices.get(0)[1] + " + " + community2Choices.get(1)[1]);
+			community1.addChoice("2", community2Choices.get(2)[1]);
+			community1.addChoice("3", community2Choices.get(3)[1] + " + " + community2Choices.get(4)[1]);
+			community1.addChoice("4", community2Choices.get(5)[1]);
+			
+			
+			questions.add(0, community1);
+			Logg.fine("Community Demo Question found, created Community 1 and added to front");
 		}
 
 		if(incomeDQ != null){

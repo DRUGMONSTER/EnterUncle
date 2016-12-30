@@ -29,9 +29,9 @@ class DemoMap{
 		map.put("(?i).*\\breligion\\b.*",						new DiEntry("RELIGION"		, null));
 		map.put("(?i).*\\bincome\\b.*", 						new DiEntry("INCOME"		, null));
 		map.put("(?i).*\\bpart\\b.*\\bof\\b.*\\bcity\\b.*", 	new DiEntry("COMMUNITY"		, null));
-		map.put("(?i).*\\baddition\\b.*\\bcell phone\\b.*", 	new DiEntry("AlSO_LANDLINE"	, null));
+		map.put("(?i).*\\baddition\\b.*\\bcell phone\\b.*", 	new DiEntry("AlSO LANDLINE"	, null));
 		map.put("(?i).*\\blandline\\b.*",						new DiEntry("REACHED"		, null));
-		map.put("(?i).*\\bborn in canada\\b.*",					new DiEntry("CANADA_BORN"	, null));
+		map.put("(?i).*\\bborn in canada\\b.*",					new DiEntry("CANADA BORN"	, null));
 	}
 
 	static String[] getRegexPatterns(){
