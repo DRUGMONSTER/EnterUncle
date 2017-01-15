@@ -242,9 +242,9 @@ public class Writer{
 			"T weight execute\n" +
 			"X set qual off\n" +
 			"X weight unweight\n" +
-			"X set qual (not " + genderPos + "-3)\n" +
+			"X set qual (not " + genderPos + "3)\n" +
 			"X weight 802 803\n" +
-			"X set qual (" + genderPos + "-3)\n" +
+			"X set qual (" + genderPos + "3)\n" +
 			"X cw(1)\n" +
 			"X set qual off\n\n");
 	}

@@ -161,7 +161,7 @@ public class Parser{
 
 			//Replace tabs and remove square brackets around label
 			String rawLabel = rq.label.replace('\t', ' ');
-			String label = rawLabel.substring(1, rawLabel.length() - 1);
+			String label = rawLabel.substring(1, rawLabel.length() - 1).trim();
 
 			//Find and capitalize first letter
 			int periodIndex = label.indexOf('.');
