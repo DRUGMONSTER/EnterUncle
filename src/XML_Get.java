@@ -25,6 +25,26 @@ class XML_Get{
 			e.printStackTrace();
 		}
 	}
+	
+	static String[] get601(String projectName){
+		NodeList nodes = getElementOf(getElementOf(docElement, "tables600"), "T601").getChildNodes();
+		return nodeListToArrayWithReplace(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
+	}
+	
+	static String[] get602ForLevel(String level, String projectName){
+		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), level), "T602").getChildNodes();
+		return nodeListToArrayWithReplace(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
+	}
+	
+	static String[] get603ForLevel(String level, String projectName){
+		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), level), "T603").getChildNodes();
+		return nodeListToArrayWithReplace(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
+	}
+	
+	static String[] get699ForLevel(String level, String projectName){
+		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), level), "T699").getChildNodes();
+		return nodeListToArrayWithReplace(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
+	}
 
 	static String[] getWeightsForToronto(){
 		return getWeightsForRegion("cities", "toronto");
@@ -40,11 +60,13 @@ class XML_Get{
 		return nodeListToArray(weightNodes);
 	}
 	
-	static String[][] getOntarioRegionTable205(){
-		NodeList choiceLabelNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable205"), "choiceLabels").getChildNodes();
-		String[] choiceLabels = nodeListToArray(choiceLabelNodes);
+	static String[][] getOntarioRegionTable250(){
+		//TODO: Don't use two calls to get, use nodeListToArrayWithReplace
 		
-		NodeList valueNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable205"), "values").getChildNodes();
+		NodeList choiceLabelNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable250"), "choiceLabels").getChildNodes();
+		String[] choiceLabels = nodeListToArrayWithReplace(choiceLabelNodes, "\\t", "\t");
+		
+		NodeList valueNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable250"), "values").getChildNodes();
 		String[] values = nodeListToArray(valueNodes);
 		
 		return new String[][]{choiceLabels, values};
@@ -63,6 +85,14 @@ class XML_Get{
 		String[] strings = new String[nl.getLength()/2];
 		for(int i = 0, j = 1; i < strings.length; i++, j += 2){
 			strings[i] = nl.item(j).getFirstChild().getNodeValue();
+		}
+		return strings;
+	}
+	
+	private static String[] nodeListToArrayWithReplace(NodeList nl, String find, String replaceWith){
+		String[] strings = new String[nl.getLength()/2];
+		for(int i = 0, j = 1; i < strings.length; i++, j += 2){
+			strings[i] = nl.item(j).getFirstChild().getNodeValue().replace(find, replaceWith);
 		}
 		return strings;
 	}

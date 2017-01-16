@@ -88,7 +88,7 @@ public class Writer{
 		writer.println();
 		
 		write200s(writer, govLvl);
-		write600s(writer);
+		write600s(writer, govLvl);
 		write800s(writer, govLvl);
 		write900s(writer, govLvl, checked.size());
 		write1000s(writer, checked, govLvl);
@@ -154,7 +154,7 @@ public class Writer{
 	
 	private static void write200s(PrintWriter w, GovernmentLevel govLvl){
 		if(govLvl == GovernmentLevel.PROVINCIAL){
-			String[][] t205 = XML_Get.getOntarioRegionTable205();
+			String[][] t205 = XML_Get.getOntarioRegionTable250();
 			StringBuilder buffer = new StringBuilder();
 			
 			buffer.append("TABLE 205\n").append("T REGION\n").append("T &wt REGION\n");
@@ -168,29 +168,44 @@ public class Writer{
 		w.println();
 	}
 
-	private static void write600s(PrintWriter w){
-		w.println(
-				"TABLE 601\n" +
-						"T Load data, run all tabs for checking purposes\n" +
-						"X load rep char from 'Y:\\" + projectName + "\\" + projectName + "_COMP.TXT'\n" +
-						"X justify 89:93 right\n" +
-						"X ;ex 901\n\n" +
-
-						"TABLE 602\n" +
-						"T Load data, weight by age, gender, region\n" +
-						"X load rep char from 'Y:\\" + projectName + "\\" + projectName + "_COMP.TXT'\n" +
-						"X justify 89:93 right\n" +
-						"X if (r(89:93,0:XXX)) DEL\n" +
-						"X ex 804\n" +
-						"X ex 901\n\n" +
-
-						"TABLE 699\n" +
-						"T Load data, run all tabs for SPSS weight by everything\n" +
-						"X load rep char from 'Y:\\" + projectName + "\\" + projectName + "_COMP.TXT'\n" +
-						"X justify 89:93 right\n" +
-						"X if (r(89:93,0:XXX)) DEL\n" +
-						"X ex 804\n" +
-						"X calc F510:525 12 (W)\n\n");
+	private static void write600s(PrintWriter w, GovernmentLevel govLvl){
+		String[] t601 = XML_Get.get601(projectName);
+		
+		for(String s : t601){
+			w.println(s);
+		}
+		w.println();
+				
+		if(govLvl == GovernmentLevel.MUNICIPAL){
+			String[] t602 = XML_Get.get602ForLevel("municipal", projectName);
+			String[] t699 = XML_Get.get699ForLevel("municipal", projectName);
+			for(String s : t602){
+				w.println(s);
+			}
+			w.println();
+			for(String s : t699){
+				w.println(s);
+			}
+			w.print("\n\n");
+		}
+		else if(govLvl == GovernmentLevel.PROVINCIAL){
+			String[] t602 = XML_Get.get602ForLevel("provincial", projectName);
+			String[] t603 = XML_Get.get602ForLevel("provincial", projectName);
+			String[] t699 = XML_Get.get699ForLevel("provincial", projectName);
+			
+			for(String s : t602){
+				w.println(s);
+			}
+			w.println();
+			for(String s : t603){
+				w.println(s);
+			}
+			w.println();
+			for(String s : t699){
+				w.println(s);
+			}
+			w.print("\n\n");
+		}
 	}
 
 	private static void write800s(PrintWriter w, GovernmentLevel govLvl){
