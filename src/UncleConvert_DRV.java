@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class UncleConvert_DRV{
 	public static void main(String[] args){
-		test();
-		//launchGUI();
+		//test();
+		launchGUI();
 	}
 
 	@SuppressWarnings("unused")
@@ -23,8 +23,8 @@ public class UncleConvert_DRV{
 
 	private static void test(){
 		//String fname = "G:\\Public Works\\Tabs\\PWG1.ASC";
-		//String fname = "G:\\FORUM\\FOJT\\Tabs\\FOJT.ASC";
-		String fname = "E:\\MAN_SON\\Dropbox\\Work\\Tabs\\ASC\\FOiJ.ASC";
+		String fname = "G:\\FORUM\\FOKB\\Tabs\\FOKB.ASC";
+		//String fname = "E:\\MAN_SON\\Dropbox\\Work\\Tabs\\ASC\\FOiJ.ASC";
 		GovernmentLevel govLvl = GovernmentLevel.PROVINCIAL;
 
 		Parser.parseASCFile(fname);

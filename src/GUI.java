@@ -31,7 +31,7 @@ import javax.swing.border.EmptyBorder;
 
 @SuppressWarnings("WeakerAccess")
 public class GUI extends JFrame{
-	private static final String VERSION = "0.38b";
+	private static final String VERSION = "0.38.1b";
 	private static final long serialVersionUID = 1L;
 	private static final int FRAME_WIDTH = 720;
 	private static final int FRAME_HEIGHT = 480;
@@ -70,9 +70,14 @@ public class GUI extends JFrame{
 					@SuppressWarnings("unchecked")
 					List<File> droppedFiles = (List<File>)evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
 					ascFile = droppedFiles.get(0);
-					readFile(ascFile);
+					try{
+						readFile(ascFile);
+					}catch(Exception ex){
+						statusTF.setText("Couldn't read file");
+					}
 					//statusTF.setText("File Read or Parse Error");
 				}catch(Exception ex){
+					System.out.println(ex);
 					statusTF.setText("Drag and Drop Error");
 				}
 			}

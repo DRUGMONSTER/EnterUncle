@@ -82,18 +82,18 @@ public class Parser{
 
 				line = sc.nextLine();
 			}
+			if(line.startsWith("*SL")){
+				Logg.fine("\"*SL\" Short Label Found");
+				Logg.info("Line: " + line);
+				
+				rq.shortLabel = sc.nextLine();
+				line = sc.nextLine();
+			}
 			if(line.startsWith("*MA")){
 				Logg.info("\"*MA\" Mask Found");
 				Logg.info("Line: " + line);
 
 				sc.nextLine();//do nothing
-				line = sc.nextLine();
-			}
-			if(line.startsWith("*SL")){
-				Logg.fine("\"*SL\" Short Label Found");
-				Logg.info("Line: " + line);
-
-				rq.shortLabel = sc.nextLine();
 				line = sc.nextLine();
 			}
 			if(line.startsWith("*SK")){
@@ -106,7 +106,7 @@ public class Parser{
 
 				line = sc.nextLine();
 
-				if(line.startsWith("TRC")) //(Truncate) Random question found, just skip
+				if(line.startsWith("TRC")) //(Truncate) Randomizing question found, just skip
 					line = sc.nextLine();
 			}
 			if(line.startsWith("*CL")){
