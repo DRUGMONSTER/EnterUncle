@@ -77,7 +77,6 @@ public class GUI extends JFrame{
 					}
 					//statusTF.setText("File Read or Parse Error");
 				}catch(Exception ex){
-					System.out.println(ex);
 					statusTF.setText("Drag and Drop Error");
 				}
 			}

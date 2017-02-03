@@ -206,6 +206,9 @@ public class Writer{
 			}
 			w.print("\n\n");
 		}
+		else{
+			w.print("\n");
+		}
 	}
 
 	private static void write800s(PrintWriter w, GovernmentLevel govLvl){
@@ -219,25 +222,40 @@ public class Writer{
 
 		String genderPos = genderQ.position;
 		String agePos = ageQ.position;
-
-		//0 = Toronto
+		
+		//TABLE 802
+		w.println("TABLE 802\nT Age Gender Weight General Pop - ???\n");//TODO: Need region
+		
+		String[] weights;
+		if(govLvl == GovernmentLevel.FEDERAL){
+			weights = XML_Get.getWeightsForCanada();
+		}else if(govLvl == GovernmentLevel.PROVINCIAL){
+			weights = XML_Get.getWeightsForOntario();			//need region, provincial may mean Alberta
+		}else{
+			weights = XML_Get.getWeightsForToronto();
+		}
+		
+		String[] base = new String[12];
+		base[0] = "R Male < 25;\t\t";
+		base[1] = "R Male 25 - 34;\t\t";
+		base[2] = "R Male 35 - 44;\t\t";
+		base[3] = "R Male 45 - 54;\t\t";
+		base[4] = "R Male 55 - 64;\t\t";
+		base[5] = "R Male 65 +;\t\t";
+		base[6] = "R Female < 25;\t\t";
+		base[7] = "R Female 25 - 34;\t";
+		base[8] = "R Female 35 - 44;\t";
+		base[9] = "R Female 45 - 54;\t";
+		base[10] = "R Female 55 - 64;\t";
+		base[11] = "R Female 65 +;\t\t";
+		
+		StringBuilder buf = new StringBuilder();
+		for(int i = 0; i < 12; i++){
+			buf.append(base[i]).append(genderPos).append(i/6+1).append(" ").append(agePos).append(weights[i]).append("\n");
+		}
+		w.println(buf);
+		
 		if(govLvl == GovernmentLevel.MUNICIPAL){
-			w.println(
-				"TABLE 802\n" +
-				"T Age Gender Weight General Pop - Toronto\n" +
-				"R Male < 25;\t\t"		+ genderPos + "1 " + agePos + "1; v 0.0610926254927089\n" +
-				"R Male 25 - 34;\t\t"	+ genderPos + "1 " + agePos + "2; v 0.0865217867900710\n" +
-				"R Male 35 - 44;\t\t"	+ genderPos + "1 " + agePos + "3; v 0.1062743449869340\n" +
-				"R Male 45 - 54;\t\t"	+ genderPos + "1 " + agePos + "4; v 0.0940080833817855\n" +
-				"R Male 55 - 64;\t\t"	+ genderPos + "1 " + agePos + "5; v 0.0638166372586212\n" +
-				"R Male 65 +;\t\t"		+ genderPos + "1 " + agePos + "6; v 0.0664017332645658\n" +
-				"R Female < 25;\t\t"	+ genderPos + "2 " + agePos + "1; v 0.0601363799159130\n" +
-				"R Female 25 - 34;\t"	+ genderPos + "2 " + agePos + "2; v 0.0952507479982239\n" +
-				"R Female 35 - 44;\t"	+ genderPos + "2 " + agePos + "3; v 0.1118448669616400\n" +
-				"R Female 45 - 54;\t"	+ genderPos + "2 " + agePos + "4; v 0.0995811310975810\n" +
-				"R Female 55 - 64;\t"	+ genderPos + "2 " + agePos + "5; v 0.0681558604517945\n" +
-				"R Female 65 +;\t\t"	+ genderPos + "2 " + agePos + "6; v 0.0869158024001612\n");
-
 			//If region demo exists
 			DemoQuestion communityQ = DemoMap.getCommunityDQ();
 			if(communityQ != null){

@@ -33,6 +33,7 @@ class DemoMap{
 		map.put("(?i).*\\blandline\\b.*",						new DiEntry("REACHED"		, null));
 		map.put("(?i).*\\bborn in canada\\b.*",					new DiEntry("CANADA BORN"	, null));
 		map.put("(?i).*\\bown or rent\\b.*",					new DiEntry("HOME"			, null));
+		map.put("(?i).*\\bprovince or territory\\b.*",			new DiEntry("PROVINCE"		, null));
 	}
 
 	static String[] getRegexPatterns(){

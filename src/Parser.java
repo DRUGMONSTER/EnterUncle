@@ -255,8 +255,8 @@ public class Parser{
 		}
 		
 		//Set Identifiers for DemoQuestions
-		boolean set = false;
 		for(DemoQuestion dq : Qnair.getDemoQuestions()){
+			boolean set = false;
 			for(String regex : DemoMap.getRegexPatterns()){
 				if(Pattern.matches(regex, dq.label)){
 					dq.identifier = DemoMap.getIdentifier(regex, dq);
