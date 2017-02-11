@@ -15,13 +15,8 @@ public class Writer{
 	private static final String FEDERAL_SAMPLE_POSITION = "273-";
 	private static final String ONTARIO_REGION_POSITION = "271:273";
 	private static String projectName;
-	private static ArrayList<Question> questions;
-	private static ArrayList<DemoQuestion> demoQuestions;
 	
 	static{
-		questions = Qnair.getQuestions();
-		demoQuestions = Qnair.getDemoQuestions();
-		
 		TB_PAIRS.add(new String[]{"(?i).*\\bagree\\b.*",			"(?i).*\\bdisagree\\b.*"});
 		TB_PAIRS.add(new String[]{"(?i).*\\bapprove\\b.*",			"(?i).*\\bdisapprove\\b.*"});
 		TB_PAIRS.add(new String[]{"(?i).*\\bsupport\\b.*", 			"(?i).*\\boppose\\b.*"});
@@ -34,7 +29,7 @@ public class Writer{
 		MEAN_KEYWORDS.add("Very Dissatisfied");
 	}
 
-	public static void writeFile(File file, ArrayList<QuestionBase> checked, GovernmentLevel govLvl){
+	public static void writeFile(File file, ArrayList<QuestionBase> checked, ArrayList<Question> questions, ArrayList<DemoQuestion> demoQuestions, GovernmentLevel govLvl){
 		Logg.info("WRITE STARTED");
 
 		PrintWriter writer;
@@ -90,7 +85,7 @@ public class Writer{
 		write200s(writer, govLvl);
 		write600s(writer, govLvl);
 		write800s(writer, govLvl);
-		write900s(writer, govLvl, checked.size());
+		write900s(writer, govLvl, checked.size(), questions.size() + demoQuestions.size());
 		write1000s(writer, checked, govLvl);
 
 		writer.close();
@@ -282,7 +277,7 @@ public class Writer{
 			"X set qual off\n\n");
 	}
 
-	private static void write900s(PrintWriter w, GovernmentLevel govLvl, int checked){
+	private static void write900s(PrintWriter w, GovernmentLevel govLvl, int checked, int totalSize){
 		//Calc how many Copy-Paste Tables there will be
 		//Offset is -2 because age and gender are merged, and also_landline is removed
 		int copyPasteTablesNum = checked - 2;
@@ -296,14 +291,13 @@ public class Writer{
 		String partyPreference200s = "";
 		if(govLvl == GovernmentLevel.PROVINCIAL)
 			partyPreference200s = "2 201 202 3 ";
-		int size = questions.size() + demoQuestions.size();
 		String excel = "excel(name'" + projectName + " - __NAME__ - " + getDate();
 		w.println(
 			"TABLE 901\n" +
-			"X run 1 " + partyPreference200s + "thru " + size + " b1001 nofreq pdp 0 " + excel + "' sheet'&r')\n" +
-			"X run 1 " + partyPreference200s + "thru " + size + " b1001 nofreq pdp 0 " + excel + " nosgtest' sheet'&r') nosgtest nottest\n" +
-			"X run 1 " + partyPreference200s + "thru " + size + " b1001 novp pdp 0 " + excel + " novp' sheet'&r') nosgtest nottest\n" +
-			"X run 1 " + partyPreference200s + "thru " + size + " b" + copyPasteTables + "nofreq pdp 0 " + excel + " copy-paste' sheet'&r &b') nosgtest nottest\n");
+			"X run 1 " + partyPreference200s + "thru " + totalSize + " b1001 nofreq pdp 0 " + excel + "' sheet'&r')\n" +
+			"X run 1 " + partyPreference200s + "thru " + totalSize + " b1001 nofreq pdp 0 " + excel + " nosgtest' sheet'&r') nosgtest nottest\n" +
+			"X run 1 " + partyPreference200s + "thru " + totalSize + " b1001 novp pdp 0 " + excel + " novp' sheet'&r') nosgtest nottest\n" +
+			"X run 1 " + partyPreference200s + "thru " + totalSize + " b" + copyPasteTables + "nofreq pdp 0 " + excel + " copy-paste' sheet'&r &b') nosgtest nottest\n");
 
 		if(govLvl == GovernmentLevel.PROVINCIAL || govLvl == GovernmentLevel.FEDERAL)
 			w.println(

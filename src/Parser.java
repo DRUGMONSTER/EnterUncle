@@ -139,14 +139,14 @@ public class Parser{
 			Logg.fine("Variable read: " + variableName);
 			
 			int codeWidth = Integer.parseInt(rawVariableParts[2].substring(2));
-			pos += codeWidth;
 			String position = pos + "-";
-			
 			
 			rq.variable = variableName;
 			rq.codeWidth = codeWidth;
 			rq.position = position;
 			rq.quePosition = i;
+			
+			pos += codeWidth;
 		}
 
 		for(RawQuestion rq : rawQuestions){
@@ -253,7 +253,6 @@ public class Parser{
 				Logg.fine("Question " + variableName + " was added");
 			}
 		}
-		
 		//Set Identifiers for DemoQuestions
 		for(DemoQuestion dq : Qnair.getDemoQuestions()){
 			boolean set = false;

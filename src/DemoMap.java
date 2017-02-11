@@ -29,7 +29,7 @@ class DemoMap{
 		map.put("(?i).*\\breligion\\b.*",						new DiEntry("RELIGION"		, null));
 		map.put("(?i).*\\bincome\\b.*", 						new DiEntry("INCOME"		, null));
 		map.put("(?i).*\\bpart\\b.*\\bof\\b.*\\bcity\\b.*", 	new DiEntry("COMMUNITY"		, null));
-		map.put("(?i).*\\baddition\\b.*\\bcell phone\\b.*", 	new DiEntry("AlSO LANDLINE"	, null));
+		map.put("(?i).*\\baddition\\b.*\\bcell phone\\b.*", 	new DiEntry("ALSO LANDLINE"	, null));
 		map.put("(?i).*\\blandline\\b.*",						new DiEntry("REACHED"		, null));
 		map.put("(?i).*\\bborn in canada\\b.*",					new DiEntry("CANADA BORN"	, null));
 		map.put("(?i).*\\bown or rent\\b.*",					new DiEntry("HOME"			, null));
@@ -61,7 +61,7 @@ class DemoMap{
 			case "COMMUNITY":
 				COMMUNITY_DQ = dq;
 				break;
-			case "AlSO_LANDLINE":
+			case "ALSO LANDLINE":
 				ALSO_LANDLINE_DQ = dq;
 				break;
 			case "REACHED":
