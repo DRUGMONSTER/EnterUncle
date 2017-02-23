@@ -219,15 +219,18 @@ public class Writer{
 		String agePos = ageQ.position;
 		
 		//TABLE 802
-		w.println("TABLE 802\nT Age Gender Weight General Pop - ???\n");//TODO: Need region
-		
-		String[] weights;
-		if(govLvl == GovernmentLevel.FEDERAL){
-			weights = XML_Get.getWeightsForCanada();
-		}else if(govLvl == GovernmentLevel.PROVINCIAL){
-			weights = XML_Get.getWeightsForOntario();			//need region, provincial may mean Alberta
-		}else{
-			weights = XML_Get.getWeightsForToronto();
+		//w.println("TABLE 802\nT Age Gender Weight General Pop - ???");//TODO: Need region
+
+        String[] weights;
+        if(govLvl == GovernmentLevel.FEDERAL){
+            w.println("TABLE 802\nT Age Gender Weight General Pop - Canada");
+            weights = XML_Get.getWeightsForCanada();
+        }else if(govLvl == GovernmentLevel.PROVINCIAL){
+            w.println("TABLE 802\nT Age Gender Weight General Pop - Ontario");
+            weights = XML_Get.getWeightsForOntario();			//need region, provincial may mean Alberta
+        }else{
+            w.println("TABLE 802\nT Age Gender Weight General Pop - Toronto");
+            weights = XML_Get.getWeightsForToronto();
 		}
 		
 		String[] base = new String[12];
@@ -431,6 +434,10 @@ public class Writer{
 		DemoQuestion alsoLandlineDQ = DemoMap.getAlsoLandlineDQ();
 
 		//Begin Reorder
+        //if(){ TODO add region demo to banner here.
+
+        //}
+
 		if(communityDQ != null){
 			communityDQ.identifier += " 2";
 			ArrayList<String[]> community2Choices = communityDQ.getChoices();
