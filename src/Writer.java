@@ -15,6 +15,7 @@ public class Writer{
 	private static final String FEDERAL_SAMPLE_POSITION = "273-";
 	private static final String ONTARIO_REGION_POSITION = "271:273";
 	private static String projectName;
+	private static String location;
 	
 	static{
 		TB_PAIRS.add(new String[]{"(?i).*\\bagree\\b.*",			"(?i).*\\bdisagree\\b.*"});
@@ -29,9 +30,10 @@ public class Writer{
 		MEAN_KEYWORDS.add("Very Dissatisfied");
 	}
 
-	public static void writeFile(File file, ArrayList<QuestionBase> checked, ArrayList<Question> questions, ArrayList<DemoQuestion> demoQuestions, GovernmentLevel govLvl){
+	public static void writeFile(File file, ArrayList<QuestionBase> checked, ArrayList<Question> questions, ArrayList<DemoQuestion> demoQuestions, GovernmentLevel govLvl, String locat){
 		Logg.info("WRITE STARTED");
-
+		
+		location = locat;
 		PrintWriter writer;
 		String originalFilePath = file.getParentFile().toString();
 		projectName = file.getName().replace(".ASC", "");
@@ -219,39 +221,33 @@ public class Writer{
 		String agePos = ageQ.position;
 		
 		//TABLE 802
-		//w.println("TABLE 802\nT Age Gender Weight General Pop - ???");//TODO: Need region
+		w.println("TABLE 802\nT Age Gender Weight General Pop - " + location);
 
-        String[] weights;
-        if(govLvl == GovernmentLevel.FEDERAL){
-            w.println("TABLE 802\nT Age Gender Weight General Pop - Canada");
-            weights = XML_Get.getWeightsForCanada();
-        }else if(govLvl == GovernmentLevel.PROVINCIAL){
-            w.println("TABLE 802\nT Age Gender Weight General Pop - Ontario");
-            weights = XML_Get.getWeightsForOntario();			//need region, provincial may mean Alberta
-        }else{
-            w.println("TABLE 802\nT Age Gender Weight General Pop - Toronto");
-            weights = XML_Get.getWeightsForToronto();
+		String[] weights = XML_Get.getWeights(location);
+		if(weights != null){
+			//Todo: move this to XML_GET
+			String[] base = new String[12];
+			base[0] = "R Male < 25;\t\t";
+			base[1] = "R Male 25 - 34;\t\t";
+			base[2] = "R Male 35 - 44;\t\t";
+			base[3] = "R Male 45 - 54;\t\t";
+			base[4] = "R Male 55 - 64;\t\t";
+			base[5] = "R Male 65 +;\t\t";
+			base[6] = "R Female < 25;\t\t";
+			base[7] = "R Female 25 - 34;\t";
+			base[8] = "R Female 35 - 44;\t";
+			base[9] = "R Female 45 - 54;\t";
+			base[10] = "R Female 55 - 64;\t";
+			base[11] = "R Female 65 +;\t\t";
+	
+			StringBuilder buf = new StringBuilder();
+			for(int i = 0; i < 12; i++){
+				buf.append(base[i]).append(genderPos).append(i / 6 + 1).append(" ").append(agePos).append(weights[i]).append("\n");
+			}
+			w.println(buf);
+		}else{
+			w.println("Couldn't recognise location entered in INTRO");
 		}
-		
-		String[] base = new String[12];
-		base[0] = "R Male < 25;\t\t";
-		base[1] = "R Male 25 - 34;\t\t";
-		base[2] = "R Male 35 - 44;\t\t";
-		base[3] = "R Male 45 - 54;\t\t";
-		base[4] = "R Male 55 - 64;\t\t";
-		base[5] = "R Male 65 +;\t\t";
-		base[6] = "R Female < 25;\t\t";
-		base[7] = "R Female 25 - 34;\t";
-		base[8] = "R Female 35 - 44;\t";
-		base[9] = "R Female 45 - 54;\t";
-		base[10] = "R Female 55 - 64;\t";
-		base[11] = "R Female 65 +;\t\t";
-		
-		StringBuilder buf = new StringBuilder();
-		for(int i = 0; i < 12; i++){
-			buf.append(base[i]).append(genderPos).append(i/6+1).append(" ").append(agePos).append(weights[i]).append("\n");
-		}
-		w.println(buf);
 		
 		if(govLvl == GovernmentLevel.MUNICIPAL){
 			//If region demo exists
@@ -402,7 +398,7 @@ public class Writer{
 		int posOfReached = modified.indexOf(DemoMap.getReachedDq()) - 2;
 		int posOfSample = posOfReached - 1;
 		for(String s: uncleCommands.get(posOfReached)){
-		    uncleCommands.get(posOfSample).add(s);
+			uncleCommands.get(posOfSample).add(s);
 		}
 		uncleCommands.remove(posOfReached);
 		
@@ -434,9 +430,9 @@ public class Writer{
 		DemoQuestion alsoLandlineDQ = DemoMap.getAlsoLandlineDQ();
 
 		//Begin Reorder
-        //if(){ TODO add region demo to banner here.
+		//if(){ TODO add Ontario region demo to banner here.
 
-        //}
+		//}
 
 		if(communityDQ != null){
 			communityDQ.identifier += " 2";

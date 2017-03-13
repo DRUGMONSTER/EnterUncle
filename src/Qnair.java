@@ -8,8 +8,9 @@ import java.util.Set;
 public class Qnair{
 	private static final ArrayList<Question> questions = new ArrayList<>();
 	private static final ArrayList<DemoQuestion> demoQuestions = new ArrayList<>();
-	private static final Set<String> rejectableVariables = new HashSet<>(Arrays.asList(new String[]{"TZONE", "LOC", "LDF", "LDE", "AREA", "FSA", "FSA1", "LANG", "IT2", "S1", "INT01", "INT99", "C3", "INT"}));
-
+	private static final Set<String> rejectableVariables = new HashSet<>(Arrays.asList(new String[]{"TZONE", "LOC", "LDF", "LDE", "AREA", "FSA", "FSA1", "LANG", "IT2", "S1", "INT01", "INT02", "INT99", "C3", "INT"}));
+	private static String location = "";
+	
 	public static void clearQuestions(){
 		questions.clear();
 		demoQuestions.clear();
@@ -33,6 +34,14 @@ public class Qnair{
 
 	public static boolean isEmpty(){
 		return questions.isEmpty() && demoQuestions.isEmpty();
+	}
+	
+	public static void setLocation(String gRegion){
+		location = gRegion;
+	}
+	
+	public static String getLocation(){
+		return location;
 	}
 
 	public static void addQuestion(String var, int cw, String l, String sl, String ident, String pos, String skipCon, int ifSkipDest, int elseSkipDest, ArrayList<String[]> choices){

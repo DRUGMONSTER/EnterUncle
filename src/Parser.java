@@ -147,6 +147,16 @@ public class Parser{
 			rq.quePosition = i;
 			
 			pos += codeWidth;
+			
+		}
+		
+		//Look at Intro question and try to identify the location
+		for(RawQuestion rq : rawQuestions){
+		    if(rq.variable.equals("INTRO")){
+				String rawShortLabel = rq.shortLabel;
+				Qnair.setLocation(rawShortLabel.substring(1, rawShortLabel.length() - 1));
+				break;
+			}
 		}
 
 		for(RawQuestion rq : rawQuestions){

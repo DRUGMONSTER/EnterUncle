@@ -14,9 +14,11 @@ class Logg{
 		try{
 			logger.addHandler(new FileHandler("C:\\EnterUncle.log"));
 		}catch(IOException e1){
+			//System.out.println(e1);
 			try{
 				logger.addHandler(new FileHandler("C:\\Users\\RZamberg\\Desktop\\EnterUncle.log"));
 			}catch(IOException e2){
+				//System.out.println(e2);
 				System.out.println("Problem with creating the log file");
 			}
 		}

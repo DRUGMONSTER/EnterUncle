@@ -23,11 +23,10 @@ public class UncleConvert_DRV{
 
 	private static void test(){
 		//String fname = "G:\\Public Works\\Tabs\\PWG1.ASC";
-		//String fname = "G:\\Auer\\FRP1\\Tabs\\FRP1.ASC";
 		//String fname = "G:\\FORUM\\FOKD\\Tabs\\FOKE.ASC";
-		//String fname = "E:\\MAN_SON\\Dropbox\\Work\\Tabs\\ASC\\FOKE.ASC";
-		String fname = "E:\\Dropbox\\Work\\Tabs\\ASC\\FOKE.ASC";
-		GovernmentLevel govLvl = GovernmentLevel.PROVINCIAL;
+		String fname = "E:\\MAN_SON\\Dropbox\\Work\\Tabs\\ASC\\FOKi.ASC";
+		//String fname = "E:\\Dropbox\\Work\\Tabs\\ASC\\FOKE.ASC";
+		GovernmentLevel govLvl = GovernmentLevel.FEDERAL;
 
 		Parser.parseASCFile(fname);
 
@@ -43,7 +42,7 @@ public class UncleConvert_DRV{
 		checkedQuestions.add(Qnair.getQuestions().get(Qnair.getQuestions().size() - 1));		// get last non-demo question
 		
 		
-		Writer.writeFile(new File(fname), checkedQuestions, Qnair.getQuestions(), Qnair.getDemoQuestions(),  govLvl);
+		Writer.writeFile(new File(fname), checkedQuestions, Qnair.getQuestions(), Qnair.getDemoQuestions(),  govLvl, Qnair.getLocation());
 
 		System.out.println("DONE");
 	}

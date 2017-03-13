@@ -7,6 +7,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
 class XML_Get{
+	private static final String canadaName = "canada";
+	private static final String ontarioName = "ontario";
+	private static final String torontoName = "toronto";
+	private static final String ottawaName = "ottawa";
+	
 	private static Element docElement;
 
 	static{
@@ -24,6 +29,18 @@ class XML_Get{
 			System.out.println("IO");
 			e.printStackTrace();
 		}
+	}
+	
+	static String[][] getOntarioRegionTable250(){
+		//TODO: Don't use two calls to get, use nodeListToArrayWithReplace
+		
+		NodeList choiceLabelNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable250"), "choiceLabels").getChildNodes();
+		String[] choiceLabels = nodeListToArrayWithReplace(choiceLabelNodes, "\\t", "\t");
+		
+		NodeList valueNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable250"), "values").getChildNodes();
+		String[] values = nodeListToArray(valueNodes);
+		
+		return new String[][]{choiceLabels, values};
 	}
 	
 	static String[] get601(String projectName){
@@ -45,35 +62,23 @@ class XML_Get{
 		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), level), "T699").getChildNodes();
 		return nodeListToArrayWithReplace(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
 	}
-
-	static String[] getWeightsForToronto(){
-		return getWeightsForRegion("cities", "toronto");
-	}
-
-	static String[] getWeightsForOntario(){
-		return getWeightsForRegion("provinces", "ontario");
-	}
-
-	static String[] getWeightsForCanada(){
-		NodeList weightNodes = getElementOf(getElementOf(docElement, "weights"), "canada").getChildNodes();
-
-		return nodeListToArray(weightNodes);
+	
+	static String[] getWeights(String location){
+		if(location.equalsIgnoreCase(torontoName)){
+			return getWeightsForLocation(torontoName);
+		}else if(location.equalsIgnoreCase(ontarioName)){
+			return getWeightsForLocation(ontarioName);
+		}else if(location.equalsIgnoreCase(canadaName)){
+			return getWeightsForLocation(canadaName);
+		}else if(location.equalsIgnoreCase(ottawaName)){
+			return getWeightsForLocation(ottawaName);
+		}
+		
+		return null;
 	}
 	
-	static String[][] getOntarioRegionTable250(){
-		//TODO: Don't use two calls to get, use nodeListToArrayWithReplace
-		
-		NodeList choiceLabelNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable250"), "choiceLabels").getChildNodes();
-		String[] choiceLabels = nodeListToArrayWithReplace(choiceLabelNodes, "\\t", "\t");
-		
-		NodeList valueNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable250"), "values").getChildNodes();
-		String[] values = nodeListToArray(valueNodes);
-		
-		return new String[][]{choiceLabels, values};
-	}
-	
-	private static String[] getWeightsForRegion(String level, String region){
-		NodeList weightNodes = getElementOf(getElementOf(getElementOf(docElement, "weights"), level), region).getChildNodes();
+	private static String[] getWeightsForLocation(String location){
+		NodeList weightNodes = getElementOf(getElementOf(docElement, "weights"), location).getChildNodes();
 		return nodeListToArray(weightNodes);
 	}
 	
