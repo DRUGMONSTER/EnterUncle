@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <strings>
 	<ontarioRegionTable250>
-		<choiceLabels>
-			<CL>Eastern Ontario;\t\t\tr(</CL>
-			<CL>NET Toronto GTA;\t\t\tr(</CL>
-			<CL>Toronto 416;\t\t\t\tr(</CL>
-			<CL>Toronto 905;\t\t\t\tr(</CL>
-			<CL>South-western Ontario;\t\tr(</CL>
-			<CL>NET: Northern Ontario;\t\tr(</CL>
-			<CL>North-eastern Ontario;\t\tr(</CL>
-			<CL>North-western Ontario;\t\tr(</CL>
-		</choiceLabels>
-		<values>
-			<V>,613,343)</V>
-			<V>,416,647,905,289,365)</V>
-			<V>,416,647)</V>
-			<V>,905,289,365)</V>
-			<V>,519,226)</V>
-			<V>,705,249,807)</V>
-			<V>,705,249)</V>
-			<V>,807)</V>
-		</values>
+		<L>TABLE 205</L>
+		<L>T REGION</L>
+		<L>T &amp;wt REGION</L>
+		<L>Eastern Ontario;\t\t\tr($$$position$$$,613,343)</L>
+		<L>NET Toronto GTA;\t\t\tr($$$position$$$,416,647,905,289,365)</L>
+		<L>Toronto 416;\t\t\t\tr($$$position$$$,416,647)</L>
+		<L>Toronto 905;\t\t\t\tr($$$position$$$,905,289,365)</L>
+		<L>South-western Ontario;\t\tr($$$position$$$,519,226)</L>
+		<L>NET: Northern Ontario;\t\tr($$$position$$$,705,249,807)</L>
+		<L>North-eastern Ontario;\t\tr($$$position$$$,705,249)</L>
+		<L>North-western Ontario;\t\tr($$$position$$$,807)</L>
 	</ontarioRegionTable250>
 
 	<tables600>
@@ -70,11 +61,11 @@
                 <L>X if (r(89:93,0:XXX)) DEL</L>
                 <L>X ex 804</L>
                 <L>X ex 901</L>
-                <L/>
+				<L/>
                 <L>X ex 806</L>
                 <L>X ex 807</L>
                 <L>X ex 902</L>
-                <L/>
+				<L/>
                 <L>X ex 501</L>
             </T603>
             <T699>
@@ -92,6 +83,22 @@
         </provincial>
 	</tables600>
 
+	<tables800>
+		<base>
+			<L>R Male &lt; 25;\t\t</L>
+			<L>R Male 25 - 34;\t\t</L>
+			<L>R Male 35 - 44;\t\t</L>
+			<L>R Male 45 - 54;\t\t</L>
+			<L>R Male 55 - 64;\t\t</L>
+			<L>R Male 65 +;\t\t</L>
+			<L>R Female &lt; 25;\t\t</L>
+			<L>R Female 25 - 34;\t</L>
+			<L>R Female 35 - 44;\t</L>
+			<L>R Female 45 - 54;\t</L>
+			<L>R Female 55 - 64;\t</L>
+			<L>R Female 65 +;\t\t</L>
+		</base>
+	</tables800>
 	<weights>
 		<canada>
 			<M_18>1; v 0.0600459788543818</M_18>

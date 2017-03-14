@@ -151,18 +151,13 @@ public class Writer{
 	
 	private static void write200s(PrintWriter w, GovernmentLevel govLvl){
 		if(govLvl == GovernmentLevel.PROVINCIAL){
-			String[][] t205 = XML_Get.getOntarioRegionTable250();
-			StringBuilder buffer = new StringBuilder();
+			String[] t205 = XML_Get.getOntarioRegionTable250(ONTARIO_REGION_POSITION);
 			
-			buffer.append("TABLE 205\n").append("T REGION\n").append("T &wt REGION\n");
-			
-			for(int i = 0; i < t205[0].length; i++){
-				buffer.append(t205[0][i]).append(ONTARIO_REGION_POSITION).append(t205[1][i]).append("\n");
+			for(String s : t205){
+				w.println(s);
 			}
-			
-			w.println(buffer);
 		}
-		w.println();
+		w.println("\n");
 	}
 
 	private static void write600s(PrintWriter w, GovernmentLevel govLvl){
@@ -187,7 +182,7 @@ public class Writer{
 		}
 		else if(govLvl == GovernmentLevel.PROVINCIAL){
 			String[] t602 = XML_Get.get602ForLevel("provincial", projectName);
-			String[] t603 = XML_Get.get602ForLevel("provincial", projectName);
+			String[] t603 = XML_Get.get603ForLevel("provincial", projectName);
 			String[] t699 = XML_Get.get699ForLevel("provincial", projectName);
 			
 			for(String s : t602){

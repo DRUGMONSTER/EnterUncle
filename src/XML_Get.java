@@ -31,16 +31,9 @@ class XML_Get{
 		}
 	}
 	
-	static String[][] getOntarioRegionTable250(){
-		//TODO: Don't use two calls to get, use nodeListToArrayWithReplace
-		
-		NodeList choiceLabelNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable250"), "choiceLabels").getChildNodes();
-		String[] choiceLabels = nodeListToArrayWithReplace(choiceLabelNodes, "\\t", "\t");
-		
-		NodeList valueNodes = getElementOf(getElementOf(docElement, "ontarioRegionTable250"), "values").getChildNodes();
-		String[] values = nodeListToArray(valueNodes);
-		
-		return new String[][]{choiceLabels, values};
+	static String[] getOntarioRegionTable250(String position){
+		NodeList labelAndValueNodes = getElementOf(docElement, "ontarioRegionTable250").getChildNodes();
+		return nodeListToArrayWithReplaceTwice(labelAndValueNodes, "$$$position$$$", position, "\\t", "\t");
 	}
 	
 	static String[] get601(String projectName){
@@ -55,7 +48,7 @@ class XML_Get{
 	
 	static String[] get603ForLevel(String level, String projectName){
 		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), level), "T603").getChildNodes();
-		return nodeListToArrayWithReplace(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
+		return nodeListToArrayWithReplaceWiltNull(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
 	}
 	
 	static String[] get699ForLevel(String level, String projectName){
@@ -98,6 +91,30 @@ class XML_Get{
 		String[] strings = new String[nl.getLength()/2];
 		for(int i = 0, j = 1; i < strings.length; i++, j += 2){
 			strings[i] = nl.item(j).getFirstChild().getNodeValue().replace(find, replaceWith);
+		}
+		return strings;
+	}
+	
+	private static String[] nodeListToArrayWithReplaceWiltNull(NodeList nl, String find, String replaceWith){
+		String[] strings = new String[nl.getLength()/2];
+		for(int i = 0, j = 1; i < strings.length; i++, j += 2){
+			org.w3c.dom.Node n = nl.item(j).getFirstChild();
+			if(n != null){
+				strings[i] = n.getNodeValue().replace(find, replaceWith);
+			}else{
+				strings[i] = "";
+			}
+		}
+		return strings;
+	}
+	
+	private static String[] nodeListToArrayWithReplaceTwice(NodeList nl, String find1, String replaceWith1, String find2, String replaceWith2){
+		String[] strings = new String[nl.getLength()/2];
+		for(int i = 0, j = 1; i < strings.length; i++, j += 2){
+			strings[i] = nl.item(j).getFirstChild().getNodeValue().replace(find1, replaceWith1);
+		}
+		for(int i = 0; i < strings.length; i++){
+			strings[i] = strings[i].replace(find2, replaceWith2);
 		}
 		return strings;
 	}
