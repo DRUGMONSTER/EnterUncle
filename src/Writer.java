@@ -430,15 +430,16 @@ public class Writer{
 		//}
 
 		if(communityDQ != null){
-			communityDQ.identifier += " 2";
+			communityDQ.identifier = "COMMUNITY 2";
 			ArrayList<String[]> community2Choices = communityDQ.getChoices();
 			
 			DemoQuestion community1 = new DemoQuestion();
 			community1.identifier = "COMMUNITY 1";
-			community1.addChoice("1", community2Choices.get(0)[1] + " + " + community2Choices.get(1)[1]);
-			community1.addChoice("2", community2Choices.get(2)[1]);
-			community1.addChoice("3", community2Choices.get(3)[1] + " + " + community2Choices.get(4)[1]);
-			community1.addChoice("4", community2Choices.get(5)[1]);
+			community1.position = communityDQ.position;
+			community1.addChoice("1,2",	community2Choices.get(0)[1] + " + " + community2Choices.get(1)[1]);
+			community1.addChoice("3",	community2Choices.get(2)[1]);
+			community1.addChoice("4,5",	community2Choices.get(3)[1] + " + " + community2Choices.get(4)[1]);
+			community1.addChoice("6",	community2Choices.get(5)[1]);
 			
 			
 			questions.add(0, community1);
@@ -527,7 +528,7 @@ public class Writer{
 		
 		return questions;
 	}
-
+	
 	private static int[] checkDichotomy(ArrayList<String[]> choices){
 		int[] dichotomyPositions = {-1, 0};
 		for(byte i = 0; i < choices.size(); i++){

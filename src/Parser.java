@@ -154,7 +154,8 @@ public class Parser{
 		for(RawQuestion rq : rawQuestions){
 		    if(rq.variable.equals("INTRO")){
 				String rawShortLabel = rq.shortLabel;
-				Qnair.setLocation(rawShortLabel.substring(1, rawShortLabel.length() - 1));
+				if(rawShortLabel != null)
+					Qnair.setLocation(rawShortLabel.substring(1, rawShortLabel.length() - 1));
 				break;
 			}
 		}
