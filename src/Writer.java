@@ -151,9 +151,9 @@ public class Writer{
 	
 	private static void write200s(PrintWriter w, GovernmentLevel govLvl){
 		if(govLvl == GovernmentLevel.PROVINCIAL){
-			String[] t205 = XML_Get.getOntarioRegionTable250(ONTARIO_REGION_POSITION);
+			String[] t250 = XML_Get.getOntarioRegionTable250(ONTARIO_REGION_POSITION);
 			
-			for(String s : t205){
+			for(String s : t250){
 				w.println(s);
 			}
 		}

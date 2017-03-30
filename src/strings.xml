@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <strings>
 	<ontarioRegionTable250>
-		<L>TABLE 205</L>
+		<L>TABLE 250</L>
 		<L>T REGION</L>
 		<L>T &amp;wt REGION</L>
-		<L>Eastern Ontario;\t\t\tr($$$position$$$,613,343)</L>
-		<L>NET Toronto GTA;\t\t\tr($$$position$$$,416,647,905,289,365)</L>
-		<L>Toronto 416;\t\t\t\tr($$$position$$$,416,647)</L>
-		<L>Toronto 905;\t\t\t\tr($$$position$$$,905,289,365)</L>
-		<L>South-western Ontario;\t\tr($$$position$$$,519,226)</L>
-		<L>NET: Northern Ontario;\t\tr($$$position$$$,705,249,807)</L>
-		<L>North-eastern Ontario;\t\tr($$$position$$$,705,249)</L>
-		<L>North-western Ontario;\t\tr($$$position$$$,807)</L>
+		<L>R Eastern Ontario;\t\t\tr($$$position$$$,613,343)</L>
+		<L>R NET Toronto GTA;\t\t\tr($$$position$$$,416,647,905,289,365)</L>
+		<L>R Toronto 416;\t\t\t\tr($$$position$$$,416,647)</L>
+		<L>R Toronto 905;\t\t\t\tr($$$position$$$,905,289,365)</L>
+		<L>R South-western Ontario;\t\tr($$$position$$$,519,226)</L>
+		<L>R NET: Northern Ontario;\t\tr($$$position$$$,705,249,807)</L>
+		<L>R North-eastern Ontario;\t\tr($$$position$$$,705,249)</L>
+		<L>R North-western Ontario;\t\tr($$$position$$$,807)</L>
 	</ontarioRegionTable250>
 
 	<tables600>
