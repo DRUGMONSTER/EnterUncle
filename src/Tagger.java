@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
-public class Tagger{
+class Tagger{
 	//add tags to the lines in bufferOfLines
-	public static String tag(ArrayList<ArrayList<String>> bufferOfLines, int tabNum, StringBuilder tags){
-		String bufferWithTags = "";
+	static String tag(ArrayList<ArrayList<String>> bufferOfLines, int tabNum, StringBuilder tags){
+		StringBuilder bufferWithTags = new StringBuilder();
 		String lastTag = "B";
 		for(int i = 0; i < bufferOfLines.size(); i++){
 			ArrayList<String> linesBuf = bufferOfLines.get(i);
@@ -12,18 +12,19 @@ public class Tagger{
 			for(String str : linesBuf){
 				int tabsNeeded = tabOffset - str.length() / 4;
 				String currentTag = Tagger.getNextTag(false, lastTag, tags);
-				bufferWithTags += str + getTabs(tabsNeeded) + "; tag '" + currentTag + "," + currentTag.toLowerCase() + "'\n";
+				assert currentTag != null;
+				bufferWithTags.append(str).append(getTabs(tabsNeeded)).append("; tag '").append(currentTag).append(",").append(currentTag.toLowerCase()).append("'\n");
 				lastTag = currentTag;
 			}
 			Tagger.getNextTag(true, null, tags);
 		}
 		tags.deleteCharAt(tags.length() - 1); //deletes apostrophe
 
-		return bufferWithTags;
+		return bufferWithTags.toString();
 	}
 
 	//side effect: updates tags
-	public static String getNextTag(boolean end, String lastTag, StringBuilder tags){
+	private static String getNextTag(boolean end, String lastTag, StringBuilder tags){
 		if(end){
 			tags.deleteCharAt(tags.length() - 1); //Deletes comma
 			tags.append("' '");
@@ -32,7 +33,7 @@ public class Tagger{
 
 		String next = getNextTag(lastTag);
 
-		tags.append(next + ",");
+		tags.append(next).append(",");
 
 		return next;
 	}
@@ -50,10 +51,10 @@ public class Tagger{
 		return rest + String.valueOf((char) asciiCode);
 	}
 
-	public static String getTabs(int x){
-		String s = "";
+	static String getTabs(int x){
+		StringBuilder s = new StringBuilder();
 		for(int i = 0; i < x; i++)
-			s += "\t";
-		return s;
+			s.append("\t");
+		return s.toString();
 	}
 }
