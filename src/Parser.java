@@ -69,17 +69,18 @@ public class Parser{
 				Logg.info("Line: " + line);
 
 				rq.variableRaw = line;
-				rq.label = sc.nextLine();
-
-				while(!rq.label.endsWith("]")){//if multiple lines
+				String tempLabel = sc.nextLine();
+				StringBuilder label = new StringBuilder(tempLabel);
+				while(!tempLabel.endsWith("]")){//if multiple lines
 					line = sc.nextLine();
 
 					if(line.length() < 8)
-						rq.label += line;
+						label.append(line);
 					else
-						rq.label += "\n" + line;
+						label.append("\n").append(line);
 				}
-
+				rq.label = label.toString();
+				
 				line = sc.nextLine();
 			}
 			if(line.startsWith("*SL")){

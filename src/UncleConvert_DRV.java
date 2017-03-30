@@ -23,9 +23,9 @@ public class UncleConvert_DRV{
 
 	private static void test(){
 		//String fname = "G:\\Public Works\\Tabs\\PWG1.ASC";
-		//String fname = "G:\\FORUM\\FOKD\\Tabs\\FOKE.ASC";
+		String fname = "G:\\FORUM\\FOKA\\FOKA.ASC";
 		//String fname = "E:\\MAN_SON\\Dropbox\\Work\\Tabs\\ASC\\FOKi.ASC";
-		String fname = "E:\\Dropbox\\Work\\Tabs\\ASC\\FOJT.ASC";
+		//String fname = "E:\\Dropbox\\Work\\Tabs\\ASC\\FOJT.ASC";
 		GovernmentLevel govLvl = GovernmentLevel.MUNICIPAL;
 
 		Parser.parseASCFile(fname);
