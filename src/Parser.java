@@ -102,8 +102,8 @@ public class Parser{
 				Logg.info("Line: " + line);
 
 				rq.skipDestination = sc.nextLine();
-				if(!rq.skipDestination.equals("->*"))		//Todo: if the skip is referencing a diff question, like in FOKE RQ6F
-					rq.skipCondition = sc.nextLine();
+				if(rq.skipDestination.startsWith("->"))				//Todo: if the skip is referencing a diff question, like in FOKE RQ6F
+					rq.skipCondition = sc.nextLine();				//Star or no star? Check the case where TRC is used afterwards
 
 				line = sc.nextLine();
 
