@@ -49,7 +49,7 @@ public class Parser{
 		sc.nextLine();
 		String line = sc.nextLine();
 		while(true){
-			if(line.startsWith("-----")){
+			if(line.startsWith("---")){
 				Logg.fine("Stopped Parsing");
 				break;                //Stop Parsing
 			}
@@ -69,9 +69,8 @@ public class Parser{
 				Logg.info("Line: " + line);
 
 				rq.variableRaw = line;
-				String tempLabel = sc.nextLine();
-				StringBuilder label = new StringBuilder(tempLabel);
-				while(!tempLabel.endsWith("]")){//if multiple lines
+				StringBuilder label = new StringBuilder(sc.nextLine());
+				while(!label.toString().endsWith("]")){		//if multiple lines
 					line = sc.nextLine();
 
 					if(line.length() < 8)
@@ -102,13 +101,9 @@ public class Parser{
 				Logg.info("Line: " + line);
 
 				rq.skipDestination = sc.nextLine();
-				if(rq.skipDestination.startsWith("->"))				//Todo: if the skip is referencing a diff question, like in FOKE RQ6F
-					rq.skipCondition = sc.nextLine();				//Star or no star? Check the case where TRC is used afterwards
+				rq.skipCondition = sc.nextLine();
 
 				line = sc.nextLine();
-
-				if(line.startsWith("TRC")) //(Truncate) Randomizing question found, just skip
-					line = sc.nextLine();
 			}
 			if(line.startsWith("*CL")){
 				Logg.info("\"*CL\" Code List Found");

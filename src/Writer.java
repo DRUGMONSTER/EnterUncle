@@ -276,10 +276,10 @@ public class Writer{
 		//Offset is -2 because age and gender are merged, and also_landline is removed
 		int copyPasteTablesNum = checked - 2;
 		
-		String copyPasteTables = "";
+		StringBuilder copyPasteTables = new StringBuilder();
 		for(int i = 0; i < copyPasteTablesNum; i++){
 			String table = 1002 + i + "";				//checked could be zero
-			copyPasteTables += table + " ";
+			copyPasteTables.append(table).append(" ");
 		}
 
 		String partyPreference200s = "";
@@ -546,6 +546,7 @@ public class Writer{
 	}
 
 	//Very Satisfied, Somewhat Satisfied, Somewhat Dissatisfied, Very Dissatisfied
+	@SuppressWarnings("UnusedReturnValue")
 	private static boolean checkMeansNeeded(ArrayList<String[]> choices){
 		for(int i = 0; i < MEAN_KEYWORDS.size(); i++){
 			if(!MEAN_KEYWORDS.get(i).equalsIgnoreCase(choices.get(i)[1])){
