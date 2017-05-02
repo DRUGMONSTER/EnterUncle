@@ -8,7 +8,7 @@ import java.util.Set;
 public class Qnair{
 	private static final ArrayList<Question> questions = new ArrayList<>();
 	private static final ArrayList<DemoQuestion> demoQuestions = new ArrayList<>();
-	private static final Set<String> rejectableVariables = new HashSet<>(Arrays.asList(new String[]{"TZONE", "LOC", "LDF", "LDE", "AREA", "FSA", "FSA1", "LANG", "IT2", "S1", "INT01", "INT02", "INT99", "C3", "INT"}));
+	private static final Set<String> rejectableVariables = new HashSet<>(Arrays.asList(new String[]{"TZONE", "LOC", "LDF", "LDE", "AREA", "FSA", "FSA1", "LANG", "IT2", "S1", "S2", "S3", "INT01", "INT02", "INT99", "C3", "INT"}));
 	private static String location = "";
 	
 	public static void clearQuestions(){
