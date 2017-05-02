@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class UncleConvert_DRV{
 	public static void main(String[] args){
-		test();
-		//launchGUI();
+		//test();
+		launchGUI();
 	}
 
 	@SuppressWarnings("unused")
@@ -42,7 +42,7 @@ public class UncleConvert_DRV{
 		checkedQuestions.add(Qnair.getQuestions().get(Qnair.getQuestions().size() - 1));		// get last non-demo question
 		
 		
-		Writer.writeFile(new File(fname), checkedQuestions, Qnair.getQuestions(), Qnair.getDemoQuestions(),  govLvl, Qnair.getLocation());
+		Writer.writeFile(new File(fname), checkedQuestions, Qnair.getQuestions(), Qnair.getDemoQuestions(), govLvl, Qnair.getLocation());
 
 		System.out.println("DONE");
 	}

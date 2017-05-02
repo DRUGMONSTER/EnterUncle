@@ -20,18 +20,20 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 
 @SuppressWarnings("WeakerAccess")
 public class GUI extends JFrame{
-	private static final String VERSION = "0.39.7b";
+	private static final String VERSION = "0.40b";
 	private static final long serialVersionUID = 1L;
 	private static final int FRAME_WIDTH = 720;
 	private static final int FRAME_HEIGHT = 480;
@@ -41,20 +43,26 @@ public class GUI extends JFrame{
 	private JButton writeOutBTN;
 	private JDesktopPane fileArea;
 	private JTextField fileToConvPathTF;
+	private JCheckBox startPosCB;
+	private JTextField startPosTF;
 	private JTextField statusTF;
 
 	private JPanel bannerWrap;
-	private ButtonGroup governmentLevel;
+	private ButtonGroup governmentLevel = new ButtonGroup();
 	private Map<JCheckBox, Question> bannerQuestions = new LinkedHashMap<>();
 	private Map<JCheckBox, DemoQuestion> bannerDemoQuestions = new LinkedHashMap<>();
 	private JRadioButton[] radioButtons = {new JRadioButton("Municipal", true), new JRadioButton("Provincial"), new JRadioButton("Federal")};
-
+	
 	public GUI(){
-		setTitle("Uncle Convert beta v" + VERSION);
+		setTitle("Enter Uncle v" + VERSION);
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		
+		governmentLevel.add(radioButtons[0]);
+		governmentLevel.add(radioButtons[1]);
+		governmentLevel.add(radioButtons[2]);
 		
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(0, 2, 15, 0));
@@ -115,17 +123,32 @@ public class GUI extends JFrame{
 		rightPanel.add(fileArea, BorderLayout.CENTER);
 
 		JPanel buttonWrap = new JPanel();
-		buttonWrap.setLayout(new GridLayout(3, 1, 0, 10));
+		buttonWrap.setLayout(new GridLayout(4, 1, 0, 10));
 
 		JPanel governmentLevelWrap = new JPanel();
-		governmentLevel = new ButtonGroup();
-		for(JRadioButton jrb : radioButtons){
-			governmentLevelWrap.add(jrb);
-			governmentLevel.add(jrb);
-		}
+		governmentLevelWrap.add(radioButtons[0]);
+		governmentLevelWrap.add(radioButtons[1]);
+		governmentLevelWrap.add(radioButtons[2]);
 		governmentLevelWrap.setPreferredSize(new Dimension(0, 23));
 		buttonWrap.add(governmentLevelWrap);
-
+		
+		/*
+		JPanel startPosWrap = new JPanel();
+		//startPosWrap.setLayout(new GridLayout(1, 0));
+		//startPosWrap.setLayout(new BorderLayout(0, 0));
+		startPosCB = new JCheckBox("Override");
+		startPosCB.setHorizontalAlignment(SwingConstants.RIGHT);
+		startPosCB.addActionListener(new CheckListener());
+		JLabel startPosLbl = new JLabel("Start Position:", SwingConstants.RIGHT);
+		startPosTF = new JTextField(String.valueOf(Parser.START_POS));
+		startPosTF.setHorizontalAlignment(SwingConstants.RIGHT);
+		startPosTF.setPreferredSize(new Dimension(20, 0));
+		startPosWrap.add(startPosCB);
+		startPosWrap.add(startPosLbl);
+		startPosWrap.add(startPosTF);
+		buttonWrap.add(startPosWrap);
+		*/
+		
 		statusTF = new JTextField();
 		statusTF.setForeground(Color.BLACK);
 		statusTF.setText("Status");
@@ -174,6 +197,13 @@ public class GUI extends JFrame{
 				statusTF.setText("Conversion Complete");
 				System.out.println("DONE");
 			}
+		}
+	}
+	
+	private class CheckListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			System.out.println("hi");
 		}
 	}
 

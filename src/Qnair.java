@@ -36,8 +36,8 @@ public class Qnair{
 		return questions.isEmpty() && demoQuestions.isEmpty();
 	}
 	
-	public static void setLocation(String gRegion){
-		location = gRegion;
+	public static void setLocation(String aLocation){
+		location = aLocation;
 	}
 	
 	public static String getLocation(){

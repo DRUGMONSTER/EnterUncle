@@ -11,6 +11,7 @@ class XML_Get{
 	private static final String ontarioName = "ontario";
 	private static final String torontoName = "toronto";
 	private static final String ottawaName = "ottawa";
+	private static final String londonName = "london";
 	
 	private static Element docElement;
 
@@ -65,6 +66,8 @@ class XML_Get{
 			return getWeightsForLocation(canadaName);
 		}else if(location.equalsIgnoreCase(ottawaName)){
 			return getWeightsForLocation(ottawaName);
+		}else if(location.equalsIgnoreCase(londonName)){
+			return getWeightsForLocation(londonName);
 		}
 		
 		return null;

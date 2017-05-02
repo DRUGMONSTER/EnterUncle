@@ -3,11 +3,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("WeakerAccess")
-public class Parser{
-	private static final int START_POS = 248;
+class Parser{
+	static final int START_POS = 248;
 
-	public static boolean parseASCFile(String filepath){
+	static boolean parseASCFile(String filepath){
 		ArrayList<RawQuestion> rawQuestions = new ArrayList<>();
 
 		try{
