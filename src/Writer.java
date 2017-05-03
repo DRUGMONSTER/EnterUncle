@@ -375,28 +375,31 @@ public class Writer{
 		ageAndGen.add("C 65+;\t\t" + agePos + "6");
 		ageAndGen.add("C Male;\t\t\t" + genPos + "1");
 		ageAndGen.add("C Female;\t\t" + genPos + "2");
-
-		String incomePos = DemoMap.getIncomeDQ().position;
-		ArrayList<String> income = new ArrayList<>();
-		income.add("C <20K;\t\t"	 + incomePos + "1");
-		income.add("C 20-40K;\t"	 + incomePos + "2");
-		income.add("C 40-60K;\t"	 + incomePos + "3");
-		income.add("C 60-80K;\t"	 + incomePos + "4");
-		income.add("C 80-100K;\t"	 + incomePos + "5");
-		income.add("C 100-250K;\t"	 + incomePos + "6");
-
-		uncleCommands.add(0, income);
+		
+		if(DemoMap.getIncomeDQ() != null){
+			String incomePos = DemoMap.getIncomeDQ().position;
+			ArrayList<String> income = new ArrayList<>();
+			income.add("C <20K;\t\t" + incomePos + "1");
+			income.add("C 20-40K;\t" + incomePos + "2");
+			income.add("C 40-60K;\t" + incomePos + "3");
+			income.add("C 60-80K;\t" + incomePos + "4");
+			income.add("C 80-100K;\t" + incomePos + "5");
+			income.add("C 100-250K;\t" + incomePos + "6");
+			uncleCommands.add(0, income);
+		}
+		
 		uncleCommands.add(0, ageAndGen);
 		
 		//Merge Sample and Reached
 		//Since uncleCommands was modified (two merges) an offset of -2 is needed
-		int posOfReached = modified.indexOf(DemoMap.getReachedDq()) - 2;
-		int posOfSample = posOfReached - 1;
-		for(String s: uncleCommands.get(posOfReached)){
-			uncleCommands.get(posOfSample).add(s);
+		if(DemoMap.getReachedDq() != null){
+			int posOfReached = modified.indexOf(DemoMap.getReachedDq()) - 2;
+			int posOfSample = posOfReached - 1;
+			for(String s : uncleCommands.get(posOfReached)){
+				uncleCommands.get(posOfSample).add(s);
+			}
+			uncleCommands.remove(posOfReached);
 		}
-		uncleCommands.remove(posOfReached);
-		
 		
 		int tableNum = 2;
 		for(ArrayList<String> set : uncleCommands){
