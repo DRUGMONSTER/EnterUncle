@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
@@ -20,7 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -129,25 +129,20 @@ public class GUI extends JFrame{
 		governmentLevelWrap.add(radioButtons[0]);
 		governmentLevelWrap.add(radioButtons[1]);
 		governmentLevelWrap.add(radioButtons[2]);
-		governmentLevelWrap.setPreferredSize(new Dimension(0, 23));
+		governmentLevelWrap.setPreferredSize(new Dimension(0, 24));
 		buttonWrap.add(governmentLevelWrap);
 		
-		/*
-		JPanel startPosWrap = new JPanel();
-		//startPosWrap.setLayout(new GridLayout(1, 0));
-		//startPosWrap.setLayout(new BorderLayout(0, 0));
-		startPosCB = new JCheckBox("Override");
-		startPosCB.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		JPanel startPosWrap = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		startPosCB = new JCheckBox("Start Position Override:");
 		startPosCB.addActionListener(new CheckListener());
-		JLabel startPosLbl = new JLabel("Start Position:", SwingConstants.RIGHT);
-		startPosTF = new JTextField(String.valueOf(Parser.START_POS));
+		startPosTF = new JTextField(String.valueOf(Parser.START_POS), 4);
 		startPosTF.setHorizontalAlignment(SwingConstants.RIGHT);
-		startPosTF.setPreferredSize(new Dimension(20, 0));
 		startPosWrap.add(startPosCB);
-		startPosWrap.add(startPosLbl);
 		startPosWrap.add(startPosTF);
+		startPosWrap.setPreferredSize(new Dimension(0, 26));
 		buttonWrap.add(startPosWrap);
-		*/
+		
 		
 		statusTF = new JTextField();
 		statusTF.setForeground(Color.BLACK);
