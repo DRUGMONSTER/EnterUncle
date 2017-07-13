@@ -211,19 +211,23 @@ class Parser{
 				String skipDestinationIfStr;
 				String skipDestinationElseStr = "";
 				
+				boolean ifExists = true;
 				boolean elseExists = false;
 				int offSet = 2;
 				int elseSkipStartPos = rq.skipDestination.indexOf(' ');
 				if(elseSkipStartPos != -1){
+					elseExists = true;
 					skipDestinationElseStr = rq.skipDestination.substring(elseSkipStartPos + 6);
 					skipDestinationIfStr = rq.skipDestination.substring(offSet, elseSkipStartPos);
-					elseExists = true;
+					if(skipDestinationIfStr.isEmpty())
+						ifExists = false;
 				}else{
 					skipDestinationIfStr = rq.skipDestination.substring(offSet);
 				}
 				
 				//skip destination may be a variable name, if it is, find it, then calculate it's relative position
-				skipDestinationIf = findQuePosition(skipDestinationIfStr, rq.quePosition, rawQuestions);
+				if(ifExists)
+					skipDestinationIf = findQuePosition(skipDestinationIfStr, rq.quePosition, rawQuestions);
 				if(elseExists)
 					skipDestinationElse = findQuePosition(skipDestinationElseStr, rq.quePosition, rawQuestions);
 			}

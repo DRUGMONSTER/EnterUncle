@@ -241,7 +241,7 @@ public class Writer{
 			}
 			w.println(buf);
 		}else{
-			w.println("Couldn't recognise location entered in INTRO");
+			w.println("Couldn't recognise location entered in INTRO\n");
 		}
 		
 		if(govLvl == GovernmentLevel.MUNICIPAL){
