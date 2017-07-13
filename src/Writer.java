@@ -23,7 +23,8 @@ public class Writer{
 		TB_PAIRS.add(new String[]{"(?i).*\\bsupport\\b.*", 			"(?i).*\\boppose\\b.*"});
 		TB_PAIRS.add(new String[]{"(?i).*\\bhave\\s+heard\\b.*",	"(?i).*\\bhave\\s+not\\s+heard\\b.*"});
 		TB_PAIRS.add(new String[]{"(?i).*\\byes\\b.*",				"(?i).*\\bno\\b.*"});
-		
+		TB_PAIRS.add(new String[]{"(?i).*\\bfavor\\b.*",			"(?i).*\\boppose\\b.*"});
+
 		MEAN_KEYWORDS.add("Very Satisfied");
 		MEAN_KEYWORDS.add("Somewhat Satisfied");
 		MEAN_KEYWORDS.add("Somewhat Dissatisfied");
