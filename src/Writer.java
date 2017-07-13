@@ -245,8 +245,8 @@ public class Writer{
 			w.println("Couldn't recognise location entered in INTRO\n");
 		}
 		
-		if(govLvl == GovernmentLevel.MUNICIPAL){
-			//If region demo exists
+		if(location.equalsIgnoreCase("toronto")){
+			//Check if region demo exists
 			DemoQuestion communityQ = DemoMap.getCommunityDQ();
 			if(communityQ != null){
 				String communityPos = communityQ.position;
