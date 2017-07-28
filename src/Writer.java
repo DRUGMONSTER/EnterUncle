@@ -13,9 +13,8 @@ public class Writer{
 	private static final String MUNICIPAL_SAMPLE_POSITION = "267-";
 	private static final String PROVINCIAL_SAMPLE_POSITION = "276-";
 	private static final String FEDERAL_SAMPLE_POSITION = "273-";
-	private static final String ONTARIO_REGION_POSITION = "271:273";
-	private static String projectName;
-	private static String location;
+	private static final String ONTARIO_REGION_POSITION = "273:275";
+	private static String projectCode;
 	
 	static{
 		TB_PAIRS.add(new String[]{"(?i).*\\bagree\\b.*",			"(?i).*\\bdisagree\\b.*"});
@@ -31,15 +30,14 @@ public class Writer{
 		MEAN_KEYWORDS.add("Very Dissatisfied");
 	}
 
-	public static void writeFile(File file, ArrayList<QuestionBase> checked, ArrayList<Question> questions, ArrayList<DemoQuestion> demoQuestions, GovernmentLevel govLvl, String locat){
+	public static void writeFile(File file, ArrayList<QuestionBase> checked, ArrayList<Question> questions, ArrayList<DemoQuestion> demoQuestions, GovernmentLevel govLvl, String location){
 		Logg.info("WRITE STARTED");
 		
-		location = locat;
 		PrintWriter writer;
 		String originalFilePath = file.getParentFile().toString();
-		projectName = file.getName().replace(".ASC", "");
+		projectCode = file.getName().replace(".ASC", "");
 		try{
-			writer = new PrintWriter(originalFilePath + "\\" + projectName + "_test" + ".e");
+			writer = new PrintWriter(originalFilePath + "\\" + projectCode + "_test" + ".e");
 		}catch(FileNotFoundException e){
 			Logg.severe("Can't write output file");
 			return;
@@ -85,10 +83,10 @@ public class Writer{
 		}
 		writer.println();
 		
-		write200s(writer, govLvl);
+		write200s(writer, location);
 		write600s(writer, govLvl);
-		write800s(writer, govLvl);
-		write900s(writer, govLvl, checked.size(), questions.size() + demoQuestions.size());
+		write800s(writer, location);
+		write900s(writer, location, govLvl, checked.size(), questions.size() + demoQuestions.size());
 		write1000s(writer, checked, govLvl);
 
 		writer.close();
@@ -150,8 +148,8 @@ public class Writer{
 		writer.print(nullAndMean);
 	}
 	
-	private static void write200s(PrintWriter w, GovernmentLevel govLvl){
-		if(govLvl == GovernmentLevel.PROVINCIAL){
+	private static void write200s(PrintWriter w, String locat){
+		if(locat.equalsIgnoreCase("ontario")){
 			String[] t250 = XML_Get.getOntarioRegionTable250(ONTARIO_REGION_POSITION);
 			
 			for(String s : t250){
@@ -162,7 +160,7 @@ public class Writer{
 	}
 
 	private static void write600s(PrintWriter w, GovernmentLevel govLvl){
-		String[] t601 = XML_Get.get601(projectName);
+		String[] t601 = XML_Get.get601(projectCode);
 		
 		for(String s : t601){
 			w.println(s);
@@ -170,8 +168,8 @@ public class Writer{
 		w.println();
 				
 		if(govLvl == GovernmentLevel.MUNICIPAL){
-			String[] t602 = XML_Get.get602ForLevel("municipal", projectName);
-			String[] t699 = XML_Get.get699ForLevel("municipal", projectName);
+			String[] t602 = XML_Get.get602ForLevel("municipal", projectCode);
+			String[] t699 = XML_Get.get699ForLevel("municipal", projectCode);
 			for(String s : t602){
 				w.println(s);
 			}
@@ -182,9 +180,9 @@ public class Writer{
 			w.print("\n\n");
 		}
 		else if(govLvl == GovernmentLevel.PROVINCIAL){
-			String[] t602 = XML_Get.get602ForLevel("provincial", projectName);
-			String[] t603 = XML_Get.get603ForLevel("provincial", projectName);
-			String[] t699 = XML_Get.get699ForLevel("provincial", projectName);
+			String[] t602 = XML_Get.get602ForLevel("provincial", projectCode);
+			String[] t603 = XML_Get.get603ForLevel("provincial", projectCode);
+			String[] t699 = XML_Get.get699ForLevel("provincial", projectCode);
 			
 			for(String s : t602){
 				w.println(s);
@@ -204,7 +202,7 @@ public class Writer{
 		}
 	}
 
-	private static void write800s(PrintWriter w, GovernmentLevel govLvl){
+	private static void write800s(PrintWriter w, String location){
 		DemoQuestion genderQ = DemoMap.getGenderDQ();
 		DemoQuestion ageQ = DemoMap.getAgeDQ();
 
@@ -272,7 +270,7 @@ public class Writer{
 			"X set qual off\n\n");
 	}
 
-	private static void write900s(PrintWriter w, GovernmentLevel govLvl, int checked, int totalSize){
+	private static void write900s(PrintWriter w, String location, GovernmentLevel govLvl, int checked, int totalSize){
 		//Calc how many Copy-Paste Tables there will be
 		//Offset is -2 because age and gender are merged, and also_landline is removed
 		int copyPasteTablesNum = checked - 2;
@@ -286,7 +284,11 @@ public class Writer{
 		String partyPreference200s = "";
 		if(govLvl == GovernmentLevel.PROVINCIAL)
 			partyPreference200s = "2 201 202 3 ";
-		String excel = "excel(name'" + projectName + " - __NAME__ - " + getDate();
+		String excel;
+		if(location.isEmpty())
+			excel = "excel(name'" + projectCode + " - __NAME__ - " + getDate();
+		else
+			excel = "excel(name'" + projectCode + " - " + location + " Issues - " + getDate();
 		w.println(
 			"TABLE 901\n" +
 			"X run 1 " + partyPreference200s + "thru " + totalSize + " b1001 nofreq pdp 0 " + excel + "' sheet'&r')\n" +
