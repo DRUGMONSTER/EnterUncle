@@ -4,11 +4,10 @@ import java.util.ArrayList;
 
 public class UncleConvert_DRV{
 	public static void main(String[] args){
-		test();
-		//launchGUI();
+		//test();
+		launchGUI();
 	}
 
-	@SuppressWarnings("unused")
 	private static void launchGUI(){
 		javax.swing.SwingUtilities.invokeLater(() -> {
 			try{
@@ -20,7 +19,8 @@ public class UncleConvert_DRV{
 			Logg.fine("GUI launched successfully");
 		});
 	}
-
+	
+	@SuppressWarnings("unused")
 	private static void test(){
 		//String fname = "G:\\Public Works\\Tabs\\PWG1.ASC";
 		String fname = "G:\\FORUM\\FOLD\\FOLD.ASC";

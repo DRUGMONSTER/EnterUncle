@@ -105,7 +105,7 @@
 				<L>X if (r(89:93,0:XXX)) DEL</L>
 				<L>X if (132'X') DEL</L>
 				<L>X set qual off</L>
-				<L>X ex 801</L>
+				<L>X ;ex 810</L>
 				<L>X delimit 'weights_check.csv' (all) t 820</L>
 			</T602>
 			<T603>
