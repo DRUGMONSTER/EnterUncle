@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 public class Writer{
 	private static final ArrayList<String[]> TB_PAIRS = new ArrayList<>();
 	private static final ArrayList<String> MEAN_KEYWORDS = new ArrayList<>();
+	private static final String FEDERAL_FSA_POSITION = "263";
 	private static final String MUNICIPAL_SAMPLE_POSITION = "267-";
 	private static final String PROVINCIAL_SAMPLE_POSITION = "276-";
 	private static final String FEDERAL_SAMPLE_POSITION = "273-";
@@ -85,7 +86,7 @@ public class Writer{
 		
 		write200s(writer, location);
 		write600s(writer, govLvl);
-		write800s(writer, location);
+		write800s(writer, location, govLvl);
 		write900s(writer, location, govLvl, checked.size(), questions.size() + demoQuestions.size());
 		write1000s(writer, checked, govLvl);
 
@@ -148,8 +149,8 @@ public class Writer{
 		writer.print(nullAndMean);
 	}
 	
-	private static void write200s(PrintWriter w, String locat){
-		if(locat.equalsIgnoreCase("ontario")){
+	private static void write200s(PrintWriter w, String location){
+		if(location.equalsIgnoreCase("ontario")){
 			String[] t250 = XML_Get.getOntarioRegionTable250(ONTARIO_REGION_POSITION);
 			
 			for(String s : t250){
@@ -160,16 +161,15 @@ public class Writer{
 	}
 
 	private static void write600s(PrintWriter w, GovernmentLevel govLvl){
-		String[] t601 = XML_Get.get601(projectCode);
-		
-		for(String s : t601){
-			w.println(s);
-		}
-		w.println();
-				
 		if(govLvl == GovernmentLevel.MUNICIPAL){
-			String[] t602 = XML_Get.get602ForLevel("municipal", projectCode);
-			String[] t699 = XML_Get.get699ForLevel("municipal", projectCode);
+			String[] t601 = XML_Get.get601("municipal", projectCode);
+			String[] t602 = XML_Get.get602("municipal", projectCode);
+			String[] t699 = XML_Get.get699("municipal", projectCode);
+			
+			for(String s : t601){
+				w.println(s);
+			}
+			w.println();
 			for(String s : t602){
 				w.println(s);
 			}
@@ -180,10 +180,15 @@ public class Writer{
 			w.print("\n\n");
 		}
 		else if(govLvl == GovernmentLevel.PROVINCIAL){
-			String[] t602 = XML_Get.get602ForLevel("provincial", projectCode);
-			String[] t603 = XML_Get.get603ForLevel("provincial", projectCode);
-			String[] t699 = XML_Get.get699ForLevel("provincial", projectCode);
+			String[] t601 = XML_Get.get601("provincial", projectCode);
+			String[] t602 = XML_Get.get602("provincial", projectCode);
+			String[] t603 = XML_Get.get603("provincial", projectCode);
+			String[] t699 = XML_Get.get699("provincial", projectCode);
 			
+			for(String s : t601){
+				w.println(s);
+			}
+			w.println();
 			for(String s : t602){
 				w.println(s);
 			}
@@ -197,12 +202,40 @@ public class Writer{
 			}
 			w.print("\n\n");
 		}
+		else if(govLvl == GovernmentLevel.FEDERAL){
+			String[] t601 = XML_Get.get601("federal", projectCode);
+			String[] t602 = XML_Get.get602("federal", projectCode);
+			String[] t603 = XML_Get.get603("federal", projectCode);
+			String[] t604 = XML_Get.get604(projectCode);
+			String[] t699 = XML_Get.get699("federal", projectCode);
+			
+			for(String s : t601){
+				w.println(s);
+			}
+			w.println();
+			for(String s : t602){
+				w.println(s);
+			}
+			w.println();
+			for(String s : t603){
+				w.println(s);
+			}
+			w.println();
+			for(String s : t604){
+				w.println(s);
+			}
+			w.println();
+			for(String s : t699){
+				w.println(s);
+			}
+			w.print("\n\n");
+		}
 		else{
 			w.print("\n");
 		}
 	}
 
-	private static void write800s(PrintWriter w, String location){
+	private static void write800s(PrintWriter w, String location, GovernmentLevel govLvl){
 		DemoQuestion genderQ = DemoMap.getGenderDQ();
 		DemoQuestion ageQ = DemoMap.getAgeDQ();
 
@@ -268,6 +301,17 @@ public class Writer{
 			"X set qual (" + genderPos + "3)\n" +
 			"X cw(1)\n" +
 			"X set qual off\n\n");
+		
+		if(govLvl == GovernmentLevel.FEDERAL){
+			String genderPosNoDash = genderPos.substring(0, genderPos.length()-1);
+			String agePosNoDash = agePos.substring(0, agePos.length()-1);
+			w.println(
+				"TABLE 820\n" +
+				"T Weight Check CSV\n" +
+				"X " + FEDERAL_FSA_POSITION + " " + FEDERAL_FSA_POSITION + "\n" +
+				"X " + genderPosNoDash + " " + genderPosNoDash + "\n" +
+				"X " + agePosNoDash + " " + agePosNoDash + "\n\n");
+		}
 	}
 
 	private static void write900s(PrintWriter w, String location, GovernmentLevel govLvl, int checked, int totalSize){

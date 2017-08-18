@@ -15,15 +15,14 @@
 	</ontarioRegionTable250>
 
 	<tables600>
-		<T601>
-			<L>TABLE 601</L>
-			<L>T Load data, run all tabs for checking purposes</L>
-			<L>X load rep char from 'Y:\$$$projectNameTwice$$$_COMP.TXT'</L>
-			<L>X justify 89:93 right</L>
-			<L>X ;ex 901</L>
-		</T601>
-
 		<municipal>
+			<T601>
+				<L>TABLE 601</L>
+				<L>T Load data, run all tabs for checking purposes</L>
+				<L>X load rep char from 'Y:\$$$projectNameTwice$$$_COMP.TXT'</L>
+				<L>X justify 89:93 right</L>
+				<L>X ;ex 901</L>
+			</T601>
 			<T602>
 				<L>TABLE 602</L>
 				<L>T Load data, weight by age, gender, region</L>
@@ -44,6 +43,13 @@
 			</T699>
 		</municipal>
         <provincial>
+			<T601>
+				<L>TABLE 601</L>
+				<L>T Load data, run all tabs for checking purposes</L>
+				<L>X load rep char from 'Y:\$$$projectNameTwice$$$_COMP.TXT'</L>
+				<L>X justify 89:93 right</L>
+				<L>X ;ex 901</L>
+			</T601>
             <T602>
                 <L>TABLE 602</L>
                 <L>T Load data, weight by voter turnout and region, run initial analysis tab</L>
@@ -81,6 +87,77 @@
                 <L>X calc F530:545 12 (W)</L>
             </T699>
         </provincial>
+		<federal>
+			<T601>
+				<L>TABLE 601</L>
+				<L>T Load data, run all tabs for checking purposes</L>
+				<L>X load rep char from 'Y:\$$$projectNameTwice$$$_COMP.TXT'</L>
+				<L>X justify 89:93 right</L>
+				<L>X ;ex 801</L>
+				<L>X ;ex 901</L>
+			</T601>
+			<T602>
+				<L>TABLE 602</L>
+				<L>T Load data, check what needs to be combined</L>
+				<L>X load rep char from 'Y:\$$$projectNameTwice$$$_COMP.TXT'</L>
+				<L>X justify 89:93 right</L>
+				<L>X set qual off</L>
+				<L>X if (r(89:93,0:XXX)) DEL</L>
+				<L>X if (132'X') DEL</L>
+				<L>X set qual off</L>
+				<L>X ex 801</L>
+				<L>X delimit 'weights_check.csv' (all) t 820</L>
+			</T602>
+			<T603>
+				<L>TABLE 603</L>
+				<L>T Load data, weight by voter turnout and region, run initial analysis tab</L>
+				<L>X load rep char from 'Y:\$$$projectNameTwice$$$_COMP.TXT'</L>
+				<L>X justify 89:93 right</L>
+				<L>X set qual off</L>
+				<L>X if (r(89:93,0:XXX)) DEL</L>
+				<L>X if (132'X') DEL</L>
+				<L>X set qual off</L>
+				<L>X ex 801</L>
+				<L>X ex 805</L>
+				<L>X ex 502</L>
+			</T603>
+			<T604>
+				<L>TABLE 604</L>
+				<L>T Load data, weight by general pop and region, run all tabs, unweight, weight by voter turnout and region, weight by Michaels coefficients over it, replace election tabs, run analytics tab</L>
+				<L>X load rep char from 'Y:\$$$projectNameTwice$$$_COMP.TXT'</L>
+				<L>X justify 89:93 right</L>
+				<L>X set qual off</L>
+				<L>X if (r(89:93,0:XXX)) DEL</L>
+				<L>X if (132'X') DEL</L>
+				<L>X set qual off</L>
+				<L/>
+				<L>X ex 801</L>
+				<L>X ex 804</L>
+				<L>X ex 901</L>
+				<L/>
+				<L>X ex 806</L>
+				<L>X ex 807</L>
+				<L>X ex 902</L>
+				<L/>
+				<L>X ex 501</L>
+			</T604>
+			<T699>
+				<L>TABLE 699</L>
+				<L>T Load data, run all tabs for SPSS weight by everything</L>
+				<L>X load rep char from 'Y:\$$$projectNameTwice$$$_COMP.TXT'</L>
+				<L>X justify 89:93 right</L>
+				<L>X set qual off</L>
+				<L>X if (r(89:93,0:XXX)) DEL</L>
+				<L>X if (132'X') DEL</L>
+				<L>X set qual off</L>
+				<L>X ex 801</L>
+				<L>X ex 804</L>
+				<L>X calc F610:625 12 (W)</L>
+				<L>X ex 806</L>
+				<L>X ex 807</L>
+				<L>X calc F630:645 12 (W)</L>
+			</T699>
+		</federal>
 	</tables600>
 
 	<tables800>

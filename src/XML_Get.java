@@ -37,22 +37,27 @@ class XML_Get{
 		return nodeListToArrayWithReplaceTwice(labelAndValueNodes, "$$$position$$$", position, "\\t", "\t");
 	}
 	
-	static String[] get601(String projectName){
-		NodeList nodes = getElementOf(getElementOf(docElement, "tables600"), "T601").getChildNodes();
+	static String[] get601(String level, String projectName){
+		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), level), "T601").getChildNodes();
 		return nodeListToArrayWithReplace(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
 	}
 	
-	static String[] get602ForLevel(String level, String projectName){
+	static String[] get602(String level, String projectName){
 		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), level), "T602").getChildNodes();
 		return nodeListToArrayWithReplace(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
 	}
 	
-	static String[] get603ForLevel(String level, String projectName){
+	static String[] get603(String level, String projectName){
 		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), level), "T603").getChildNodes();
 		return nodeListToArrayWithReplaceWiltNull(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
 	}
 	
-	static String[] get699ForLevel(String level, String projectName){
+	static String[] get604(String projectName){
+		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), "federal"), "T603").getChildNodes();
+		return nodeListToArrayWithReplaceWiltNull(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
+	}
+	
+	static String[] get699(String level, String projectName){
 		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), level), "T699").getChildNodes();
 		return nodeListToArrayWithReplace(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
 	}
