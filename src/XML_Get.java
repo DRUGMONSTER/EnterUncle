@@ -49,17 +49,22 @@ class XML_Get{
 	
 	static String[] get603(String level, String projectName){
 		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), level), "T603").getChildNodes();
-		return nodeListToArrayWithReplaceWiltNull(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
+		return nodeListToArrayWithReplaceWithNull(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
 	}
 	
 	static String[] get604(String projectName){
 		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), "federal"), "T603").getChildNodes();
-		return nodeListToArrayWithReplaceWiltNull(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
+		return nodeListToArrayWithReplaceWithNull(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
 	}
 	
 	static String[] get699(String level, String projectName){
 		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), level), "T699").getChildNodes();
 		return nodeListToArrayWithReplace(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
+	}
+	
+	static String[] get802Base(){
+		NodeList nodes = getElementOf(getElementOf(docElement, "tables800"), "T802Base").getChildNodes();
+		return nodeListToArrayWithReplace(nodes, "\\t", "\t");
 	}
 	
 	static String[] getWeights(String location){
@@ -103,7 +108,7 @@ class XML_Get{
 		return strings;
 	}
 	
-	private static String[] nodeListToArrayWithReplaceWiltNull(NodeList nl, String find, String replaceWith){
+	private static String[] nodeListToArrayWithReplaceWithNull(NodeList nl, String find, String replaceWith){
 		String[] strings = new String[nl.getLength()/2];
 		for(int i = 0, j = 1; i < strings.length; i++, j += 2){
 			org.w3c.dom.Node n = nl.item(j).getFirstChild();

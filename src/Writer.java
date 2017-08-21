@@ -252,20 +252,7 @@ public class Writer{
 
 		String[] weights = XML_Get.getWeights(location);
 		if(weights != null){
-			//Todo: move this to XML_GET
-			String[] base = new String[12];
-			base[0] = "R Male < 25;\t\t";
-			base[1] = "R Male 25 - 34;\t\t";
-			base[2] = "R Male 35 - 44;\t\t";
-			base[3] = "R Male 45 - 54;\t\t";
-			base[4] = "R Male 55 - 64;\t\t";
-			base[5] = "R Male 65 +;\t\t";
-			base[6] = "R Female < 25;\t\t";
-			base[7] = "R Female 25 - 34;\t";
-			base[8] = "R Female 35 - 44;\t";
-			base[9] = "R Female 45 - 54;\t";
-			base[10] = "R Female 55 - 64;\t";
-			base[11] = "R Female 65 +;\t\t";
+			String[] base = XML_Get.get802Base();
 	
 			StringBuilder buf = new StringBuilder();
 			for(int i = 0; i < 12; i++){
@@ -326,7 +313,7 @@ public class Writer{
 		}
 
 		String partyPreference200s = "";
-		if(govLvl == GovernmentLevel.PROVINCIAL)
+		if(govLvl == GovernmentLevel.PROVINCIAL || govLvl == GovernmentLevel.FEDERAL)
 			partyPreference200s = "2 201 202 3 ";
 		String excel;
 		if(location.isEmpty())
@@ -350,7 +337,8 @@ public class Writer{
 
 		w.println();
 	}
-
+	
+	//Banner
 	private static void write1000s(PrintWriter w, ArrayList<QuestionBase> checked, GovernmentLevel govLvl){
 		Logg.info("Begin writing 1000s");
 		

@@ -161,7 +161,7 @@
 	</tables600>
 
 	<tables800>
-		<base>
+		<T802Base>
 			<L>R Male &lt; 25;\t\t</L>
 			<L>R Male 25 - 34;\t\t</L>
 			<L>R Male 35 - 44;\t\t</L>
@@ -174,8 +174,9 @@
 			<L>R Female 45 - 54;\t</L>
 			<L>R Female 55 - 64;\t</L>
 			<L>R Female 65 +;\t\t</L>
-		</base>
+		</T802Base>
 	</tables800>
+
 	<weights>
 		<canada>
 			<M_18>1; v 0.0600459788543818</M_18>
