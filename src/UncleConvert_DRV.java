@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class UncleConvert_DRV{
 	public static void main(String[] args){
-		test();
-		//launchGUI();
+		//test();
+		launchGUI();
 	}
 
 	private static void launchGUI(){

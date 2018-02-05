@@ -53,7 +53,7 @@ class XML_Get{
 	}
 	
 	static String[] get604(String projectName){
-		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), "federal"), "T603").getChildNodes();
+		NodeList nodes = getElementOf(getElementOf(getElementOf(docElement, "tables600"), "federal"), "T604").getChildNodes();
 		return nodeListToArrayWithReplaceWithNull(nodes, "$$$projectNameTwice$$$", projectName + "\\" + projectName);
 	}
 	
